@@ -1,0 +1,28 @@
+{
+  "DAWN": {
+    "Actor": {
+      "Character": {
+        "Health": "Health"
+      },
+      "Adversary": {
+        "Tier": "Tier"
+      }
+    },
+    "Sheet": {
+      "Character": {
+        "Title": "Character Sheet",
+        "Label": "Dawn Character Sheet"
+      },
+      "Adversary": {
+        "Title": "Adversary Sheet",
+        "Label": "Dawn Adversary Sheet"
+      }
+    }
+  },
+  "TYPES": {
+    "Actor": {
+      "character": "Character",
+      "adversary": "Adversary"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+<form class="dawn-sheet sheet-body flexcol">
+  <header class="sheet-header flexrow">
+    <img class="profile-img" src="{{document.img}}" data-edit="img" title="{{document.name}}" />
+    <div class="header-fields flexcol">
+      <input class="charname" name="name" type="text" value="{{document.name}}" placeholder="Name" />
+    </div>
+  </header>
+
+  <section class="sheet-content">
+    <div class="resource flexrow">
+      <label>{{localize "DAWN.Actor.Character.Health"}}</label>
+      <input type="number" name="system.health" value="{{system.health}}" />
+    </div>
+  </section>
+</form>

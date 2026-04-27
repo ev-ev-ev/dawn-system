@@ -1,0 +1,34 @@
+{
+  "id": "dawn-system",
+  "title": "Dawn System",
+  "description": "A custom game system for Dawn.",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": 14,
+    "verified": 14
+  },
+  "authors": [
+    {
+      "name": "Hexe",
+      "email": "foundry@caest.us"
+    }
+  ],
+  "esmodules": ["dist/dawn-system.mjs"],
+  "styles": ["styles/dawn-system.css"],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "character": {},
+      "adversary": {}
+    }
+  },
+  "initiative": "1d20",
+  "primaryTokenAttribute": null,
+  "secondaryTokenAttribute": null
+}
