@@ -44,7 +44,11 @@
         "Speed": "Speed",
         "Focus": "Focus",
         "Wounds": "Wounds",
-        "Wound": "Wound"
+        "Wound": "Wound",
+        "Techniques": "Techniques",
+        "NoTechniques": "No techniques learned. Drag from a compendium to add.",
+        "ForgetTechnique": "Forget",
+        "ChatTechnique": "Send to Chat"
       },
       "Adversary": {
         "Tier": "Tier"

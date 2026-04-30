@@ -233,3 +233,71 @@
   box-sizing: border-box;
 }
 
+/* ----------------------------------------- */
+/*  Technique list on actor sheet            */
+/* ----------------------------------------- */
+
+.dawn-sheet .techniques-list .technique-entry {
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 2px;
+  border-bottom: 1px solid var(--color-border-light-tertiary, #ccc);
+}
+
+.dawn-sheet .techniques-list .technique-entry:last-child {
+  border-bottom: none;
+}
+
+.dawn-sheet .techniques-list .technique-entry-left {
+  flex: 0 0 130px;
+  gap: 2px;
+}
+
+.dawn-sheet .techniques-list .technique-entry-name {
+  font-weight: bold;
+  font-size: 0.95em;
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+
+.dawn-sheet .techniques-list .technique-entry-name:hover {
+  text-decoration: underline;
+}
+
+.dawn-sheet .techniques-list .technique-entry-meta {
+  font-size: 0.78em;
+  opacity: 0.65;
+}
+
+.dawn-sheet .techniques-list .technique-entry-desc {
+  flex: 1;
+  font-size: 0.85em;
+  line-height: 1.4;
+  opacity: 0.85;
+  min-width: 0;
+}
+
+.dawn-sheet .techniques-list .technique-entry-controls {
+  flex: 0 0 auto;
+  gap: 4px;
+  padding-top: 2px;
+}
+
+.dawn-sheet .techniques-list .technique-entry-controls a {
+  cursor: pointer;
+  opacity: 0.4;
+  padding: 2px 4px;
+}
+
+.dawn-sheet .techniques-list .technique-entry-controls a:hover {
+  opacity: 1;
+  color: var(--color-level-error, #c00);
+}
+
+.dawn-sheet .techniques-empty {
+  font-size: 0.85em;
+  opacity: 0.5;
+  text-align: center;
+  margin: 4px 0;
+}
+

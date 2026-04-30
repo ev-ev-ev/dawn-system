@@ -90,6 +90,27 @@
         <label><input type="checkbox" name="system.wound3" {{#if system.wound3}}checked{{/if}} /> {{localize "DAWN.Actor.Character.Wound"}}</label>
       </div>
     </fieldset>
+
+    <fieldset class="techniques-list">
+      <legend>{{localize "DAWN.Actor.Character.Techniques"}}</legend>
+      {{#if techniques.length}}
+        {{#each techniques as |item|}}
+        <div class="technique-entry flexrow" data-item-id="{{item.id}}">
+          <div class="technique-entry-left flexcol">
+            <span class="technique-entry-name" data-action="openItem" role="button">{{item.name}}</span>
+            <span class="technique-entry-meta">{{item.system.tech}} · {{localize "DAWN.Item.Technique.LevelLabel"}} {{item.system.level}}</span>
+          </div>
+          <div class="technique-entry-desc">{{item.system.text}}</div>
+          <div class="technique-entry-controls flexrow">
+            <a data-action="chatItem" data-tooltip="{{localize "DAWN.Actor.Character.ChatTechnique"}}"><i class="fa-solid fa-message"></i></a>
+            <a data-action="deleteItem" data-tooltip="{{localize "DAWN.Actor.Character.ForgetTechnique"}}"><i class="fa-solid fa-trash"></i></a>
+          </div>
+        </div>
+        {{/each}}
+      {{else}}
+        <p class="techniques-empty hint">{{localize "DAWN.Actor.Character.NoTechniques"}}</p>
+      {{/if}}
+    </fieldset>
   </section>
 
   <section class="tab{{#if tabs.unstructured.active}} active{{/if}}" data-group="sheet" data-tab="unstructured">
