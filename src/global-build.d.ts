@@ -93,7 +93,62 @@ declare namespace foundry {
       function once(event: string, fn: (...args: unknown[]) => void): void;
     }
   }
+  namespace applications {
+    namespace api {
+      // Already declared above; extend with DialogV2
+    }
+  }
 }
+
+// Merge DialogV2 into foundry.applications.api
+declare namespace foundry {
+  namespace applications {
+    namespace api {
+      class DialogV2 {
+        static input(config: {
+          window?: { title?: string };
+          content?: string;
+          ok?: { label?: string; icon?: string };
+          rejectClose?: boolean;
+        }): Promise<Record<string, unknown> | null>;
+        static wait(config: {
+          window?: { title?: string };
+          content?: string;
+          buttons: Array<{
+            action: string;
+            label: string;
+            icon?: string;
+            default?: boolean;
+            callback?: (event: Event, button: HTMLButtonElement, dialog: DialogV2) => unknown;
+          }>;
+          submit?: (result: unknown, dialog: DialogV2) => void;
+          rejectClose?: boolean;
+        }): Promise<unknown>;
+      }
+    }
+  }
+}
+
+declare class Roll {
+  constructor(formula: string);
+  evaluate(): Promise<this>;
+  get dice(): Array<{
+    results: Array<{ result: number; success?: boolean; exploded?: boolean }>;
+  }>;
+  toAnchor(): HTMLElement;
+}
+
+declare class ChatMessage {
+  static create(data: {
+    content: string;
+    speaker?: Record<string, unknown>;
+    rolls?: Roll[];
+    sound?: string;
+  }): Promise<unknown>;
+  static getSpeaker(options?: { actor?: unknown }): Record<string, unknown>;
+}
+
+declare const game: { i18n: { localize(key: string): string } };
 
 declare const CONFIG: {
   Actor: {

@@ -1,3 +1,5 @@
+import { openRollDialog } from "../dice/roll.js";
+
 export class CharacterSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
 ) {
@@ -6,6 +8,9 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     window: { title: "DAWN.Sheet.Character.Title", resizable: true },
     position: { width: 480, height: 640 },
     form: { submitOnChange: true, closeOnSubmit: false },
+    actions: {
+      rollAttr: CharacterSheet._onRollAttr,
+    },
   };
 
   static override PARTS = {
@@ -37,5 +42,13 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
         mind: "DAWN.Actor.Character.Mind",
       },
     });
+  }
+
+  static async _onRollAttr(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {
+    const attr = target.dataset.attr as string;
+    const system = (this as any).document.system as Record<string, unknown>;
+    const dice = Number(system[attr] ?? 2);
+    const labelKey = `DAWN.Actor.Character.${attr.charAt(0).toUpperCase() + attr.slice(1)}`;
+    await openRollDialog(labelKey, dice, (this as any).document);
   }
 }

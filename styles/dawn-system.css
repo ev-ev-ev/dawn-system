@@ -76,8 +76,16 @@
   color: var(--color-level-error, #c00);
 }
 
-/* ----------------------------------------- */
-/*  Fieldsets (attr roles, wounds)           */
+.dawn-sheet .resource label[data-action] {
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+
+.dawn-sheet .resource label[data-action]:hover {
+  text-decoration: underline;
+}
+
+
 /* ----------------------------------------- */
 
 .dawn-sheet fieldset {
