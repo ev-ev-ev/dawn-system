@@ -12,6 +12,23 @@
         "Title": "Adversary Sheet"
       }
     },
+    "Item": {
+      "Technique": {
+        "Title": "Technique",
+        "Tech": "Technique",
+        "Archetype": "Archetype",
+        "Tags": "Tags",
+        "Stars": "Cost",
+        "Flavor": "Flavor",
+        "FlavorPlaceholder": "Flavor text…",
+        "Level": "Level",
+        "LevelLabel": "Level",
+        "Details": "Details",
+        "Text": "Description",
+        "TextPlaceholder": "Ability description…",
+        "NamePlaceholder": "Ability Name"
+      }
+    },
     "Actor": {
       "Character": {
         "Health": "Health",
@@ -38,6 +55,9 @@
     "Actor": {
       "character": "Character",
       "adversary": "Adversary"
+    },
+    "Item": {
+      "technique": "Technique"
     }
   }
 }

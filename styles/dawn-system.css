@@ -160,3 +160,76 @@
 .dawn-sheet .tab fieldset {
   margin-top: 8px;
 }
+
+/* ----------------------------------------- */
+/*  Technique sheet                          */
+/* ----------------------------------------- */
+
+.technique-sheet .technique-header {
+  gap: 4px;
+}
+
+.technique-sheet .technique-title-row {
+  align-items: center;
+  gap: 8px;
+}
+
+.technique-sheet .technique-name {
+  flex: 1;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.technique-sheet .technique-level-badge {
+  flex: 0 0 auto;
+  font-size: 0.8em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+.technique-sheet .technique-byline {
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85em;
+  opacity: 0.8;
+}
+
+.technique-sheet .technique-tech {
+  flex: 0 0 auto;
+  font-weight: bold;
+  width: auto;
+  min-width: 80px;
+}
+
+.technique-sheet .technique-stars {
+  flex: 0 0 40px;
+  text-align: center;
+}
+
+.technique-sheet .technique-tags {
+  flex: 1;
+}
+
+.technique-sheet .technique-sep {
+  flex: 0 0 auto;
+  opacity: 0.4;
+}
+
+.technique-sheet .technique-flavor-text {
+  width: 100%;
+  resize: vertical;
+  font-style: italic;
+  opacity: 0.8;
+  font-size: 0.9em;
+  box-sizing: border-box;
+}
+
+.technique-sheet .technique-ability-text {
+  width: 100%;
+  resize: vertical;
+  box-sizing: border-box;
+}
+

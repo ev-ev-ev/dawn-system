@@ -26,6 +26,9 @@
     "Actor": {
       "character": {},
       "adversary": {}
+    },
+    "Item": {
+      "technique": {}
     }
   },
   "initiative": "1d20",

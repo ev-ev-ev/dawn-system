@@ -1,6 +1,8 @@
 import { AdversaryDataModel, CharacterDataModel } from "./data/actor-models.js";
+import { TechniqueDataModel } from "./data/item-models.js";
 import { CharacterSheet } from "./sheets/character-sheet.js";
 import { AdversarySheet } from "./sheets/adversary-sheet.js";
+import { TechniqueSheet } from "./sheets/technique-sheet.js";
 
 foundry.helpers.Hooks.once("init", () => {
   console.log("dawn-system | Initialising Dawn System");
@@ -22,6 +24,17 @@ foundry.helpers.Hooks.once("init", () => {
     character: { bar: ["health", "focus"], value: ["speed"] },
     adversary: { bar: [], value: ["tier"] },
   };
+
+  // Register item data models.
+  const itemDataModels = CONFIG.Item.dataModels as Record<string, unknown>;
+  itemDataModels.technique = TechniqueDataModel;
+
+  // Register item sheets.
+  foundry.documents.collections.Items.registerSheet("dawn-system", TechniqueSheet, {
+    types: ["technique"],
+    makeDefault: true,
+    label: "DAWN.Sheet.Technique.Title",
+  });
 
   // Register actor sheets.
   foundry.documents.collections.Actors.registerSheet("dawn-system", CharacterSheet, {

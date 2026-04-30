@@ -1,0 +1,92 @@
+[
+  {
+    "name": "All-Seeing",
+    "flavor": "Master of battlefield control and range.",
+    "defensename": "\u201cPredictable\u201d",
+    "turnname": "Piercing Vision (Misc Reaction)",
+    "phasename": "\u201c...You\u2019ve Forced My Hand\u201d",
+    "defense": "When this NPC would be Attacked they may gain [Tier \u00d7 2] Evasion. If the Attack misses, this NPC may move up to 3 spaces in any direction.",
+    "turn": "When this NPC is at least 4 spaces away from a player and the player gets attacked, this may Mark them (before the attack is rolled or advantage is determined).",
+    "phase": "When this NPC would be Knocked Out or pass a Health Gate you may spend 2 Antagonism and give all players 1 Influence to deploy 2 Artillery NPCs with Tiers equal to this NPC\u2019s and have this restore [Tier x 5] Health."
+  },
+  {
+    "name": "God-Like",
+    "flavor": "All-Rounder with tools to move players.",
+    "defensename": "\u201cBREAK\u201d",
+    "turnname": "\u201cBEHOLD\u201d (Start Of Turn)",
+    "phasename": "\u201cBOW TO ME\u201d",
+    "defense": "When this NPC would be Attacked they may gain [Tier \u00d7 2] Armor. If the Attack\u2019s damage is reduced to 1 the Attacker is pushed 3 spaces away and slowed.",
+    "turn": "When this NPC begins its Turn it may choose a non-adjacent player and pull them 2 spaces towards themself. If the player is brought adjacent, Daze them.",
+    "phase": "When this NPC would be Knocked Out or pass a Health Gate you may spend 2 Antagonism and give all players 1 Influence to deploy 2 Paladin NPCs with Tiers equal to this NPC\u2019s and have this restore [Tier x 5] Health."
+  },
+  {
+    "name": "Iron-Willed",
+    "flavor": "Full force tank who can protect allies.",
+    "defensename": "Guardian",
+    "turnname": "Jabbing Insults (Start Of Turn)",
+    "phasename": "\u201cPush The Line!\u201d",
+    "defense": "When any NPC would be attacked, this NPC may teleport adjacent to the attacker and gain [Tier \u00d7 2] Armor and force the attack to target them.",
+    "turn": "When this NPC begins its Turn adjacent to a player, they may Taunt them.",
+    "phase": "When this NPC would be Knocked Out or pass a Health Gate you may spend 2 Antagonism and give all players 1 Influence to deploy 2 Swarm NPCs with a Tier equal to this NPC\u2019s, have this restore [Tier x 5] Health, and give this NPC [Tier] Armor."
+  },
+  {
+    "name": "Over-Confident",
+    "flavor": "Evasion based bruiser with a cleanse.",
+    "defensename": "\u201cGo On And Try!\u201d",
+    "turnname": "Drop The Weight (Start Of Turn)",
+    "phasename": "Deafening Silence",
+    "defense": "When this NPC would be Attacked, they may Mark themselves to gain [Tier \u00d7 2] Evasion after the attack.",
+    "turn": "When this NPC begins its Turn it may lose any amount of Evasion to move 4 spaces ignoring characters. If this NPC moves through an opponent they take damage equal to the Evasion spent.",
+    "phase": "When this NPC would be Knocked Out or pass a Health Gate you may spend 2 Antagonism and give all players 1 Influence to remove all Negative Effects from this, make it unable to gain Negative Effects for the remainder of the Scene, and have this restore [Tier x 5] Health."
+  },
+  {
+    "name": "Back-stabbing",
+    "flavor": "Sacrifices allies for their own survival.",
+    "defensename": "\u201cHonorable\u201d Sacrifice",
+    "turnname": "Shirk The Blame (Start Of Turn)",
+    "phasename": "\u201cSeize Them!\u201d",
+    "defense": "When any NPC would be attacked, this may have one of its allies teleport adjacent to it and become the target instead.",
+    "turn": "When this NPC begins its Turn while another NPC is adjacent to a player, they may have said NPC Taunt them.",
+    "phase": "When this NPC would be Knocked Out or pass a Health Gate you may spend 2 Antagonism and give all players 1 Influence to deploy 2 Bodyguard NPCs with a Tier equal to this NPC\u2019s, have this gain [Tier x 5] Health, and [Tier x 3] Evasion."
+  },
+  {
+    "name": "Cruel-Hearted",
+    "flavor": "Sadistically debuffs and DOTs players.",
+    "defensename": "Body Of Thorns",
+    "turnname": "Sadist (Start Of Turn)",
+    "phasename": "\u201cBreath It In!\u201d",
+    "defense": "When this NPC would be Attacked they may gain [Tier \u00d7 2] Armor. If the Attack\u2019s damage is reduced to 1 the Attacker is Blighted.",
+    "turn": "When this NPC begins its Turn it may clear Blight from any number of characters in the scene, doing this Strengthens this NPC and deals [Tier \u00d7 2] damage to all character\u2019s affected.",
+    "phase": "When this NPC would be Knocked Out or pass a Health Gate you may spend 2 Antagonism and give all players 1 Influence to attach a Contagion and Isolation Modifier with Tiers equal to this NPC\u2019s and have this restore [Tier x 5] Health."
+  },
+  {
+    "name": "Swift-Stepping",
+    "flavor": "Assassin eliminating single players.",
+    "defensename": "Enter Shadow",
+    "turnname": "Dominate (Start Of Turn)",
+    "phasename": "\u201cGo To Sleep\u2026\u201d",
+    "defense": "When this NPC would be Attacked they may gain [Tier \u00d7 2] Evasion. If the Attack misses, it teleports to a space on the edge of the board and Disappears.",
+    "turn": "When this NPC begins its Turn it may choose a character that hasn\u2019t been attacked since the start of its last turn, that character becomes \u201cMarked For Death\u201d. When this NPC attacks a character who\u2019s been Marked For Death, they deal [Tier \u00d7 2] additional damage and remove the effect.",
+    "phase": "When this NPC would be Knocked Out or pass a Health Gate you may spend 2 Antagonism & give all players 1 Influence to Disappear and Strengthen this, have this restore [Tier x 5] Health, and give this [Tier x 3] Evasion."
+  },
+  {
+    "name": "Wild-Eyed",
+    "flavor": "Bruiser benefiting from being in the mix.",
+    "defensename": "Vicious Interception",
+    "turnname": "Beastly Roar (Start Of Turn)",
+    "phasename": "\u201cCrush Them All!\u201d",
+    "defense": "When this NPC would be attacked, they may force the attacker to Clash with it instead (the enemy counts as having 3 + [Tier] Spirit for the Clash).",
+    "turn": "When this NPC begins its Turn, it may \u2018Roar\u2019, clearing all Effects on it, dealing Daze to opponents in 3 spaces of it, and pushing them to the nearest space 4 spaces away from it",
+    "phase": "When this NPC would be Knocked Out or pass a Health Gate you may spend 2 Antagonism and give all players 1 Influence to attach a Giant and Earthquake Modifier with Tiers equal to this and have this restore [Tier x 5] Health."
+  },
+  {
+    "name": "World-Renowned",
+    "flavor": "Supportive fighter with buffs.",
+    "defensename": "Hero\u2019s Interception",
+    "turnname": "Inspiring Presence (Ally Turn Start)",
+    "phasename": "\u201cFace Me!\u201d",
+    "defense": "When any NPC is attacked, this NPC may teleport adjacent to the attacker and force the attacker to Clash with it instead.",
+    "turn": "When another NPC begins its Turn, this NPC may have it Attack or move an additional time.",
+    "phase": "When this NPC would be Knocked Out or pass a Health Gate you may spend 2 Antagonism and give all players 1 Influence to force a player into a Duel, have this restore [Tier x 5] Health, and give this [Tier x 3] Evasion."
+  }
+]

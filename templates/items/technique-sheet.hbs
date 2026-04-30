@@ -1,0 +1,37 @@
+<div class="dawn-sheet sheet-body technique-sheet flexcol">
+  <header class="sheet-header technique-header flexcol">
+    <div class="technique-title-row flexrow">
+      <input class="charname technique-name" name="name" type="text" value="{{document.name}}" placeholder="{{localize "DAWN.Item.Technique.NamePlaceholder"}}" />
+      <span class="technique-level-badge">{{localize "DAWN.Item.Technique.LevelLabel"}} {{system.level}}</span>
+    </div>
+    <div class="technique-byline flexrow">
+      <input class="technique-tech" name="system.tech" type="text" value="{{system.tech}}" placeholder="{{localize "DAWN.Item.Technique.Tech"}}" />
+      <span class="technique-sep">|</span>
+      <input class="technique-stars" name="system.stars" type="text" value="{{system.stars}}" placeholder="★" />
+      <span class="technique-sep">|</span>
+      <input class="technique-tags" name="system.tags" type="text" value="{{system.tags}}" placeholder="{{localize "DAWN.Item.Technique.Tags"}}" />
+    </div>
+  </header>
+
+  <fieldset class="technique-details">
+    <legend>{{localize "DAWN.Item.Technique.Details"}}</legend>
+    <div class="resource flexrow">
+      <label>{{localize "DAWN.Item.Technique.Archetype"}}</label>
+      <input name="system.archetype" type="text" value="{{system.archetype}}" />
+    </div>
+    <div class="resource flexrow">
+      <label>{{localize "DAWN.Item.Technique.Level"}}</label>
+      <input name="system.level" type="number" value="{{system.level}}" min="1" max="3" />
+    </div>
+  </fieldset>
+
+  <fieldset class="technique-flavor-block">
+    <legend>{{localize "DAWN.Item.Technique.Flavor"}}</legend>
+    <textarea class="technique-flavor-text" name="system.flavor" rows="3" placeholder="{{localize "DAWN.Item.Technique.FlavorPlaceholder"}}">{{system.flavor}}</textarea>
+  </fieldset>
+
+  <fieldset class="technique-text-block">
+    <legend>{{localize "DAWN.Item.Technique.Text"}}</legend>
+    <textarea class="technique-ability-text" name="system.text" rows="5" placeholder="{{localize "DAWN.Item.Technique.TextPlaceholder"}}">{{system.text}}</textarea>
+  </fieldset>
+</div>
