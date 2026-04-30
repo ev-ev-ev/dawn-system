@@ -1,9 +1,19 @@
 /* dawn-system — base stylesheet */
 
+/* ----------------------------------------- */
+/*  Sheet layout                             */
+/* ----------------------------------------- */
+
+.dawn-sheet.sheet-body {
+  padding: 0 8px 8px;
+  overflow-y: auto;
+}
+
 .dawn-sheet .sheet-header {
   align-items: center;
   gap: 8px;
   padding: 8px;
+  margin-bottom: 8px;
   border-bottom: 1px solid var(--color-border-light-tertiary, #ccc);
   flex: 0 0 auto;
 }
@@ -14,4 +24,131 @@
   object-fit: cover;
   border-radius: 4px;
   flex: 0 0 80px;
+  cursor: pointer;
+}
+
+.dawn-sheet .header-fields {
+  gap: 4px;
+  flex: 1;
+}
+
+.dawn-sheet .charname {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* ----------------------------------------- */
+/*  Resource rows                            */
+/* ----------------------------------------- */
+
+.dawn-sheet .resource {
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+}
+
+.dawn-sheet .resource label {
+  flex: 0 0 120px;
+}
+
+.dawn-sheet .resource input[type="number"] {
+  width: 60px;
+  text-align: center;
+}
+
+.dawn-sheet .resource-sep,
+.dawn-sheet .attr-points-sep {
+  flex: 0 0 auto;
+  opacity: 0.5;
+}
+
+.dawn-sheet .resource-max,
+.dawn-sheet .attr-points-total {
+  flex: 0 0 auto;
+  opacity: 0.7;
+}
+
+.dawn-sheet .resource-derived {
+  font-weight: bold;
+}
+
+.dawn-sheet .attr-points-available.negative {
+  color: var(--color-level-error, #c00);
+}
+
+/* ----------------------------------------- */
+/*  Fieldsets (attr roles, wounds)           */
+/* ----------------------------------------- */
+
+.dawn-sheet fieldset {
+  border: 1px solid var(--color-border-light-tertiary, #ccc);
+  border-radius: 4px;
+  padding: 6px 10px 8px;
+  margin: 8px 0;
+}
+
+.dawn-sheet fieldset legend {
+  padding: 0 4px;
+  font-weight: bold;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dawn-sheet .attr-roles .resource + .resource {
+  margin-top: 4px;
+}
+
+/* ----------------------------------------- */
+/*  Attributes block                         */
+/* ----------------------------------------- */
+
+.dawn-sheet .attributes {
+  border: 1px solid var(--color-border-light-tertiary, #ccc);
+  border-radius: 4px;
+  padding: 6px 10px 8px;
+  margin: 8px 0;
+}
+
+.dawn-sheet .attributes .resource + .resource {
+  margin-top: 4px;
+}
+
+.dawn-sheet .attr-points {
+  margin-bottom: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-border-light-tertiary, #ccc);
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+/* ----------------------------------------- */
+/*  Wounds                                   */
+/* ----------------------------------------- */
+
+.dawn-sheet .wounds .wounds-row {
+  gap: 16px;
+}
+
+.dawn-sheet .wounds .wounds-row label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+/* ----------------------------------------- */
+/*  Tab content                              */
+/* ----------------------------------------- */
+
+.dawn-sheet .tab {
+  padding-top: 8px;
+}
+
+.dawn-sheet .tab .resource + .resource {
+  margin-top: 4px;
+}
+
+.dawn-sheet .tab fieldset {
+  margin-top: 8px;
 }
