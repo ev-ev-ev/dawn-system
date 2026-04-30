@@ -1,8 +1,29 @@
 {
   "DAWN": {
+    "Sheet": {
+      "Character": {
+        "Title": "Character Sheet",
+        "Tab": {
+          "structured": "Structured",
+          "unstructured": "Unstructured"
+        }
+      },
+      "Adversary": {
+        "Title": "Adversary Sheet"
+      }
+    },
     "Actor": {
       "Character": {
-        "Health": "Health"
+        "Health": "Health",
+        "Tier": "Tier",
+        "AttributeRoles": "Attribute Roles",
+        "PrimaryAttr": "Primary",
+        "SecondaryAttr": "Secondary",
+        "Body": "Body",
+        "Talent": "Talent",
+        "Spirit": "Spirit",
+        "Mind": "Mind",
+        "AttrPoints": "Attribute Points"
       },
       "Adversary": {
         "Tier": "Tier"

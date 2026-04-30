@@ -1,4 +1,6 @@
 import { AdversaryDataModel, CharacterDataModel } from "./data/actor-models.js";
+import { CharacterSheet } from "./sheets/character-sheet.js";
+import { AdversarySheet } from "./sheets/adversary-sheet.js";
 
 foundry.helpers.Hooks.once("init", () => {
   console.log("dawn-system | Initialising Dawn System");
@@ -20,4 +22,16 @@ foundry.helpers.Hooks.once("init", () => {
     character: { bar: [], value: ["health"] },
     adversary: { bar: [], value: ["tier"] },
   };
+
+  // Register actor sheets.
+  foundry.documents.collections.Actors.registerSheet("dawn-system", CharacterSheet, {
+    types: ["character"],
+    makeDefault: true,
+    label: "DAWN.Sheet.Character.Title",
+  });
+  foundry.documents.collections.Actors.registerSheet("dawn-system", AdversarySheet, {
+    types: ["adversary"],
+    makeDefault: true,
+    label: "DAWN.Sheet.Adversary.Title",
+  });
 });

@@ -1,1 +1,17 @@
 /* dawn-system — base stylesheet */
+
+.dawn-sheet .sheet-header {
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-bottom: 1px solid var(--color-border-light-tertiary, #ccc);
+  flex: 0 0 auto;
+}
+
+.dawn-sheet .profile-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex: 0 0 80px;
+}

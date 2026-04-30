@@ -1,4 +1,4 @@
-<form class="dawn-sheet sheet-body flexcol">
+<div class="dawn-sheet sheet-body flexcol">
   <header class="sheet-header flexrow">
     <img class="profile-img" src="{{document.img}}" data-edit="img" title="{{document.name}}" />
     <div class="header-fields flexcol">
@@ -45,25 +45,31 @@
     </fieldset>
 
     <div class="attributes">
+      <div class="attr-points resource flexrow">
+        <label>{{localize "DAWN.Actor.Character.AttrPoints"}}</label>
+        <span class="attr-points-available{{#if (lt system.attrPointsAvailable 0)}} negative{{/if}}">{{system.attrPointsAvailable}}</span>
+        <span class="attr-points-sep">/</span>
+        <span class="attr-points-total">{{system.attrPointsTotal}}</span>
+      </div>
       <div class="resource flexrow">
         <label>{{localize "DAWN.Actor.Character.Body"}}</label>
-        <input type="number" name="system.body" value="{{system.body}}" />
+        <input type="number" name="system.body" value="{{system.body}}" min="{{system.attrMin.body}}" />
       </div>
       <div class="resource flexrow">
         <label>{{localize "DAWN.Actor.Character.Talent"}}</label>
-        <input type="number" name="system.talent" value="{{system.talent}}" />
+        <input type="number" name="system.talent" value="{{system.talent}}" min="{{system.attrMin.talent}}" />
       </div>
       <div class="resource flexrow">
         <label>{{localize "DAWN.Actor.Character.Spirit"}}</label>
-        <input type="number" name="system.spirit" value="{{system.spirit}}" />
+        <input type="number" name="system.spirit" value="{{system.spirit}}" min="{{system.attrMin.spirit}}" />
       </div>
       <div class="resource flexrow">
         <label>{{localize "DAWN.Actor.Character.Mind"}}</label>
-        <input type="number" name="system.mind" value="{{system.mind}}" />
+        <input type="number" name="system.mind" value="{{system.mind}}" min="{{system.attrMin.mind}}" />
       </div>
     </div>
   </section>
 
   <section class="tab{{#if tabs.unstructured.active}} active{{/if}}" data-group="sheet" data-tab="unstructured">
   </section>
-</form>
+</div>
