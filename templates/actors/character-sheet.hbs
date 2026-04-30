@@ -6,10 +6,64 @@
     </div>
   </header>
 
-  <section class="sheet-content">
+  <nav class="sheet-tabs tabs" aria-roledescription="{{localize "SHEETS.FormNavLabel"}}">
+    {{#each tabs as |tab|}}
+    <a data-action="tab" data-group="{{tab.group}}" data-tab="{{tab.id}}"
+        {{#if tab.cssClass}}class="{{tab.cssClass}}"{{/if}}
+        {{#if tab.tooltip}}data-tooltip="{{tab.tooltip}}"{{/if}}>
+      {{#if tab.icon}}<i class="{{tab.icon}}" inert></i>{{/if}}
+      {{#if tab.label}}<span>{{localize tab.label}}</span>{{/if}}
+    </a>
+    {{/each}}
+  </nav>
+
+  <section class="tab{{#if tabs.structured.active}} active{{/if}}" data-group="sheet" data-tab="structured">
     <div class="resource flexrow">
       <label>{{localize "DAWN.Actor.Character.Health"}}</label>
       <input type="number" name="system.health" value="{{system.health}}" />
     </div>
+
+    <div class="resource flexrow">
+      <label>{{localize "DAWN.Actor.Character.Tier"}}</label>
+      <input type="number" name="system.tier" value="{{system.tier}}" min="1" max="6" />
+    </div>
+
+    <fieldset class="attr-roles">
+      <legend>{{localize "DAWN.Actor.Character.AttributeRoles"}}</legend>
+      <div class="resource flexrow">
+        <label>{{localize "DAWN.Actor.Character.PrimaryAttr"}}</label>
+        <select name="system.primaryAttr">
+          {{{selectOptions attrOptions selected=system.primaryAttr localize=true}}}
+        </select>
+      </div>
+      <div class="resource flexrow">
+        <label>{{localize "DAWN.Actor.Character.SecondaryAttr"}}</label>
+        <select name="system.secondaryAttr">
+          {{{selectOptions attrOptions selected=system.secondaryAttr localize=true}}}
+        </select>
+      </div>
+    </fieldset>
+
+    <div class="attributes">
+      <div class="resource flexrow">
+        <label>{{localize "DAWN.Actor.Character.Body"}}</label>
+        <input type="number" name="system.body" value="{{system.body}}" />
+      </div>
+      <div class="resource flexrow">
+        <label>{{localize "DAWN.Actor.Character.Talent"}}</label>
+        <input type="number" name="system.talent" value="{{system.talent}}" />
+      </div>
+      <div class="resource flexrow">
+        <label>{{localize "DAWN.Actor.Character.Spirit"}}</label>
+        <input type="number" name="system.spirit" value="{{system.spirit}}" />
+      </div>
+      <div class="resource flexrow">
+        <label>{{localize "DAWN.Actor.Character.Mind"}}</label>
+        <input type="number" name="system.mind" value="{{system.mind}}" />
+      </div>
+    </div>
+  </section>
+
+  <section class="tab{{#if tabs.unstructured.active}} active{{/if}}" data-group="sheet" data-tab="unstructured">
   </section>
 </form>
