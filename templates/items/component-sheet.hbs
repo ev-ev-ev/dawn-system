@@ -1,0 +1,74 @@
+<div class="dawn-sheet sheet-body npc-sheet component-sheet flexcol">
+  <header class="sheet-header flexcol">
+    <div class="flexrow" style="gap:8px">
+      <input class="charname" name="name" type="text" value="{{document.name}}" placeholder="Component Name" />
+      <input class="npc-archetype" name="system.archetype" type="text" value="{{system.archetype}}" placeholder="{{localize "DAWN.Item.Component.Archetype"}}" />
+    </div>
+    <textarea class="npc-flavor" name="system.flavor" rows="2" placeholder="{{localize "DAWN.Item.Component.Flavor"}}">{{system.flavor}}</textarea>
+  </header>
+
+  <fieldset class="npc-stats">
+    <legend>{{localize "DAWN.Item.Component.Stats"}}</legend>
+    <div class="npc-stats-row flexrow">
+      <div class="npc-stat flexcol">
+        <label>HP</label>
+        <div class="flexrow npc-stat-formula">
+          <input name="system.basehp" type="number" value="{{system.basehp}}" min="0" />
+          <span>+</span>
+          <input name="system.tierhp" type="number" value="{{system.tierhp}}" min="0" />
+          <span class="npc-stat-tier">×T</span>
+        </div>
+      </div>
+      <div class="npc-stat flexcol">
+        <label>{{localize "DAWN.Item.Component.Speed"}}</label>
+        <input name="system.speed" type="number" value="{{system.speed}}" min="0" />
+      </div>
+      <div class="npc-stat flexcol">
+        <label>{{localize "DAWN.Item.Component.TierArmor"}}</label>
+        <div class="flexrow npc-stat-formula">
+          <span>+</span>
+          <input name="system.tierarmor" type="number" value="{{system.tierarmor}}" min="0" />
+          <span class="npc-stat-tier">×T</span>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="npc-passive">
+    <legend>{{localize "DAWN.Item.Component.Passive"}}</legend>
+    <textarea name="system.passive" rows="3" placeholder="{{localize "DAWN.Item.Component.Passive"}}">{{system.passive}}</textarea>
+  </fieldset>
+
+  <fieldset class="npc-action">
+    <legend>{{localize "DAWN.Item.Component.ActionLabel"}}</legend>
+    <input class="npc-ability-name" name="system.actionname" type="text" value="{{system.actionname}}" placeholder="{{localize "DAWN.Item.Component.ActionName"}}" />
+    <textarea name="system.action" rows="2" placeholder="{{localize "DAWN.Item.Component.Action"}}">{{system.action}}</textarea>
+  </fieldset>
+
+  <fieldset class="npc-attack">
+    <legend>{{localize "DAWN.Item.Component.AttackLabel"}}</legend>
+    <div class="npc-ability-header flexrow">
+      <input class="npc-ability-name" name="system.attackname" type="text" value="{{system.attackname}}" placeholder="{{localize "DAWN.Item.Component.AttackName"}}" />
+    </div>
+    <div class="npc-dice-row flexrow">
+      <span class="npc-dice-label">{{localize "DAWN.Item.Component.Roll"}}</span>
+      <input class="dice-input" name="system.attackdice" type="number" value="{{system.attackdice}}" min="0" />
+      <span>+</span>
+      <input class="dice-input" name="system.attacktierdice" type="number" value="{{system.attacktierdice}}" min="0" />
+      <span>×T / ×</span>
+      <input class="dice-input" name="system.attacktensionx" type="number" value="{{system.attacktensionx}}" min="0" />
+      <span>{{localize "DAWN.Item.Component.Tension"}}</span>
+    </div>
+    <textarea name="system.attack" rows="4" placeholder="{{localize "DAWN.Item.Component.Attack"}}">{{system.attack}}</textarea>
+  </fieldset>
+
+  <fieldset class="npc-ace">
+    <legend>{{localize "DAWN.Item.Component.AceLabel"}}</legend>
+    <div class="npc-ability-header flexrow">
+      <input class="npc-ability-name" name="system.acename" type="text" value="{{system.acename}}" placeholder="{{localize "DAWN.Item.Component.AceName"}}" />
+      <span class="ace-tension-badge">T{{system.acetension}}</span>
+      <input class="dice-input" name="system.acetension" type="number" value="{{system.acetension}}" min="0" />
+    </div>
+    <textarea name="system.ace" rows="3" placeholder="{{localize "DAWN.Item.Component.Ace"}}">{{system.ace}}</textarea>
+  </fieldset>
+</div>

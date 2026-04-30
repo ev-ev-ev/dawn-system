@@ -10,6 +10,18 @@
       },
       "Adversary": {
         "Title": "Adversary Sheet"
+      },
+      "Technique": {
+        "Title": "Technique"
+      },
+      "Edge": {
+        "Title": "Edge"
+      },
+      "Component": {
+        "Title": "NPC Component"
+      },
+      "Modifier": {
+        "Title": "NPC Modifier"
       }
     },
     "Item": {
@@ -27,6 +39,77 @@
         "Text": "Description",
         "TextPlaceholder": "Ability description…",
         "NamePlaceholder": "Ability Name"
+      },
+      "Edge": {
+        "Title": "Edge",
+        "Flavor": "Flavor text…",
+        "DefenseLabel": "Defense",
+        "TurnLabel": "Turn",
+        "PhaseLabel": "Phase",
+        "AbilityName": "Name",
+        "DefenseName": "Defense Name",
+        "Defense": "Defense description…",
+        "TurnName": "Turn Name",
+        "Turn": "Turn description…",
+        "PhaseName": "Phase Name",
+        "Phase": "Phase description…"
+      },
+      "Component": {
+        "Title": "NPC Component",
+        "Archetype": "Archetype",
+        "Flavor": "Flavor text…",
+        "Stats": "Stats",
+        "BaseHP": "Base HP",
+        "TierHP": "Tier HP",
+        "Speed": "Speed",
+        "TierArmor": "Armor",
+        "Passive": "Passive",
+        "ActionLabel": "Action",
+        "ActionName": "Action name…",
+        "Action": "Action description…",
+        "AttackLabel": "Attack",
+        "AttackName": "Attack name…",
+        "Attack": "Attack description…",
+        "AttackDice": "Dice",
+        "AttackTierDice": "Tier Dice",
+        "AttackTensionX": "Tension ×",
+        "Roll": "Roll",
+        "Tension": "Tension",
+        "AceLabel": "Ace",
+        "AceName": "Ace name…",
+        "Ace": "Ace description…",
+        "AceTension": "Tension Cost"
+      },
+      "Modifier": {
+        "Title": "NPC Modifier",
+        "Archetype": "Archetype",
+        "Flavor": "Flavor text…",
+        "Stats": "Stats",
+        "BaseHP": "Base HP",
+        "TierHP": "Tier HP",
+        "Speed": "Speed",
+        "Evasion": "Evasion",
+        "BaseEvasion": "Base Evasion",
+        "TierEvasion": "Tier Evasion",
+        "Armor": "Armor",
+        "BaseArmor": "Base Armor",
+        "TierArmor": "Tier Armor",
+        "Passive": "Passive",
+        "ActionLabel": "Action",
+        "ActionName": "Action name…",
+        "Action": "Action description…",
+        "AttackLabel": "Attack",
+        "AttackName": "Attack name…",
+        "Attack": "Attack description…",
+        "AttackDice": "Dice",
+        "AttackTierDice": "Tier Dice",
+        "AttackTensionX": "Tension ×",
+        "Roll": "Roll",
+        "Tension": "Tension",
+        "AceLabel": "Ace",
+        "AceName": "Ace name…",
+        "Ace": "Ace description…",
+        "AceTension": "Tension Cost"
       }
     },
     "Actor": {
@@ -61,7 +144,10 @@
       "adversary": "Adversary"
     },
     "Item": {
-      "technique": "Technique"
+      "technique": "Technique",
+      "edge": "Edge",
+      "component": "NPC Component",
+      "modifier": "NPC Modifier"
     }
   }
 }

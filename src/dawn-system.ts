@@ -1,8 +1,11 @@
 import { AdversaryDataModel, CharacterDataModel } from "./data/actor-models.js";
-import { TechniqueDataModel } from "./data/item-models.js";
+import { TechniqueDataModel, EdgeDataModel, ComponentDataModel, ModifierDataModel } from "./data/item-models.js";
 import { CharacterSheet } from "./sheets/character-sheet.js";
 import { AdversarySheet } from "./sheets/adversary-sheet.js";
 import { TechniqueSheet } from "./sheets/technique-sheet.js";
+import { EdgeSheet } from "./sheets/edge-sheet.js";
+import { ComponentSheet } from "./sheets/component-sheet.js";
+import { ModifierSheet } from "./sheets/modifier-sheet.js";
 
 foundry.helpers.Hooks.once("init", () => {
   console.log("dawn-system | Initialising Dawn System");
@@ -28,12 +31,30 @@ foundry.helpers.Hooks.once("init", () => {
   // Register item data models.
   const itemDataModels = CONFIG.Item.dataModels as Record<string, unknown>;
   itemDataModels.technique = TechniqueDataModel;
+  itemDataModels.edge = EdgeDataModel;
+  itemDataModels.component = ComponentDataModel;
+  itemDataModels.modifier = ModifierDataModel;
 
   // Register item sheets.
   foundry.documents.collections.Items.registerSheet("dawn-system", TechniqueSheet, {
     types: ["technique"],
     makeDefault: true,
     label: "DAWN.Sheet.Technique.Title",
+  });
+  foundry.documents.collections.Items.registerSheet("dawn-system", EdgeSheet, {
+    types: ["edge"],
+    makeDefault: true,
+    label: "DAWN.Sheet.Edge.Title",
+  });
+  foundry.documents.collections.Items.registerSheet("dawn-system", ComponentSheet, {
+    types: ["component"],
+    makeDefault: true,
+    label: "DAWN.Sheet.Component.Title",
+  });
+  foundry.documents.collections.Items.registerSheet("dawn-system", ModifierSheet, {
+    types: ["modifier"],
+    makeDefault: true,
+    label: "DAWN.Sheet.Modifier.Title",
   });
 
   // Register actor sheets.

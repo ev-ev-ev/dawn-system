@@ -1,0 +1,33 @@
+<div class="dawn-sheet sheet-body edge-sheet flexcol">
+  <header class="sheet-header flexcol">
+    <input class="charname" name="name" type="text" value="{{document.name}}" placeholder="Edge Name" />
+    <textarea class="edge-flavor" name="system.flavor" rows="2" placeholder="{{localize "DAWN.Item.Edge.Flavor"}}">{{system.flavor}}</textarea>
+  </header>
+
+  <fieldset class="edge-ability">
+    <legend>{{localize "DAWN.Item.Edge.DefenseLabel"}}</legend>
+    <div class="resource flexrow">
+      <label>{{localize "DAWN.Item.Edge.AbilityName"}}</label>
+      <input name="system.defensename" type="text" value="{{system.defensename}}" />
+    </div>
+    <textarea name="system.defense" rows="3" placeholder="{{localize "DAWN.Item.Edge.Defense"}}">{{system.defense}}</textarea>
+  </fieldset>
+
+  <fieldset class="edge-ability">
+    <legend>{{localize "DAWN.Item.Edge.TurnLabel"}}</legend>
+    <div class="resource flexrow">
+      <label>{{localize "DAWN.Item.Edge.AbilityName"}}</label>
+      <input name="system.turnname" type="text" value="{{system.turnname}}" />
+    </div>
+    <textarea name="system.turn" rows="3" placeholder="{{localize "DAWN.Item.Edge.Turn"}}">{{system.turn}}</textarea>
+  </fieldset>
+
+  <fieldset class="edge-ability">
+    <legend>{{localize "DAWN.Item.Edge.PhaseLabel"}}</legend>
+    <div class="resource flexrow">
+      <label>{{localize "DAWN.Item.Edge.AbilityName"}}</label>
+      <input name="system.phasename" type="text" value="{{system.phasename}}" />
+    </div>
+    <textarea name="system.phase" rows="4" placeholder="{{localize "DAWN.Item.Edge.Phase"}}">{{system.phase}}</textarea>
+  </fieldset>
+</div>

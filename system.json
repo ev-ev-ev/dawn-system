@@ -28,7 +28,10 @@
       "adversary": {}
     },
     "Item": {
-      "technique": {}
+      "technique": {},
+      "edge": {},
+      "component": {},
+      "modifier": {}
     }
   },
   "packs": [
@@ -36,6 +39,27 @@
       "name": "techniques",
       "label": "Techniques",
       "path": "packs/techniques",
+      "type": "Item",
+      "system": "dawn-system"
+    },
+    {
+      "name": "edges",
+      "label": "Edges",
+      "path": "packs/edges",
+      "type": "Item",
+      "system": "dawn-system"
+    },
+    {
+      "name": "components",
+      "label": "NPC Components",
+      "path": "packs/components",
+      "type": "Item",
+      "system": "dawn-system"
+    },
+    {
+      "name": "modifiers",
+      "label": "NPC Modifiers",
+      "path": "packs/modifiers",
       "type": "Item",
       "system": "dawn-system"
     }

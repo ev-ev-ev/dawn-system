@@ -301,3 +301,156 @@
   margin: 4px 0;
 }
 
+/* ─── Edge Sheet ──────────────────────────────────────────────────────────── */
+
+.edge-sheet .sheet-header {
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.edge-sheet .edge-flavor {
+  font-style: italic;
+  opacity: 0.75;
+  resize: vertical;
+  min-height: 40px;
+}
+
+.edge-sheet .edge-ability {
+  margin-bottom: 0;
+}
+
+.edge-sheet .edge-ability textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 56px;
+}
+
+/* ─── NPC Sheets (Component & Modifier) ──────────────────────────────────── */
+
+.npc-sheet .sheet-header {
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.npc-sheet .npc-archetype {
+  flex: 0 0 120px;
+  font-size: 0.85em;
+  text-align: center;
+  border: 1px solid var(--color-border-light-tertiary);
+  border-radius: 3px;
+  padding: 2px 6px;
+}
+
+.npc-sheet .npc-flavor {
+  font-style: italic;
+  opacity: 0.75;
+  resize: vertical;
+  min-height: 36px;
+}
+
+/* Stats fieldset */
+.npc-sheet .npc-stats-row {
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.npc-sheet .npc-stat {
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 2px;
+  min-width: 80px;
+}
+
+.npc-sheet .npc-stat > label {
+  font-size: 0.78em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+  text-align: center;
+}
+
+.npc-sheet .npc-stat-formula {
+  align-items: center;
+  gap: 2px;
+}
+
+.npc-sheet .npc-stat-formula input[type="number"] {
+  width: 44px;
+  text-align: center;
+  padding: 2px 4px;
+}
+
+.npc-sheet .npc-stat input[type="number"] {
+  width: 52px;
+  text-align: center;
+  padding: 2px 4px;
+}
+
+.npc-sheet .npc-stat-tier {
+  font-size: 0.78em;
+  opacity: 0.6;
+}
+
+/* Passive / action / attack / ace fieldsets */
+.npc-sheet .npc-passive textarea,
+.npc-sheet .npc-action textarea,
+.npc-sheet .npc-attack textarea,
+.npc-sheet .npc-ace textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 44px;
+}
+
+/* Ability name input (full width inside fieldset) */
+.npc-sheet .npc-ability-name {
+  width: 100%;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* Ability header row: name + badge */
+.npc-sheet .npc-ability-header {
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+/* Dice row */
+.npc-sheet .npc-dice-row {
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+  font-size: 0.85em;
+}
+
+.npc-sheet .npc-dice-label {
+  font-size: 0.8em;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.npc-sheet .dice-input {
+  width: 42px;
+  text-align: center;
+  padding: 2px 4px;
+  flex: 0 0 auto;
+}
+
+/* Ace tension cost badge */
+.npc-sheet .ace-tension-badge {
+  font-size: 0.78em;
+  font-weight: 700;
+  background: var(--color-border-light-tertiary);
+  border-radius: 3px;
+  padding: 1px 5px;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.npc-sheet .ace-tension-badge + .dice-input {
+  /* small tension number input next to badge */
+  width: 38px;
+}
+
+
