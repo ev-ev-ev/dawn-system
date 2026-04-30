@@ -30,10 +30,41 @@ export class LearnTechniqueDialog extends foundry.applications.api.HandlebarsApp
   }).ApplicationV2
 ) {
   private _actor: foundry.documents.BaseActor;
+  private _closedArchetypes = new Set<string>();
+  private _scrollTop = 0;
 
   constructor(actor: foundry.documents.BaseActor, options: object = {}) {
     super(options as never);
     this._actor = actor;
+  }
+
+  async _preRender(_context: object, _options: object) {
+    const el = (this as any).element as HTMLElement | undefined;
+    if (!el) return;
+    const list = el.querySelector(".learn-technique-list");
+    if (list) this._scrollTop = (list as HTMLElement).scrollTop;
+    this._closedArchetypes.clear();
+    el.querySelectorAll<HTMLDetailsElement>(".learn-archetype-group").forEach(details => {
+      if (!details.open) {
+        const text = details.querySelector(".learn-archetype-header")?.textContent?.trim();
+        if (text) this._closedArchetypes.add(text);
+      }
+    });
+  }
+
+  async _onRender(_context: object, _options: object) {
+    const el = (this as any).element as HTMLElement | undefined;
+    if (!el) return;
+    el.querySelectorAll<HTMLDetailsElement>(".learn-archetype-group").forEach(details => {
+      const text = details.querySelector(".learn-archetype-header")?.textContent?.trim();
+      const shouldClose = text ? this._closedArchetypes.has(text) : false;
+      if (text && this._closedArchetypes.has(text)) details.removeAttribute("open");
+    });
+    const scrollTop = this._scrollTop;
+    setTimeout(() => {
+      const list = el.querySelector(".learn-technique-list");
+      if (list) (list as HTMLElement).scrollTop = scrollTop;
+    }, 0);
   }
 
   static DEFAULT_OPTIONS = {
