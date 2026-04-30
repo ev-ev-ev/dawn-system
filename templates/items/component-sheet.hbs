@@ -16,7 +16,7 @@
           <input name="system.basehp" type="number" value="{{system.basehp}}" min="0" />
           <span>+</span>
           <input name="system.tierhp" type="number" value="{{system.tierhp}}" min="0" />
-          <span class="npc-stat-tier">×T</span>
+          <span class="npc-stat-tier">× Tier</span>
         </div>
       </div>
       <div class="npc-stat flexcol">
@@ -28,7 +28,7 @@
         <div class="flexrow npc-stat-formula">
           <span>+</span>
           <input name="system.tierarmor" type="number" value="{{system.tierarmor}}" min="0" />
-          <span class="npc-stat-tier">×T</span>
+          <span class="npc-stat-tier">× Tier</span>
         </div>
       </div>
     </div>
@@ -55,7 +55,7 @@
       <input class="dice-input" name="system.attackdice" type="number" value="{{system.attackdice}}" min="0" />
       <span>+</span>
       <input class="dice-input" name="system.attacktierdice" type="number" value="{{system.attacktierdice}}" min="0" />
-      <span>×T / ×</span>
+      <span>× Tier +</span>
       <input class="dice-input" name="system.attacktensionx" type="number" value="{{system.attacktensionx}}" min="0" />
       <span>{{localize "DAWN.Item.Component.Tension"}}</span>
     </div>
@@ -66,7 +66,7 @@
     <legend>{{localize "DAWN.Item.Component.AceLabel"}}</legend>
     <div class="npc-ability-header flexrow">
       <input class="npc-ability-name" name="system.acename" type="text" value="{{system.acename}}" placeholder="{{localize "DAWN.Item.Component.AceName"}}" />
-      <span class="ace-tension-badge">T{{system.acetension}}</span>
+      <label class="ace-tension-label">{{localize "DAWN.Item.Component.AceTension"}}</label>
       <input class="dice-input" name="system.acetension" type="number" value="{{system.acetension}}" min="0" />
     </div>
     <textarea name="system.ace" rows="3" placeholder="{{localize "DAWN.Item.Component.Ace"}}">{{system.ace}}</textarea>

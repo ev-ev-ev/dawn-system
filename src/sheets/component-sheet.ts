@@ -4,7 +4,7 @@ export class ComponentSheet extends foundry.applications.api.HandlebarsApplicati
   static override DEFAULT_OPTIONS = {
     classes: ["dawn-system", "item", "component"],
     window: { title: "DAWN.Sheet.Component.Title", resizable: true },
-    position: { width: 520, height: 720 },
+    position: { width: 620, height: 720 },
     form: { submitOnChange: true, closeOnSubmit: false },
   };
 

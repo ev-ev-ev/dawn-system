@@ -78,7 +78,7 @@
         "AceLabel": "Ace",
         "AceName": "Ace name…",
         "Ace": "Ace description…",
-        "AceTension": "Tension Cost"
+        "AceTension": "Minimum Tension"
       },
       "Modifier": {
         "Title": "NPC Modifier",
@@ -109,7 +109,7 @@
         "AceLabel": "Ace",
         "AceName": "Ace name…",
         "Ace": "Ace description…",
-        "AceTension": "Tension Cost"
+        "AceTension": "Minimum Tension"
       }
     },
     "Actor": {

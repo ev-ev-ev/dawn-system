@@ -4,7 +4,7 @@ export class ModifierSheet extends foundry.applications.api.HandlebarsApplicatio
   static override DEFAULT_OPTIONS = {
     classes: ["dawn-system", "item", "modifier"],
     window: { title: "DAWN.Sheet.Modifier.Title", resizable: true },
-    position: { width: 520, height: 740 },
+    position: { width: 620, height: 740 },
     form: { submitOnChange: true, closeOnSubmit: false },
   };
 

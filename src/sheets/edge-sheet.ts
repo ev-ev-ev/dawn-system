@@ -4,7 +4,7 @@ export class EdgeSheet extends foundry.applications.api.HandlebarsApplicationMix
   static override DEFAULT_OPTIONS = {
     classes: ["dawn-system", "item", "edge"],
     window: { title: "DAWN.Sheet.Edge.Title", resizable: true },
-    position: { width: 480, height: 580 },
+    position: { width: 560, height: 580 },
     form: { submitOnChange: true, closeOnSubmit: false },
   };
 
