@@ -31,6 +31,15 @@
       "technique": {}
     }
   },
+  "packs": [
+    {
+      "name": "techniques",
+      "label": "Techniques",
+      "path": "packs/techniques",
+      "type": "Item",
+      "system": "dawn-system"
+    }
+  ],
   "initiative": "1d20",
   "primaryTokenAttribute": null,
   "secondaryTokenAttribute": null

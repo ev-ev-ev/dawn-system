@@ -4,11 +4,14 @@
   "description": "A Foundry VTT V14 game system",
   "type": "module",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c && node scripts/build-packs.mjs",
+    "build:js": "rollup -c",
+    "build:packs": "node scripts/build-packs.mjs",
     "watch": "rollup -c --watch",
     "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "devDependencies": {
+    "@foundryvtt/foundryvtt-cli": "^3.0.3",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-typescript": "^12.1.2",
     "rollup": "^4.32.0",
