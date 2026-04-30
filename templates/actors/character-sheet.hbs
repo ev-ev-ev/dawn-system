@@ -20,8 +20,31 @@
   <section class="tab{{#if tabs.structured.active}} active{{/if}}" data-group="sheet" data-tab="structured">
     <div class="resource flexrow">
       <label>{{localize "DAWN.Actor.Character.Health"}}</label>
-      <input type="number" name="system.health" value="{{system.health}}" />
+      <input type="number" name="system.health.value" value="{{system.health.value}}" min="0" max="{{system.health.max}}" />
+      <span class="resource-sep">/</span>
+      <span class="resource-max">{{system.health.max}}</span>
     </div>
+
+    <div class="resource flexrow">
+      <label>{{localize "DAWN.Actor.Character.Focus"}}</label>
+      <input type="number" name="system.focus.value" value="{{system.focus.value}}" min="0" max="{{system.focus.max}}" />
+      <span class="resource-sep">/</span>
+      <span class="resource-max">{{system.focus.max}}</span>
+    </div>
+
+    <div class="resource flexrow">
+      <label>{{localize "DAWN.Actor.Character.Speed"}}</label>
+      <span class="resource-derived">{{system.speed}}</span>
+    </div>
+
+    <fieldset class="wounds">
+      <legend>{{localize "DAWN.Actor.Character.Wounds"}}</legend>
+      <div class="wounds-row flexrow">
+        <label><input type="checkbox" name="system.wound1" {{#if system.wound1}}checked{{/if}} /> {{localize "DAWN.Actor.Character.Wound"}}</label>
+        <label><input type="checkbox" name="system.wound2" {{#if system.wound2}}checked{{/if}} /> {{localize "DAWN.Actor.Character.Wound"}}</label>
+        <label><input type="checkbox" name="system.wound3" {{#if system.wound3}}checked{{/if}} /> {{localize "DAWN.Actor.Character.Wound"}}</label>
+      </div>
+    </fieldset>
 
     <div class="resource flexrow">
       <label>{{localize "DAWN.Actor.Character.Tier"}}</label>

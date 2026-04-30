@@ -19,7 +19,7 @@ foundry.helpers.Hooks.once("init", () => {
     trackableAttributes: Record<string, { bar: string[]; value: string[] }>;
   };
   trackable.trackableAttributes = {
-    character: { bar: [], value: ["health"] },
+    character: { bar: ["health", "focus"], value: ["speed"] },
     adversary: { bar: [], value: ["tier"] },
   };
 

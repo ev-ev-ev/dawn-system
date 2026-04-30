@@ -1,4 +1,4 @@
-const { NumberField, StringField } = foundry.data.fields;
+const { NumberField, StringField, SchemaField, BooleanField } = foundry.data.fields;
 
 /**
  * Data model for the "character" Actor type.
@@ -7,13 +7,15 @@ const { NumberField, StringField } = foundry.data.fields;
 export class CharacterDataModel extends foundry.abstract.TypeDataModel {
   static override defineSchema() {
     return {
-      health: new NumberField({
-        required: true,
-        integer: true,
-        min: 0,
-        initial: 10,
-        label: "DAWN.Actor.Character.Health",
+      health: new SchemaField({
+        value: new NumberField({ required: true, integer: true, min: 0, initial: 16, label: "DAWN.Actor.Character.Health" }),
       }),
+      focus: new SchemaField({
+        value: new NumberField({ required: true, integer: true, min: 0, initial: 2, label: "DAWN.Actor.Character.Focus" }),
+      }),
+      wound1: new BooleanField({ initial: false, label: "DAWN.Actor.Character.Wound" }),
+      wound2: new BooleanField({ initial: false, label: "DAWN.Actor.Character.Wound" }),
+      wound3: new BooleanField({ initial: false, label: "DAWN.Actor.Character.Wound" }),
       tier: new NumberField({
         required: true,
         integer: true,
@@ -35,12 +37,22 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
     super.prepareBaseData();
     const s = this as any;
     const tier: number = s.tier ?? 1;
+    const body: number = s.body ?? 4;
+    const talent: number = s.talent ?? 3;
+    const spirit: number = s.spirit ?? 2;
     const primary: string = s.primaryAttr ?? "body";
     const secondary: string = s.secondaryAttr ?? "talent";
 
+    // Derived resource maximums
+    s.health.max = 10 + body + tier * 2;
+    s.focus.max = 1 + Math.floor(spirit / 2);
+
+    // Derived speed (not a stored field)
+    s.speed = 2 + Math.floor(talent / 2);
+
     // Total points = base 11 at tier 1, +2 per additional tier
     s.attrPointsTotal = 11 + (tier - 1) * 2;
-    s.attrPointsSpent = (s.body ?? 2) + (s.talent ?? 2) + (s.spirit ?? 2) + (s.mind ?? 2);
+    s.attrPointsSpent = body + talent + spirit + (s.mind ?? 2);
     s.attrPointsAvailable = s.attrPointsTotal - s.attrPointsSpent;
 
     // Per-attribute minimums enforced by role selection

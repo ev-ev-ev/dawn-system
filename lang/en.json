@@ -23,7 +23,11 @@
         "Talent": "Talent",
         "Spirit": "Spirit",
         "Mind": "Mind",
-        "AttrPoints": "Attribute Points"
+        "AttrPoints": "Attribute Points",
+        "Speed": "Speed",
+        "Focus": "Focus",
+        "Wounds": "Wounds",
+        "Wound": "Wound"
       },
       "Adversary": {
         "Tier": "Tier"
