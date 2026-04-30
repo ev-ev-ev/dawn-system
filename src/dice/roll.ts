@@ -89,6 +89,7 @@ export async function openRollDialog(tag: string, defaultDice: number, actor: un
         <input type="number" name="bonus" value="0" />
       </div>
     `,
+    ok: { label: "Roll", icon: "fa-solid fa-dice-d6" },
     rejectClose: false,
   });
 
