@@ -1,4 +1,5 @@
 import { openRollDialog } from "../dice/roll.js";
+import { LearnTechniqueDialog } from "../apps/learn-technique-dialog.js";
 
 export class CharacterSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
@@ -13,6 +14,7 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
       deleteItem: CharacterSheet._onDeleteItem,
       openItem: CharacterSheet._onOpenItem,
       chatItem: CharacterSheet._onChatItem,
+      learnTechnique: CharacterSheet._onLearnTechnique,
     },
   };
 
@@ -78,6 +80,11 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     if (!itemId) return;
     const item = (this as any).document.items.get(itemId) as (foundry.documents.BaseItem & { sheet: { render(force: boolean): void } }) | undefined;
     item?.sheet?.render(true);
+  }
+
+  static async _onLearnTechnique(this: CharacterSheet, _event: Event, _target: HTMLElement): Promise<void> {
+    const dialog = new LearnTechniqueDialog((this as any).document);
+    await dialog.render(true);
   }
 
   static async _onChatItem(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {

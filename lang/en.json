@@ -112,6 +112,13 @@
         "AceTension": "Minimum Tension"
       }
     },
+    "Dialog": {
+      "LearnTechnique": {
+        "Title": "Learn a Technique",
+        "Learn": "Learn",
+        "None": "No techniques available to learn."
+      }
+    },
     "Actor": {
       "Character": {
         "Health": "Health",
@@ -130,6 +137,7 @@
         "Wound": "Wound",
         "Techniques": "Techniques",
         "NoTechniques": "No techniques learned. Drag from a compendium to add.",
+        "LearnTechnique": "Learn",
         "ForgetTechnique": "Forget",
         "ChatTechnique": "Send to Chat"
       },

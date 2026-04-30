@@ -1,0 +1,30 @@
+<div class="learn-technique-body flexcol">
+  {{#if hasAny}}
+  <div class="learn-technique-list flexcol">
+    {{#each groups as |group|}}
+    <details class="learn-archetype-group" open>
+      <summary class="learn-archetype-header">{{group.archetype}}</summary>
+      <div class="learn-archetype-techniques flexcol">
+        {{#each group.techniques as |tech|}}
+        <div class="learn-technique-row flexrow">
+          <div class="learn-technique-info flexcol">
+            <div class="learn-technique-title flexrow">
+              <span class="learn-technique-name">{{tech.name}}</span>
+              <span class="learn-technique-meta">{{tech.tech}} · {{localize "DAWN.Item.Technique.LevelLabel"}} {{tech.level}} · {{tech.stars}}</span>
+            </div>
+            {{#if tech.flavor}}<p class="learn-technique-flavor">{{tech.flavor}}</p>{{/if}}
+            <p class="learn-technique-text">{{tech.text}}</p>
+          </div>
+          <button type="button" class="learn-btn" data-action="learnTechnique" data-doc-id="{{tech.id}}">
+            {{localize "DAWN.Dialog.LearnTechnique.Learn"}}
+          </button>
+        </div>
+        {{/each}}
+      </div>
+    </details>
+    {{/each}}
+  </div>
+  {{else}}
+  <p class="learn-technique-none hint">{{localize "DAWN.Dialog.LearnTechnique.None"}}</p>
+  {{/if}}
+</div>

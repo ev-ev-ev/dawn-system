@@ -454,4 +454,133 @@
   width: 38px;
 }
 
+/* ─── Techniques legend with Learn button ──────────────────────────────────── */
+
+.dawn-sheet .techniques-list {
+  position: relative;
+}
+
+.dawn-sheet .techniques-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dawn-sheet .learn-technique-btn {
+  font-size: 0.78em;
+  padding: 1px 7px;
+  height: 20px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 1;
+  vertical-align: middle;
+}
+
+/* ─── Learn Technique Dialog ───────────────────────────────────────────────── */
+
+.learn-technique-dialog .learn-technique-body {
+  padding: 8px;
+  gap: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.learn-technique-dialog .learn-technique-list {
+  flex: 1;
+  overflow-y: auto;
+  gap: 0;
+}
+
+.learn-technique-dialog .learn-archetype-group {
+  border-bottom: 1px solid var(--color-border-light-tertiary, #ccc);
+  margin-bottom: 4px;
+}
+
+.learn-technique-dialog .learn-archetype-header {
+  font-weight: bold;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+  padding: 4px 2px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.learn-technique-dialog .learn-archetype-header::before {
+  content: "▾ ";
+  font-size: 0.9em;
+}
+
+.learn-technique-dialog details:not([open]) .learn-archetype-header::before {
+  content: "▸ ";
+}
+
+.learn-technique-dialog .learn-archetype-techniques {
+  gap: 0;
+  padding-bottom: 4px;
+}
+
+.learn-technique-dialog .learn-technique-row {
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--color-border-light-tertiary, #ccc);
+}
+
+.learn-technique-dialog .learn-technique-row:last-child {
+  border-bottom: none;
+}
+
+.learn-technique-dialog .learn-technique-info {
+  flex: 1;
+  gap: 3px;
+  min-width: 0;
+}
+
+.learn-technique-dialog .learn-technique-title {
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.learn-technique-dialog .learn-technique-name {
+  font-weight: bold;
+  font-size: 0.95em;
+}
+
+.learn-technique-dialog .learn-technique-meta {
+  font-size: 0.78em;
+  opacity: 0.6;
+}
+
+.learn-technique-dialog .learn-technique-flavor {
+  font-style: italic;
+  font-size: 0.8em;
+  opacity: 0.7;
+  margin: 0;
+}
+
+.learn-technique-dialog .learn-technique-text {
+  font-size: 0.85em;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.learn-technique-dialog .learn-btn {
+  flex: 0 0 auto;
+  font-size: 0.82em;
+  padding: 2px 10px;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.learn-technique-dialog .learn-technique-none {
+  text-align: center;
+  padding: 24px;
+  opacity: 0.5;
+}
+
 

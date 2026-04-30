@@ -92,7 +92,13 @@
     </fieldset>
 
     <fieldset class="techniques-list">
-      <legend>{{localize "DAWN.Actor.Character.Techniques"}}</legend>
+      <legend class="techniques-legend">
+        {{localize "DAWN.Actor.Character.Techniques"}}
+        <button type="button" class="learn-technique-btn" data-action="learnTechnique"
+          data-tooltip="{{localize "DAWN.Actor.Character.LearnTechnique"}}">
+          <i class="fa-solid fa-graduation-cap"></i> {{localize "DAWN.Actor.Character.LearnTechnique"}}
+        </button>
+      </legend>
       {{#if techniques.length}}
         {{#each techniques as |item|}}
         <div class="technique-entry flexrow" data-item-id="{{item.id}}">
