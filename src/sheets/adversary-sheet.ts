@@ -11,6 +11,7 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       printTechnique: AdversarySheet._onPrintTechnique,
       printComponent: AdversarySheet._onPrintComponent,
       deleteItem: AdversarySheet._onDeleteItem,
+      openItem: AdversarySheet._onOpenItem,
     },
   };
 
@@ -41,15 +42,11 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       .sort((a: foundry.documents.BaseItem, b: foundry.documents.BaseItem) => String(a.name).localeCompare(String(b.name)));
 
     const npcTechniques = allItems
-      .filter((i: foundry.documents.BaseItem) => i.type === "technique")
+      .filter((i: foundry.documents.BaseItem) => i.type === "modifier")
       .sort((a: foundry.documents.BaseItem, b: foundry.documents.BaseItem) => String(a.name).localeCompare(String(b.name)));
 
     const npcComponents = allItems
       .filter((i: foundry.documents.BaseItem) => i.type === "component")
-      .sort((a: foundry.documents.BaseItem, b: foundry.documents.BaseItem) => String(a.name).localeCompare(String(b.name)));
-
-    const modifiers = allItems
-      .filter((i: foundry.documents.BaseItem) => i.type === "modifier")
       .sort((a: foundry.documents.BaseItem, b: foundry.documents.BaseItem) => String(a.name).localeCompare(String(b.name)));
 
     return Object.assign(context, {
@@ -57,7 +54,6 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       edges,
       npcTechniques,
       npcComponents,
-      modifiers,
     });
   }
 
@@ -105,5 +101,12 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
     if (!itemId) return;
     const item = (this as any).document.items.get(itemId) as (foundry.documents.BaseItem & { delete(): Promise<unknown> }) | undefined;
     await item?.delete();
+  }
+
+  static async _onOpenItem(this: AdversarySheet, _event: Event, target: HTMLElement): Promise<void> {
+    const itemId = target.closest("[data-item-id]")?.getAttribute("data-item-id");
+    if (!itemId) return;
+    const item = (this as any).document.items.get(itemId) as (foundry.documents.BaseItem & { sheet: { render(force: boolean): void } }) | undefined;
+    item?.sheet?.render(true);
   }
 }

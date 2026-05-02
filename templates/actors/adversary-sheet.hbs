@@ -18,6 +18,7 @@
   </nav>
 
   <section class="tab{{#if tabs.main.active}} active{{/if}}" data-group="sheet" data-tab="main">
+    
   </section>
 
   <section class="tab{{#if tabs.components.active}} active{{/if}}" data-group="sheet" data-tab="components">
@@ -26,7 +27,7 @@
       {{#if edges.length}}
         {{#each edges as |item|}}
         <div class="adversary-entry flexrow" data-item-id="{{item.id}}">
-          <div class="adversary-entry-name">{{item.name}}</div>
+          <div class="adversary-entry-name" data-action="openItem" role="button">{{item.name}}</div>
           <div class="adversary-entry-controls flexrow">
             <a data-action="printEdge" data-tooltip="{{localize "DAWN.Actor.Character.ChatTechnique"}}"><i class="fa-solid fa-message"></i></a>
             <a data-action="deleteItem" data-tooltip="{{localize "DAWN.Actor.Character.ForgetTechnique"}}"><i class="fa-solid fa-trash"></i></a>
@@ -43,7 +44,7 @@
       {{#if npcTechniques.length}}
         {{#each npcTechniques as |item|}}
         <div class="adversary-entry flexrow" data-item-id="{{item.id}}">
-          <div class="adversary-entry-name">{{item.name}}</div>
+          <div class="adversary-entry-name" data-action="openItem" role="button">{{item.name}}</div>
           <div class="adversary-entry-controls flexrow">
             <a data-action="printTechnique" data-tooltip="{{localize "DAWN.Actor.Character.ChatTechnique"}}"><i class="fa-solid fa-message"></i></a>
             <a data-action="deleteItem" data-tooltip="{{localize "DAWN.Actor.Character.ForgetTechnique"}}"><i class="fa-solid fa-trash"></i></a>
@@ -60,7 +61,7 @@
       {{#if npcComponents.length}}
         {{#each npcComponents as |item|}}
         <div class="adversary-entry flexrow" data-item-id="{{item.id}}">
-          <div class="adversary-entry-name">{{item.name}}</div>
+          <div class="adversary-entry-name" data-action="openItem" role="button">{{item.name}}</div>
           <div class="adversary-entry-controls flexrow">
             <a data-action="printComponent" data-tooltip="{{localize "DAWN.Actor.Character.ChatTechnique"}}"><i class="fa-solid fa-message"></i></a>
             <a data-action="deleteItem" data-tooltip="{{localize "DAWN.Actor.Character.ForgetTechnique"}}"><i class="fa-solid fa-trash"></i></a>
@@ -72,4 +73,5 @@
       {{/if}}
     </fieldset>
   </section>
+
 </div>
