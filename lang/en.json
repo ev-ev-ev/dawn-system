@@ -9,7 +9,14 @@
         }
       },
       "Adversary": {
-        "Title": "Adversary Sheet"
+        "Title": "Adversary Sheet",
+        "Tab": {
+          "main": "Main",
+          "components": "Components"
+        },
+        "Edges": "Edges",
+        "NPCTechniques": "NPC Techniques",
+        "NPCComponents": "NPC Components"
       },
       "Technique": {
         "Title": "Technique"

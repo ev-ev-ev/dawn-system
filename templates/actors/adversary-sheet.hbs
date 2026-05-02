@@ -6,10 +6,70 @@
     </div>
   </header>
 
-  <section class="sheet-content">
-    <div class="resource flexrow">
-      <label>{{localize "DAWN.Actor.Adversary.Tier"}}</label>
-      <input type="number" name="system.tier" value="{{system.tier}}" />
-    </div>
+  <nav class="sheet-tabs tabs" aria-roledescription="{{localize "SHEETS.FormNavLabel"}}">
+    {{#each tabs as |tab|}}
+    <a data-action="tab" data-group="{{tab.group}}" data-tab="{{tab.id}}"
+        {{#if tab.cssClass}}class="{{tab.cssClass}}"{{/if}}
+        {{#if tab.tooltip}}data-tooltip="{{tab.tooltip}}"{{/if}}>
+      {{#if tab.icon}}<i class="{{tab.icon}}" inert></i>{{/if}}
+      {{#if tab.label}}<span>{{localize tab.label}}</span>{{/if}}
+    </a>
+    {{/each}}
+  </nav>
+
+  <section class="tab{{#if tabs.main.active}} active{{/if}}" data-group="sheet" data-tab="main">
+  </section>
+
+  <section class="tab{{#if tabs.components.active}} active{{/if}}" data-group="sheet" data-tab="components">
+    <fieldset class="adversary-section">
+      <legend>{{localize "DAWN.Sheet.Adversary.Edges"}}</legend>
+      {{#if edges.length}}
+        {{#each edges as |item|}}
+        <div class="adversary-entry flexrow" data-item-id="{{item.id}}">
+          <div class="adversary-entry-name">{{item.name}}</div>
+          <div class="adversary-entry-controls flexrow">
+            <a data-action="printEdge" data-tooltip="{{localize "DAWN.Actor.Character.ChatTechnique"}}"><i class="fa-solid fa-message"></i></a>
+            <a data-action="deleteItem" data-tooltip="{{localize "DAWN.Actor.Character.ForgetTechnique"}}"><i class="fa-solid fa-trash"></i></a>
+          </div>
+        </div>
+        {{/each}}
+      {{else}}
+        <p class="adversary-empty hint">{{localize "DAWN.Actor.Character.NoTechniques"}}</p>
+      {{/if}}
+    </fieldset>
+
+    <fieldset class="adversary-section">
+      <legend>{{localize "DAWN.Sheet.Adversary.NPCTechniques"}}</legend>
+      {{#if npcTechniques.length}}
+        {{#each npcTechniques as |item|}}
+        <div class="adversary-entry flexrow" data-item-id="{{item.id}}">
+          <div class="adversary-entry-name">{{item.name}}</div>
+          <div class="adversary-entry-controls flexrow">
+            <a data-action="printTechnique" data-tooltip="{{localize "DAWN.Actor.Character.ChatTechnique"}}"><i class="fa-solid fa-message"></i></a>
+            <a data-action="deleteItem" data-tooltip="{{localize "DAWN.Actor.Character.ForgetTechnique"}}"><i class="fa-solid fa-trash"></i></a>
+          </div>
+        </div>
+        {{/each}}
+      {{else}}
+        <p class="adversary-empty hint">{{localize "DAWN.Actor.Character.NoTechniques"}}</p>
+      {{/if}}
+    </fieldset>
+
+    <fieldset class="adversary-section">
+      <legend>{{localize "DAWN.Sheet.Adversary.NPCComponents"}}</legend>
+      {{#if npcComponents.length}}
+        {{#each npcComponents as |item|}}
+        <div class="adversary-entry flexrow" data-item-id="{{item.id}}">
+          <div class="adversary-entry-name">{{item.name}}</div>
+          <div class="adversary-entry-controls flexrow">
+            <a data-action="printComponent" data-tooltip="{{localize "DAWN.Actor.Character.ChatTechnique"}}"><i class="fa-solid fa-message"></i></a>
+            <a data-action="deleteItem" data-tooltip="{{localize "DAWN.Actor.Character.ForgetTechnique"}}"><i class="fa-solid fa-trash"></i></a>
+          </div>
+        </div>
+        {{/each}}
+      {{else}}
+        <p class="adversary-empty hint">{{localize "DAWN.Actor.Character.NoTechniques"}}</p>
+      {{/if}}
+    </fieldset>
   </section>
 </div>
