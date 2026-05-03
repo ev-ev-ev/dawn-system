@@ -15,6 +15,7 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
       openItem: CharacterSheet._onOpenItem,
       chatItem: CharacterSheet._onChatItem,
       learnTechnique: CharacterSheet._onLearnTechnique,
+      toggleWound: CharacterSheet._onToggleWound,
     },
   };
 
@@ -48,9 +49,12 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
         if (techCmp !== 0) return techCmp;
         return Number(sa.level ?? 1) - Number(sb.level ?? 1);
       });
+    const woundsValue = Number((document.system as any).wounds ?? 0);
+    const woundBoxes = Array.from({ length: 3 }, (_, i) => ({ index: i, checked: i < woundsValue }));
     return Object.assign(context, {
       system: document.system,
       techniques,
+      woundBoxes,
       attrOptions: {
         body: "DAWN.Actor.Character.Body",
         talent: "DAWN.Actor.Character.Talent",
@@ -98,5 +102,12 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
       content,
       speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
     });
+  }
+
+  static async _onToggleWound(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.woundIndex);
+    const current = Number((this as any).document.system.wounds ?? 0);
+    const newValue = index < current ? current - 1 : current + 1;
+    await (this as any).document.update({ "system.wounds": newValue });
   }
 }

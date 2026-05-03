@@ -3,8 +3,19 @@
     <img class="profile-img" src="{{document.img}}" data-edit="img" title="{{document.name}}" />
     <div class="header-fields flexcol">
       <input class="charname" name="name" type="text" value="{{document.name}}" placeholder="Name" />
+      <div class="resource flexrow">
+        <label>{{localize "DAWN.Actor.Adversary.Tier"}}</label>
+        <input type="number" name="system.tier" value="{{system.tier}}" min="1" />
+      </div>
     </div>
   </header>
+
+  <div class="resource flexrow">
+    <label>{{localize "DAWN.Actor.Adversary.Health"}}</label>
+    <input type="number" name="system.health.value" value="{{system.health.value}}" min="0" max="{{healthMax}}" />
+    <span class="resource-sep">/</span>
+    <span class="resource-max">{{healthMax}}</span>
+  </div>
 
   <nav class="sheet-tabs tabs" aria-roledescription="{{localize "SHEETS.FormNavLabel"}}">
     {{#each tabs as |tab|}}
@@ -18,7 +29,16 @@
   </nav>
 
   <section class="tab{{#if tabs.main.active}} active{{/if}}" data-group="sheet" data-tab="main">
-    
+    {{#if (gt gatesMax 1)}}
+    <fieldset class="gates">
+      <legend>{{localize "DAWN.Actor.Adversary.Gates"}}</legend>
+      <div class="gates-row flexrow">
+        {{#each gateBoxes as |box|}}
+        <span class="gate-box{{#if box.checked}} checked{{/if}}" data-action="toggleGate" data-gate-index="{{box.index}}" role="button">{{#if box.checked}}<i class="fa-solid fa-bandage"></i>{{/if}}</span>
+        {{/each}}
+      </div>
+    </fieldset>
+    {{/if}}
   </section>
 
   <section class="tab{{#if tabs.components.active}} active{{/if}}" data-group="sheet" data-tab="components">

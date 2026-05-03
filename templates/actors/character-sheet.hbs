@@ -71,6 +71,16 @@
     </div>
 
     <div class="resource flexrow">
+      <label>{{localize "DAWN.Actor.Character.Evasion"}}</label>
+      <input type="number" name="system.evasion" value="{{system.evasion}}" min="0" />
+    </div>
+
+    <div class="resource flexrow">
+      <label>{{localize "DAWN.Actor.Character.Armor"}}</label>
+      <input type="number" name="system.armor" value="{{system.armor}}" min="0" />
+    </div>
+
+    <div class="resource flexrow">
       <label>{{localize "DAWN.Actor.Character.Focus"}}</label>
       <input type="number" name="system.focus.value" value="{{system.focus.value}}" min="0" max="{{system.focus.max}}" />
       <span class="resource-sep">/</span>
@@ -85,9 +95,9 @@
     <fieldset class="wounds">
       <legend>{{localize "DAWN.Actor.Character.Wounds"}}</legend>
       <div class="wounds-row flexrow">
-        <label><input type="checkbox" name="system.wound1" {{#if system.wound1}}checked{{/if}} /> {{localize "DAWN.Actor.Character.Wound"}}</label>
-        <label><input type="checkbox" name="system.wound2" {{#if system.wound2}}checked{{/if}} /> {{localize "DAWN.Actor.Character.Wound"}}</label>
-        <label><input type="checkbox" name="system.wound3" {{#if system.wound3}}checked{{/if}} /> {{localize "DAWN.Actor.Character.Wound"}}</label>
+        {{#each woundBoxes as |box|}}
+        <span class="gate-box{{#if box.checked}} checked{{/if}}" data-action="toggleWound" data-wound-index="{{box.index}}" role="button">{{#if box.checked}}<i class="fa-solid fa-bandage"></i>{{/if}}</span>
+        {{/each}}
       </div>
     </fieldset>
 

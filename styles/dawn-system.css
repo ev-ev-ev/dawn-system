@@ -131,20 +131,40 @@
 }
 
 /* ----------------------------------------- */
-/*  Wounds                                   */
+/*  Wounds & Gates (shared box style)        */
 /* ----------------------------------------- */
 
-.dawn-sheet .wounds .wounds-row {
-  gap: 16px;
+.dawn-sheet .wounds .wounds-row,
+.dawn-sheet .gates .gates-row {
+  justify-content: space-evenly;
 }
 
-.dawn-sheet .wounds .wounds-row label {
-  display: flex;
+.dawn-sheet .gate-box {
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  width: 1.25em;
+  height: 1.25em;
+  border: 2px solid var(--color-text-primary, #333);
+  border-radius: 2px;
   cursor: pointer;
+  color: var(--color-text-primary, #333);
+  flex: 0 0 auto;
+  filter: grayscale(1);
 }
 
+.dawn-sheet .gate-box:hover {
+  opacity: 0.65;
+}
+
+.dawn-sheet .gate-box.checked {
+  border-color: transparent;
+}
+
+.dawn-sheet .gate-box i {
+  font-size: 0.95em;
+  line-height: 1;
+}
 /* ----------------------------------------- */
 /*  Tab content                              */
 /* ----------------------------------------- */

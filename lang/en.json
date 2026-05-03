@@ -142,6 +142,8 @@
         "Focus": "Focus",
         "Wounds": "Wounds",
         "Wound": "Wound",
+        "Evasion": "Evasion",
+        "Armor": "Armor",
         "Techniques": "Techniques",
         "NoTechniques": "No techniques learned. Drag from a compendium to add.",
         "LearnTechnique": "Learn",
@@ -149,7 +151,10 @@
         "ChatTechnique": "Send to Chat"
       },
       "Adversary": {
-        "Tier": "Tier"
+        "Tier": "Tier",
+        "Health": "Health",
+        "Gates": "Gates",
+        "Gate": "Gate"
       }
     }
   },

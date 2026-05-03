@@ -13,9 +13,7 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
       focus: new SchemaField({
         value: new NumberField({ required: true, integer: true, min: 0, initial: 2, label: "DAWN.Actor.Character.Focus" }),
       }),
-      wound1: new BooleanField({ initial: false, label: "DAWN.Actor.Character.Wound" }),
-      wound2: new BooleanField({ initial: false, label: "DAWN.Actor.Character.Wound" }),
-      wound3: new BooleanField({ initial: false, label: "DAWN.Actor.Character.Wound" }),
+      wounds: new NumberField({ required: true, integer: true, min: 0, max: 3, initial: 0, label: "DAWN.Actor.Character.Wounds" }),
       tier: new NumberField({
         required: true,
         integer: true,
@@ -30,12 +28,13 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
       talent: new NumberField({ required: true, integer: true, min: 2, initial: 3, label: "DAWN.Actor.Character.Talent" }),
       spirit: new NumberField({ required: true, integer: true, min: 2, initial: 2, label: "DAWN.Actor.Character.Spirit" }),
       mind: new NumberField({ required: true, integer: true, min: 2, initial: 2, label: "DAWN.Actor.Character.Mind" }),
+      evasion: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "DAWN.Actor.Character.Evasion" }),
+      armor: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "DAWN.Actor.Character.Armor" }),
     };
   }
 
   override prepareBaseData() {
-    super.prepareBaseData();
-    const s = this as any;
+    super.prepareBaseData();    const s = this as any;
     const tier: number = s.tier ?? 1;
     const body: number = s.body ?? 4;
     const talent: number = s.talent ?? 3;
@@ -76,6 +75,12 @@ export class AdversaryDataModel extends foundry.abstract.TypeDataModel {
         min: 1,
         initial: 1,
         label: "DAWN.Actor.Adversary.Tier",
+      }),
+      health: new SchemaField({
+        value: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "DAWN.Actor.Adversary.Health" }),
+      }),
+      gates: new SchemaField({
+        value: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "DAWN.Actor.Adversary.Gates" }),
       }),
     };
   }

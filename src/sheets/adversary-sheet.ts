@@ -12,6 +12,7 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       printComponent: AdversarySheet._onPrintComponent,
       deleteItem: AdversarySheet._onDeleteItem,
       openItem: AdversarySheet._onOpenItem,
+      toggleGate: AdversarySheet._onToggleGate,
     },
   };
 
@@ -49,12 +50,34 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       .filter((i: foundry.documents.BaseItem) => i.type === "component")
       .sort((a: foundry.documents.BaseItem, b: foundry.documents.BaseItem) => String(a.name).localeCompare(String(b.name)));
 
+    const system = document.system as Record<string, unknown>;
+    const tier = Number((system as any).tier ?? 1);
+    const { healthMax, gatesMax } = AdversarySheet._computeDerived(npcComponents, tier);
+    const gatesValue: number = Number((system.gates as Record<string, unknown>)?.value ?? 0);
+    const gateBoxes = Array.from({ length: gatesMax }, (_, i) => ({
+      index: i,
+      checked: i < gatesValue,
+    }));
+
     return Object.assign(context, {
       system: document.system,
       edges,
       npcTechniques,
       npcComponents,
+      healthMax,
+      gatesMax,
+      gateBoxes,
     });
+  }
+
+  static _computeDerived(components: foundry.documents.BaseItem[], tier: number): { healthMax: number; gatesMax: number } {
+    const gatesMax = components.length;
+    if (gatesMax === 0) return { healthMax: 0, gatesMax: 0 };
+    const total = components.reduce((sum, comp) => {
+      const cs = comp.system as Record<string, unknown>;
+      return sum + (Number(cs.basehp ?? 0) + Number(cs.tierhp ?? 0) * tier);
+    }, 0);
+    return { healthMax: Math.ceil(total / gatesMax), gatesMax };
   }
 
   static async _onPrintEdge(this: AdversarySheet, _event: Event, target: HTMLElement): Promise<void> {
@@ -108,5 +131,12 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
     if (!itemId) return;
     const item = (this as any).document.items.get(itemId) as (foundry.documents.BaseItem & { sheet: { render(force: boolean): void } }) | undefined;
     item?.sheet?.render(true);
+  }
+
+  static async _onToggleGate(this: AdversarySheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.gateIndex);
+    const current = Number((this as any).document.system.gates?.value ?? 0);
+    const newValue = index < current ? current - 1 : current + 1;
+    await (this as any).document.update({ "system.gates.value": newValue });
   }
 }
