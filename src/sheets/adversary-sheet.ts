@@ -36,6 +36,7 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
   private _scrollTop = 0;
 
   async _preRender(_context: object, _options: object) {
+    await super._preRender(_context, _options);
     const el = (this as any).element as HTMLElement | undefined;
     if (!el) return;
     const body = el.querySelector(".dawn-sheet.sheet-body");
@@ -43,6 +44,7 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
   }
 
   async _onRender(_context: object, _options: object) {
+    await super._onRender(_context, _options);
     const el = (this as any).element as HTMLElement | undefined;
     if (!el) return;
     const scrollTop = this._scrollTop;

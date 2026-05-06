@@ -15,6 +15,8 @@ declare class ActorSheetV2 extends TypeDataModel {
   static DEFAULT_OPTIONS: Record<string, unknown>;
   static PARTS: Record<string, { template: string }>;
   _prepareContext(options: object): Promise<Record<string, unknown>>;
+  _preRender(context: object, options: object): Promise<void>;
+  _onRender(context: object, options: object): Promise<void>;
 }
 
 declare class ItemSheetV2 extends TypeDataModel {
@@ -43,6 +45,8 @@ declare namespace foundry {
         static DEFAULT_OPTIONS: Record<string, unknown>;
         static PARTS: Record<string, { template: string }>;
         _prepareContext(options: object): Promise<Record<string, unknown>>;
+        _preRender(context: object, options: object): Promise<void>;
+        _onRender(context: object, options: object): Promise<void>;
       }
       class ItemSheetV2 {
         document: BaseItem;
