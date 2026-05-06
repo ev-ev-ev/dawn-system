@@ -73,7 +73,7 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
 
     const system = document.system as Record<string, unknown>;
     const tier = Number((system as any).tier ?? 1);
-    const { healthMax, gatesMax } = AdversarySheet._computeDerived(npcComponents, tier);
+    const { healthMax, gatesMax, speed } = AdversarySheet._computeDerived(npcComponents, tier);
     const gatesValue: number = Number((system.gates as Record<string, unknown>)?.value ?? 0);
     const gateBoxes = Array.from({ length: gatesMax }, (_, i) => ({
       index: i,
@@ -88,17 +88,34 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       healthMax,
       gatesMax,
       gateBoxes,
+      speed,
     });
   }
 
-  static _computeDerived(components: foundry.documents.BaseItem[], tier: number): { healthMax: number; gatesMax: number } {
+  static _computeDerived(components: foundry.documents.BaseItem[], tier: number): { healthMax: number; gatesMax: number; speed: number } {
     const gatesMax = components.length;
-    if (gatesMax === 0) return { healthMax: 0, gatesMax: 0 };
+    if (gatesMax === 0) return { healthMax: 0, gatesMax: 0, speed: 0 };
     const total = components.reduce((sum, comp) => {
       const cs = comp.system as Record<string, unknown>;
       return sum + (Number(cs.basehp ?? 0) + Number(cs.tierhp ?? 0) * tier);
     }, 0);
-    return { healthMax: Math.ceil(total / gatesMax), gatesMax };
+    // Compute mode speed: most common value, highest wins ties.
+    const speedCounts: Record<number, number> = {};
+    for (const comp of components) {
+      const cs = comp.system as Record<string, unknown>;
+      const s = Number(cs.speed ?? 0);
+      speedCounts[s] = (speedCounts[s] ?? 0) + 1;
+    }
+    let speed = 0;
+    let maxCount = 0;
+    for (const [s, count] of Object.entries(speedCounts)) {
+      const num = Number(s);
+      if (count > maxCount || (count === maxCount && num > speed)) {
+        speed = num;
+        maxCount = count;
+      }
+    }
+    return { healthMax: Math.ceil(total / gatesMax), gatesMax, speed };
   }
 
   static async _onPrintEdge(this: AdversarySheet, _event: Event, target: HTMLElement): Promise<void> {

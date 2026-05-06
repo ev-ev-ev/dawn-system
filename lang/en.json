@@ -153,6 +153,7 @@
       "Adversary": {
         "Tier": "Tier",
         "Health": "Health",
+        "Speed": "Speed",
         "Gates": "Gates",
         "Gate": "Gate"
       }

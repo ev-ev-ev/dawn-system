@@ -10,13 +10,6 @@
     </div>
   </header>
 
-  <div class="resource flexrow">
-    <label>{{localize "DAWN.Actor.Adversary.Health"}}</label>
-    <input type="number" name="system.health.value" value="{{system.health.value}}" min="0" max="{{healthMax}}" />
-    <span class="resource-sep">/</span>
-    <span class="resource-max">{{healthMax}}</span>
-  </div>
-
   <nav class="sheet-tabs tabs" aria-roledescription="{{localize "SHEETS.FormNavLabel"}}">
     {{#each tabs as |tab|}}
     <a data-action="tab" data-group="{{tab.group}}" data-tab="{{tab.id}}"
@@ -29,6 +22,18 @@
   </nav>
 
   <section class="tab{{#if tabs.main.active}} active{{/if}}" data-group="sheet" data-tab="main">
+    <div class="resource flexrow">
+      <label>{{localize "DAWN.Actor.Adversary.Health"}}</label>
+      <input type="number" name="system.health.value" value="{{system.health.value}}" min="0" max="{{healthMax}}" />
+      <span class="resource-sep">/</span>
+      <span class="resource-max">{{healthMax}}</span>
+    </div>
+
+    <div class="resource flexrow">
+      <label>{{localize "DAWN.Actor.Adversary.Speed"}}</label>
+      <span class="resource-derived">{{speed}}</span>
+    </div>
+
     {{#if (gt gatesMax 1)}}
     <fieldset class="gates">
       <legend>{{localize "DAWN.Actor.Adversary.Gates"}}</legend>
