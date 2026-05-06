@@ -154,6 +154,7 @@
         "Tier": "Tier",
         "Health": "Health",
         "Speed": "Speed",
+        "Armor": "Armor",
         "Gates": "Gates",
         "Gate": "Gate"
       }
