@@ -33,6 +33,25 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
     },
   };
 
+  private _scrollTop = 0;
+
+  async _preRender(_context: object, _options: object) {
+    const el = (this as any).element as HTMLElement | undefined;
+    if (!el) return;
+    const body = el.querySelector(".dawn-sheet.sheet-body");
+    if (body) this._scrollTop = (body as HTMLElement).scrollTop;
+  }
+
+  async _onRender(_context: object, _options: object) {
+    const el = (this as any).element as HTMLElement | undefined;
+    if (!el) return;
+    const scrollTop = this._scrollTop;
+    setTimeout(() => {
+      const body = el.querySelector(".dawn-sheet.sheet-body");
+      if (body) (body as HTMLElement).scrollTop = scrollTop;
+    }, 0);
+  }
+
   override async _prepareContext(options: object) {
     const context = await super._prepareContext(options as never);
     const document = (context as unknown as { document: foundry.documents.BaseActor }).document;
