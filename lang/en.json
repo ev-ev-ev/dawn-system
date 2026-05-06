@@ -156,7 +156,8 @@
         "Speed": "Speed",
         "Armor": "Armor",
         "Gates": "Gates",
-        "Gate": "Gate"
+        "Gate": "Gate",
+        "Evasion": "Evasion"
       }
     }
   },

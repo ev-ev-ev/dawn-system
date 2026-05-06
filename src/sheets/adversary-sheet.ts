@@ -73,7 +73,7 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
 
     const system = document.system as Record<string, unknown>;
     const tier = Number((system as any).tier ?? 1);
-    const { healthMax, gatesMax, speed, armor } = AdversarySheet._computeDerived(npcComponents, npcTechniques, tier);
+    const { healthMax, gatesMax, speed, armor, evasionMax } = AdversarySheet._computeDerived(npcComponents, npcTechniques, tier);
     const gatesValue: number = Number((system.gates as Record<string, unknown>)?.value ?? 0);
     const gateBoxes = Array.from({ length: gatesMax }, (_, i) => ({
       index: i,
@@ -90,12 +90,13 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       gateBoxes,
       speed,
       armor,
+      evasionMax,
     });
   }
 
-  static _computeDerived(components: foundry.documents.BaseItem[], modifiers: foundry.documents.BaseItem[], tier: number): { healthMax: number; gatesMax: number; speed: number; armor: number } {
+  static _computeDerived(components: foundry.documents.BaseItem[], modifiers: foundry.documents.BaseItem[], tier: number): { healthMax: number; gatesMax: number; speed: number; armor: number; evasionMax: number } {
     const gatesMax = components.length;
-    if (gatesMax === 0) return { healthMax: 0, gatesMax: 0, speed: 0, armor: 0 };
+    if (gatesMax === 0) return { healthMax: 0, gatesMax: 0, speed: 0, armor: 0, evasionMax: 0 };
     const total = components.reduce((sum, comp) => {
       const cs = comp.system as Record<string, unknown>;
       return sum + (Number(cs.basehp ?? 0) + Number(cs.tierhp ?? 0) * tier);
@@ -128,7 +129,13 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       const ms = mod.system as Record<string, unknown>;
       modifierArmorBonus += Number(ms.basearmor ?? 0) + Number(ms.tierarmor ?? 0) * tier;
     }
-    return { healthMax: Math.ceil(total / gatesMax), gatesMax, speed, armor: maxComponentArmor + modifierArmorBonus };
+    // Compute evasion: sum of modifier evasion bonuses (baseevasion + tierevasion × tier).
+    let evasionMax = 0;
+    for (const mod of modifiers) {
+      const ms = mod.system as Record<string, unknown>;
+      evasionMax += Number(ms.baseevasion ?? 0) + Number(ms.tierevasion ?? 0) * tier;
+    }
+    return { healthMax: Math.ceil(total / gatesMax), gatesMax, speed, armor: maxComponentArmor + modifierArmorBonus, evasionMax };
   }
 
   static async _onPrintEdge(this: AdversarySheet, _event: Event, target: HTMLElement): Promise<void> {

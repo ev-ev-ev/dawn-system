@@ -82,6 +82,9 @@ export class AdversaryDataModel extends foundry.abstract.TypeDataModel {
       gates: new SchemaField({
         value: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "DAWN.Actor.Adversary.Gates" }),
       }),
+      evasion: new SchemaField({
+        value: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "DAWN.Actor.Adversary.Evasion" }),
+      }),
     };
   }
 }

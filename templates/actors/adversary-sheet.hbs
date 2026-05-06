@@ -39,6 +39,13 @@
       <span class="resource-derived">{{armor}}</span>
     </div>
 
+    <div class="resource flexrow">
+      <label>{{localize "DAWN.Actor.Adversary.Evasion"}}</label>
+      <input type="number" name="system.evasion.value" value="{{system.evasion.value}}" min="0" />
+      <span class="resource-sep">/</span>
+      <span class="resource-max">{{evasionMax}}</span>
+    </div>
+
     {{#if (gt gatesMax 1)}}
     <fieldset class="gates">
       <legend>{{localize "DAWN.Actor.Adversary.Gates"}}</legend>
