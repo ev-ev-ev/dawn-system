@@ -1,5 +1,11 @@
 {
   "DAWN": {
+    "Tension": {
+      "Title": "Tension",
+      "Increment": "Increase Tension",
+      "Decrement": "Decrease Tension",
+      "Reset": "Reset Tension"
+    },
     "Sheet": {
       "Character": {
         "Title": "Character Sheet",

@@ -6,9 +6,38 @@ import { TechniqueSheet } from "./sheets/technique-sheet.js";
 import { EdgeSheet } from "./sheets/edge-sheet.js";
 import { ComponentSheet } from "./sheets/component-sheet.js";
 import { ModifierSheet } from "./sheets/modifier-sheet.js";
+import { createTensionHud, updateTensionDisplay } from "./apps/tension-hud.js";
+
+foundry.helpers.Hooks.once("ready", () => {
+  createTensionHud();
+});
 
 foundry.helpers.Hooks.once("init", () => {
   console.log("dawn-system | Initialising Dawn System");
+
+  // Register Tension world setting.
+  game.settings.register("dawn-system", "tension", {
+    name: "DAWN.Tension.Title",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0,
+    range: { min: 0, max: 99, step: 1 },
+    permissions: {
+      GM: 2,
+      Assistant: 1,
+      Player: 1,
+    },
+  });
+
+  // Listen for tension changes and update HUD display.
+  foundry.helpers.Hooks.on("updateSetting", (...args: unknown[]) => {
+    const ns = typeof args[0] === "string" ? args[0] : (args[0] as { namespace?: string })?.namespace;
+    const key = typeof args[1] === "string" ? args[1] : (args[0] as { key?: string })?.key;
+    if (ns === "dawn-system" && key === "tension") {
+      updateTensionDisplay();
+    }
+  });
 
   // Register data models for each Actor sub-type.
   // Cast needed: Foundry's JSDoc types use a generic TypeDataModel that requires

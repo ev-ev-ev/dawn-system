@@ -61,6 +61,7 @@ function row(tag: string, value: unknown, always = false): string {
 
 export async function openRollDialog(tag: string, defaultDice: number, actor: unknown): Promise<void> {
   const locTag = (game as any).i18n.localize(tag);
+  const tensionValue = game.settings.get("dawn-system", "tension") as number;
   const formData = await foundry.applications.api.DialogV2.input({
     window: { title: `Roll: ${locTag}` },
     content: `
@@ -78,7 +79,7 @@ export async function openRollDialog(tag: string, defaultDice: number, actor: un
       </div>
       <div class="form-group">
         <label>Tension</label>
-        <input type="number" name="tension" value="0" />
+        <input type="number" name="tension" value="${tensionValue}" />
       </div>
       <div class="form-group">
         <label>Tension Multiplier</label>

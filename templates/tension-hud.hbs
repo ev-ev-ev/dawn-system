@@ -1,0 +1,9 @@
+<div class="tension-hud-bar flexrow">
+  <span class="tension-label">{{localize "DAWN.Tension.Title"}}</span>
+  <span class="tension-value">{{tension}}</span>
+  {{#if isGM}}
+  <button type="button" data-action="tensionDecrement" data-tooltip="{{localize "DAWN.Tension.Decrement"}}"><i class="fa-solid fa-minus"></i></button>
+  <button type="button" data-action="tensionIncrement" data-tooltip="{{localize "DAWN.Tension.Increment"}}"><i class="fa-solid fa-plus"></i></button>
+  <button type="button" data-action="tensionReset" data-tooltip="{{localize "DAWN.Tension.Reset"}}"><i class="fa-solid fa-rotate-left"></i></button>
+  {{/if}}
+</div>

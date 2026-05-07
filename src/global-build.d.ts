@@ -95,6 +95,7 @@ declare namespace foundry {
   namespace helpers {
     namespace Hooks {
       function once(event: string, fn: (...args: unknown[]) => void): void;
+      function on(event: string, fn: (...args: unknown[]) => void): void;
     }
   }
   namespace applications {
@@ -152,7 +153,20 @@ declare class ChatMessage {
   static getSpeaker(options?: { actor?: unknown }): Record<string, unknown>;
 }
 
-declare const game: { i18n: { localize(key: string): string } };
+declare const game: {
+  i18n: { localize(key: string): string };
+  settings: {
+    get(namespace: string, key: string): number | string | boolean | object | null;
+    set(namespace: string, key: string, value: unknown): Promise<void>;
+    register(namespace: string, key: string, data: Record<string, unknown>): void;
+  };
+  user?: {
+    isGM?: boolean;
+    limited?: boolean;
+  };
+};
+
+declare const document: Document;
 
 declare const CONFIG: {
   Actor: {

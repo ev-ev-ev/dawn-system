@@ -659,4 +659,60 @@
   margin-left: auto;
 }
 
+/* ─── Tension HUD ─────────────────────────────────────────────────────────── */
 
+.tension-hud {
+  position: fixed;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30000;
+  pointer-events: none;
+}
+
+.tension-hud .tension-hud-bar {
+  display: flex;
+  background: var(--color-bg-bedrock, #181818);
+  border: 1px solid var(--color-border-dark-secondary, #444);
+  border-radius: 4px;
+  padding: 2px 12px;
+  gap: 8px;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+}
+
+.tension-hud .tension-label {
+  font-size: 0.75em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+}
+
+.tension-hud .tension-value {
+  font-size: 1em;
+  font-weight: bold;
+  min-width: 1.5em;
+  text-align: center;
+}
+
+.tension-hud .tension-btn {
+  background: transparent;
+  border: 1px solid var(--color-border-dark-secondary, #444);
+  border-radius: 3px;
+  color: var(--color-text-primary, #eee);
+  cursor: pointer;
+  padding: 1px 6px;
+  font-size: 0.75em;
+  line-height: 1.4;
+  opacity: 0.7;
+  transition: opacity 0.15s, border-color 0.15s;
+}
+
+.tension-hud .tension-btn:hover {
+  opacity: 1;
+  border-color: var(--color-border-light-tertiary, #888);
+}
+
+ 
