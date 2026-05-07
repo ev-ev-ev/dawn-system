@@ -68,10 +68,10 @@ export function createTensionHud(): void {
   updateTensionDisplay();
 }
 
-export function updateTensionDisplay(): void {
+export function updateTensionDisplay(tensionValue?: number): void {
   const valueEl = document.getElementById("tension-value");
   if (valueEl) {
-    const tension = game.settings.get("dawn-system", "tension") as number;
+    const tension = tensionValue !== undefined ? tensionValue : (game.settings.get("dawn-system", "tension") as number);
     valueEl.textContent = String(tension);
   }
 }

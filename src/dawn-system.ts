@@ -32,10 +32,12 @@ foundry.helpers.Hooks.once("init", () => {
 
   // Listen for tension changes and update HUD display.
   foundry.helpers.Hooks.on("updateSetting", (...args: unknown[]) => {
-    const ns = typeof args[0] === "string" ? args[0] : (args[0] as { namespace?: string })?.namespace;
-    const key = typeof args[1] === "string" ? args[1] : (args[0] as { key?: string })?.key;
+    const obj = typeof args[0] === "string" ? undefined : (args[0] as { namespace?: string; key?: string; newValue?: unknown });
+    const ns = typeof args[0] === "string" ? args[0] : obj?.namespace;
+    const key = typeof args[1] === "string" ? args[1] : obj?.key;
     if (ns === "dawn-system" && key === "tension") {
-      updateTensionDisplay();
+      const val = obj?.newValue ?? game.settings.get("dawn-system", "tension");
+      updateTensionDisplay(Number(val));
     }
   });
 
