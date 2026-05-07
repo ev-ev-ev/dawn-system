@@ -1,3 +1,5 @@
+import { openRollDialog } from "../dice/roll.js";
+
 export class AdversarySheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
 ) {
@@ -13,6 +15,7 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       deleteItem: AdversarySheet._onDeleteItem,
       openItem: AdversarySheet._onOpenItem,
       toggleGate: AdversarySheet._onToggleGate,
+      rollAttack: AdversarySheet._onRollAttack,
     },
   };
 
@@ -34,6 +37,7 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
   };
 
   private _scrollTop = 0;
+  private _attacks: Array<{ name: string; dice: number; tensionx: number }> = [];
 
   async _preRender(_context: object, _options: object) {
     await super._preRender(_context, _options);
@@ -83,6 +87,13 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
     // Aggregate passives, actions, attacks, aces from all attached components and modifiers.
     const allNpcItems = [...npcComponents, ...npcTechniques];
     const { passives, actions, attacks, aces } = AdversarySheet._aggregateAbilities(allNpcItems, tier);
+
+    // Store attack roll data for the roll action handler.
+    this._attacks = attacks.map((a) => ({
+      name: a.name,
+      dice: a.dice,
+      tensionx: a.tensionx,
+    }));
 
     return Object.assign(context, {
       system: document.system,
@@ -149,12 +160,12 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
   static _aggregateAbilities(items: foundry.documents.BaseItem[], tier: number): {
     passives: Array<{ source: string; text: string }>;
     actions: Array<{ source: string; name: string; text: string }>;
-    attacks: Array<{ source: string; name: string; roll: string; text: string }>;
+    attacks: Array<{ source: string; name: string; dice: number; roll: string; tensionx: number; text: string }>;
     aces: Array<{ source: string; name: string; tension: number; text: string }>;
   } {
     const passives: Array<{ source: string; text: string }> = [];
     const actions: Array<{ source: string; name: string; text: string }> = [];
-    const attacks: Array<{ source: string; name: string; roll: string; text: string }> = [];
+    const attacks: Array<{ source: string; name: string; dice: number; roll: string; tensionx: number; text: string }> = [];
     const aces: Array<{ source: string; name: string; tension: number; text: string }> = [];
 
     for (const item of items) {
@@ -172,7 +183,9 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
         attacks.push({
           source,
           name: String(s.attackname),
+          dice,
           roll: dice > 0 ? `${dice}d6` : `0d6`,
+          tensionx: Number(s.attacktensionx ?? 0),
           text: String(s.attack ?? ""),
         });
       }
@@ -242,5 +255,17 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
     const current = Number((this as any).document.system.gates?.value ?? 0);
     const newValue = index < current ? current - 1 : current + 1;
     await (this as any).document.update({ "system.gates.value": newValue });
+  }
+
+  static async _onRollAttack(this: AdversarySheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.attackIndex);
+    const attack = (this as any)._attacks[index];
+    if (!attack) return;
+    await openRollDialog(
+      attack.name,
+      attack.dice,
+      (this as any).document,
+      { tensionx: attack.tensionx }
+    );
   }
 }

@@ -653,6 +653,21 @@
   opacity: 1;
 }
 
+.dawn-system.actor.adversary .npc-ability-name[data-action] {
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+
+.dawn-system.actor.adversary .npc-ability-name[data-action]:hover {
+  text-decoration: underline;
+}
+
+.dawn-system.actor.adversary .npc-ability-name[data-action] i {
+  font-size: 0.9em;
+  opacity: 0.5;
+  margin-right: 2px;
+}
+
 .dawn-system.actor.adversary .ace-tension-badge {
   font-size: 0.75em;
   opacity: 0.6;

@@ -59,35 +59,45 @@ function row(tag: string, value: unknown, always = false): string {
   return "";
 }
 
-export async function openRollDialog(tag: string, defaultDice: number, actor: unknown): Promise<void> {
+export interface RollDialogDefaults {
+  dice?: number;
+  advantage?: number;
+  crittingOn?: number;
+  tension?: number;
+  tensionx?: number;
+  bonus?: number;
+}
+
+export async function openRollDialog(tag: string, defaultDice: number, actor: unknown, defaults?: RollDialogDefaults): Promise<void> {
   const locTag = (game as any).i18n.localize(tag);
   const tensionValue = game.settings.get("dawn-system", "tension") as number;
+  const d = defaults ?? {};
   const formData = await foundry.applications.api.DialogV2.input({
     window: { title: `Roll: ${locTag}` },
     content: `
       <div class="form-group">
         <label>Dice</label>
-        <input type="number" name="dice" value="${defaultDice}" min="1" autofocus />
+        <input type="number" name="dice" value="${d.dice ?? defaultDice}" min="1" autofocus />
       </div>
       <div class="form-group">
         <label>Advantage</label>
-        <input type="number" name="advantage" value="0" />
+        <input type="number" name="advantage" value="${d.advantage ?? 0}" />
       </div>
       <div class="form-group">
         <label>Critting On</label>
-        <input type="number" name="crittingOn" value="6" min="2" max="6" />
+        <input type="number" name="crittingOn" value="${d.crittingOn ?? 6}" min="2" max="6" />
       </div>
       <div class="form-group">
         <label>Tension</label>
-        <input type="number" name="tension" value="${tensionValue}" />
+        <input type="number" name="tension" value="${d.tension ?? tensionValue}" />
       </div>
       <div class="form-group">
         <label>Tension Multiplier</label>
-        <input type="number" name="tensionx" value="0" />
+        <input type="number" name="tensionx" value="${d.tensionx ?? 0}" />
       </div>
       <div class="form-group">
         <label>Bonus</label>
-        <input type="number" name="bonus" value="0" />
+        <input type="number" name="bonus" value="${d.bonus ?? 0}" />
       </div>
     `,
     ok: { label: "Roll", icon: "fa-solid fa-dice-d6" },

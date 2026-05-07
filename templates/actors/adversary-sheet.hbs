@@ -90,7 +90,7 @@
       {{#each attacks as |a|}}
       <div class="npc-ability-block">
         <div class="npc-ability-header flexrow">
-          <span class="npc-ability-name">{{a.name}}</span>
+          <span class="npc-ability-name" data-action="rollAttack" data-attack-index="{{@index}}" role="button"><i class="fa-solid fa-dice-d6"></i> {{a.name}}</span>
           <span class="npc-ability-source">{{a.source}}</span>
         </div>
         <div class="npc-dice-row flexrow">
