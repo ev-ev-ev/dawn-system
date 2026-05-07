@@ -80,6 +80,10 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       checked: i < gatesValue,
     }));
 
+    // Aggregate passives, actions, attacks, aces from all attached components and modifiers.
+    const allNpcItems = [...npcComponents, ...npcTechniques];
+    const { passives, actions, attacks, aces } = AdversarySheet._aggregateAbilities(allNpcItems, tier);
+
     return Object.assign(context, {
       system: document.system,
       edges,
@@ -91,6 +95,10 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       speed,
       armor,
       evasionMax,
+      passives,
+      actions,
+      attacks,
+      aces,
     });
   }
 
@@ -136,6 +144,44 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       evasionMax += Number(ms.baseevasion ?? 0) + Number(ms.tierevasion ?? 0) * tier;
     }
     return { healthMax: Math.ceil(total / gatesMax), gatesMax, speed, armor: maxComponentArmor + modifierArmorBonus, evasionMax };
+  }
+
+  static _aggregateAbilities(items: foundry.documents.BaseItem[], tier: number): {
+    passives: Array<{ source: string; text: string }>;
+    actions: Array<{ source: string; name: string; text: string }>;
+    attacks: Array<{ source: string; name: string; roll: string; text: string }>;
+    aces: Array<{ source: string; name: string; tension: number; text: string }>;
+  } {
+    const passives: Array<{ source: string; text: string }> = [];
+    const actions: Array<{ source: string; name: string; text: string }> = [];
+    const attacks: Array<{ source: string; name: string; roll: string; text: string }> = [];
+    const aces: Array<{ source: string; name: string; tension: number; text: string }> = [];
+
+    for (const item of items) {
+      const s = item.system as Record<string, unknown>;
+      const source = String(item.name ?? "");
+
+      if (s.passive && String(s.passive).trim()) {
+        passives.push({ source, text: String(s.passive) });
+      }
+      if (s.actionname && String(s.actionname).trim()) {
+        actions.push({ source, name: String(s.actionname), text: String(s.action ?? "") });
+      }
+      if (s.attackname && String(s.attackname).trim()) {
+        const dice = Number(s.attackdice ?? 0) + Number(s.attacktierdice ?? 0) * tier;
+        attacks.push({
+          source,
+          name: String(s.attackname),
+          roll: dice > 0 ? `${dice}d6` : `0d6`,
+          text: String(s.attack ?? ""),
+        });
+      }
+      if (s.acename && String(s.acename).trim()) {
+        aces.push({ source, name: String(s.acename), tension: Number(s.acetension ?? 0), text: String(s.ace ?? "") });
+      }
+    }
+
+    return { passives, actions, attacks, aces };
   }
 
   static async _onPrintEdge(this: AdversarySheet, _event: Event, target: HTMLElement): Promise<void> {

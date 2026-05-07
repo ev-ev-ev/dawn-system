@@ -56,6 +56,68 @@
       </div>
     </fieldset>
     {{/if}}
+
+    {{#if passives.length}}
+    <fieldset class="npc-passive">
+      <legend>{{localize "DAWN.Sheet.Adversary.Passives"}}</legend>
+      {{#each passives as |p|}}
+      <div class="npc-ability-block">
+        <div class="npc-ability-source">{{p.source}}</div>
+        <div class="npc-ability-text">{{{p.text}}}</div>
+      </div>
+      {{/each}}
+    </fieldset>
+    {{/if}}
+
+    {{#if actions.length}}
+    <fieldset class="npc-action">
+      <legend>{{localize "DAWN.Sheet.Adversary.Actions"}}</legend>
+      {{#each actions as |a|}}
+      <div class="npc-ability-block">
+        <div class="npc-ability-header flexrow">
+          <span class="npc-ability-name">{{a.name}}</span>
+          <span class="npc-ability-source">{{a.source}}</span>
+        </div>
+        <div class="npc-ability-text">{{{a.text}}}</div>
+      </div>
+      {{/each}}
+    </fieldset>
+    {{/if}}
+
+    {{#if attacks.length}}
+    <fieldset class="npc-attack">
+      <legend>{{localize "DAWN.Sheet.Adversary.Attacks"}}</legend>
+      {{#each attacks as |a|}}
+      <div class="npc-ability-block">
+        <div class="npc-ability-header flexrow">
+          <span class="npc-ability-name">{{a.name}}</span>
+          <span class="npc-ability-source">{{a.source}}</span>
+        </div>
+        <div class="npc-dice-row flexrow">
+          <span class="npc-dice-label">{{localize "DAWN.Item.Component.Roll"}}</span>
+          <span class="npc-dice-val">{{a.roll}}</span>
+        </div>
+        <div class="npc-ability-text">{{{a.text}}}</div>
+      </div>
+      {{/each}}
+    </fieldset>
+    {{/if}}
+
+    {{#if aces.length}}
+    <fieldset class="npc-ace">
+      <legend>{{localize "DAWN.Sheet.Adversary.Aces"}}</legend>
+      {{#each aces as |a|}}
+      <div class="npc-ability-block">
+        <div class="npc-ability-header flexrow">
+          <span class="npc-ability-name">{{a.name}}</span>
+          <span class="npc-ability-source">{{a.source}}</span>
+          <span class="ace-tension-badge">{{localize "DAWN.Item.Component.AceTension"}}: {{a.tension}}</span>
+        </div>
+        <div class="npc-ability-text">{{{a.text}}}</div>
+      </div>
+      {{/each}}
+    </fieldset>
+    {{/if}}
   </section>
 
   <section class="tab{{#if tabs.components.active}} active{{/if}}" data-group="sheet" data-tab="components">

@@ -603,4 +603,60 @@
   opacity: 0.5;
 }
 
+/* ─── Adversary Sheet Ability Sections ───────────────────────────────────── */
+
+.dawn-system.actor.adversary .npc-ability-block {
+  padding: 4px 6px;
+  border-radius: 3px;
+}
+
+.dawn-system.actor.adversary .npc-ability-block:nth-child(odd) {
+  background: var(--color-bg-alpha-transparent, rgba(0, 0, 0, 0));
+}
+
+.dawn-system.actor.adversary .npc-ability-block:nth-child(even) {
+  background: var(--color-bg-option-2, rgba(128, 128, 128, 0.08));
+}
+
+.dawn-system.actor.adversary .npc-ability-block:hover {
+  background: var(--color-bg-option-1, rgba(128, 128, 128, 0.14));
+}
+
+.dawn-system.actor.adversary .npc-ability-name {
+  font-weight: 600;
+  font-size: 0.95em;
+}
+
+.dawn-system.actor.adversary .npc-ability-source {
+  font-size: 0.78em;
+  opacity: 0.55;
+  margin-left: 4px;
+  font-style: italic;
+}
+
+.dawn-system.actor.adversary .npc-ability-text {
+  font-size: 0.85em;
+  line-height: 1.45;
+  opacity: 0.85;
+  margin-top: 2px;
+  white-space: pre-wrap;
+}
+
+.dawn-system.actor.adversary .npc-dice-row {
+  font-size: 0.82em;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.dawn-system.actor.adversary .npc-dice-val {
+  font-weight: 600;
+  opacity: 1;
+}
+
+.dawn-system.actor.adversary .ace-tension-badge {
+  font-size: 0.75em;
+  opacity: 0.6;
+  margin-left: auto;
+}
+
 

@@ -16,7 +16,11 @@
         },
         "Edges": "Edges",
         "NPCTechniques": "NPC Techniques",
-        "NPCComponents": "NPC Components"
+        "NPCComponents": "NPC Components",
+        "Passives": "Passives",
+        "Actions": "Actions",
+        "Attacks": "Attacks",
+        "Aces": "Aces"
       },
       "Technique": {
         "Title": "Technique"
