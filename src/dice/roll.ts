@@ -74,8 +74,10 @@ export async function rollAttribute(params: RollParams): Promise<void> {
     rollerActorId: (speaker as any)?.actorID ?? "",
   };
 
-  // Create message, then store damage data as a flag for renderHook
-  const msg = await ChatMessage.create({
+  // Embed fluff data directly into renderHook since flag isn't set yet at render time
+  const fluffJson = JSON.stringify(fluffData);
+
+  await ChatMessage.create({
     content,
     speaker,
     rolls: [r],
@@ -83,9 +85,7 @@ export async function rollAttribute(params: RollParams): Promise<void> {
       (async () => {
         try {
           const msg = arguments[0];
-          const fluffRaw = msg.getFlag("dawn-system", "damage");
-          if (!fluffRaw) return;
-          const fluff = typeof fluffRaw === "string" ? JSON.parse(fluffRaw) : fluffRaw;
+          const fluff = ${fluffJson};
           if (!fluff.targets || !fluff.targets.length || fluff.result < 1) return;
           const { canApplyDamage } = await import("systems/dawn-system/dist/dawn-system.mjs");
           if (!canApplyDamage(fluff)) return;
@@ -108,8 +108,6 @@ export async function rollAttribute(params: RollParams): Promise<void> {
       })();
     `,
   } as any);
-
-  await msg.setFlag("dawn-system", "damage", fluffData);
 }
 
 function row(tag: string, value: unknown, always = false): string {
