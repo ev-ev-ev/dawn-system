@@ -168,20 +168,20 @@ export async function applyDamageToTarget(tokenId: string, sceneId: string, dama
   let gatePassed = false;
   let takenOut = false;
 
-  // Step 3: check for wound/gate
+  // Step 3: check for wound/gate (increment first, then check taken-out)
   if (newHealth <= 0) {
     if (actor.type === "character") {
-      const currentWounds = Number((actor.system as any).wounds ?? 0);
-      if (currentWounds >= 3) {
+      const newWounds = Number((actor.system as any).wounds ?? 0) + 1;
+      if (newWounds >= 3) {
         takenOut = true;
       } else {
         woundTaken = true;
         newHealth = stats.healthMax;
       }
     } else {
-      const gatesValue = Number((actor.system as any).gates?.value ?? 0);
+      const newGates = Number((actor.system as any).gates?.value ?? 0) + 1;
       const components = (actor as any).items?.filter((i: foundry.documents.BaseItem) => i.type === "component") ?? [];
-      if (gatesValue >= components.length) {
+      if (newGates >= components.length) {
         takenOut = true;
       } else {
         gatePassed = true;
@@ -196,13 +196,13 @@ export async function applyDamageToTarget(tokenId: string, sceneId: string, dama
   if (actor.type === "character") {
     updates["system.health.value"] = Math.max(0, newHealth);
     updates["system.evasion"] = Math.max(0, stats.evasion - evasionLost);
-    if (woundTaken) {
+    if (woundTaken || takenOut) {
       updates["system.wounds"] = Number((actor.system as any).wounds ?? 0) + 1;
     }
   } else {
     updates["system.health.value"] = Math.max(0, newHealth);
     updates["system.evasion.value"] = Math.max(0, stats.evasion - evasionLost);
-    if (gatePassed) {
+    if (gatePassed || takenOut) {
       updates["system.gates.value"] = Number((actor.system as any).gates?.value ?? 0) + 1;
     }
   }
@@ -329,17 +329,17 @@ export async function applySelfDamage(actor: foundry.documents.BaseActor, damage
 
   if (newHealth <= 0) {
     if (actor.type === "character") {
-      const currentWounds = Number((actor.system as any).wounds ?? 0);
-      if (currentWounds >= 3) {
+      const newWounds = Number((actor.system as any).wounds ?? 0) + 1;
+      if (newWounds >= 3) {
         takenOut = true;
       } else {
         woundTaken = true;
         newHealth = stats.healthMax;
       }
     } else {
-      const gatesValue = Number((actor.system as any).gates?.value ?? 0);
+      const newGates = Number((actor.system as any).gates?.value ?? 0) + 1;
       const components = (actor as any).items?.filter((i: foundry.documents.BaseItem) => i.type === "component") ?? [];
-      if (gatesValue >= components.length) {
+      if (newGates >= components.length) {
         takenOut = true;
       } else {
         gatePassed = true;
@@ -353,13 +353,13 @@ export async function applySelfDamage(actor: foundry.documents.BaseActor, damage
   if (actor.type === "character") {
     updates["system.health.value"] = Math.max(0, newHealth);
     updates["system.evasion"] = Math.max(0, stats.evasion - evasionLost);
-    if (woundTaken) {
+    if (woundTaken || takenOut) {
       updates["system.wounds"] = Number((actor.system as any).wounds ?? 0) + 1;
     }
   } else {
     updates["system.health.value"] = Math.max(0, newHealth);
     updates["system.evasion.value"] = Math.max(0, stats.evasion - evasionLost);
-    if (gatePassed) {
+    if (gatePassed || takenOut) {
       updates["system.gates.value"] = Number((actor.system as any).gates?.value ?? 0) + 1;
     }
   }
