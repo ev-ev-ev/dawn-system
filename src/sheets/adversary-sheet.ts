@@ -16,6 +16,10 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       openItem: AdversarySheet._onOpenItem,
       toggleGate: AdversarySheet._onToggleGate,
       rollAttack: AdversarySheet._onRollAttack,
+      chatPassive: AdversarySheet._onChatPassive,
+      chatAction: AdversarySheet._onChatAction,
+      chatAttack: AdversarySheet._onChatAttack,
+      chatAce: AdversarySheet._onChatAce,
     },
   };
 
@@ -37,7 +41,10 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
   };
 
   private _scrollTop = 0;
-  private _attacks: Array<{ name: string; dice: number; tensionx: number }> = [];
+  private _passives: Array<{ source: string; text: string }> = [];
+  private _actions: Array<{ source: string; name: string; text: string }> = [];
+  private _attacks: Array<{ source: string; name: string; dice: number; tensionx: number; text: string }> = [];
+  private _aces: Array<{ source: string; name: string; tension: number; text: string }> = [];
 
   async _preRender(_context: object, _options: object) {
     await super._preRender(_context, _options);
@@ -88,12 +95,17 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
     const allNpcItems = [...npcComponents, ...npcTechniques];
     const { passives, actions, attacks, aces } = AdversarySheet._aggregateAbilities(allNpcItems, tier);
 
-    // Store attack roll data for the roll action handler.
+    // Store data for chat action handlers.
+    this._passives = passives;
+    this._actions = actions;
     this._attacks = attacks.map((a) => ({
+      source: a.source,
       name: a.name,
       dice: a.dice,
       tensionx: a.tensionx,
+      text: a.text,
     }));
+    this._aces = aces;
 
     return Object.assign(context, {
       system: document.system,
@@ -267,5 +279,49 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       (this as any).document,
       { tensionx: attack.tensionx }
     );
+  }
+
+  static async _onChatPassive(this: AdversarySheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.abilityIndex);
+    const passive = (this as any)._passives[index];
+    if (!passive) return;
+    const content = `<strong>Passive</strong> <span style="opacity:0.7;font-size:0.85em">(${passive.source})</span><hr>${passive.text}`;
+    await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
+      content,
+      speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
+    });
+  }
+
+  static async _onChatAction(this: AdversarySheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.abilityIndex);
+    const action = (this as any)._actions[index];
+    if (!action) return;
+    const content = `<strong>${action.name}</strong> <span style="opacity:0.7;font-size:0.85em">(${action.source})</span><hr>${action.text}`;
+    await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
+      content,
+      speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
+    });
+  }
+
+  static async _onChatAttack(this: AdversarySheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.abilityIndex);
+    const attack = (this as any)._attacks[index];
+    if (!attack) return;
+    const content = `<strong>${attack.name}</strong> <span style="opacity:0.7;font-size:0.85em">(${attack.source} | ${attack.dice}d6${attack.tensionx ? ' × Tension' : ''})</span><hr>${attack.text}`;
+    await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
+      content,
+      speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
+    });
+  }
+
+  static async _onChatAce(this: AdversarySheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.abilityIndex);
+    const ace = (this as any)._aces[index];
+    if (!ace) return;
+    const content = `<strong>${ace.name}</strong> <span style="opacity:0.7;font-size:0.85em">(${ace.source} | Min Tension: ${ace.tension})</span><hr>${ace.text}`;
+    await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
+      content,
+      speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
+    });
   }
 }

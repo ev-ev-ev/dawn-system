@@ -674,6 +674,18 @@
   margin-left: auto;
 }
 
+.dawn-system.actor.adversary .npc-ability-chat {
+  cursor: pointer;
+  opacity: 0.4;
+  padding: 2px 4px;
+  font-size: 0.85em;
+  margin-left: auto;
+}
+
+.dawn-system.actor.adversary .npc-ability-chat:hover {
+  opacity: 1;
+}
+
 /* ─── Tension HUD ─────────────────────────────────────────────────────────── */
 
 .tension-hud {
