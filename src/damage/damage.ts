@@ -382,40 +382,30 @@ export async function applySelfDamage(actor: foundry.documents.BaseActor, damage
  * Post a damage summary chat message.
  */
 export async function postDamageSummary(results: DamageResult[]): Promise<void> {
-  const rows = results
+  const targetBlocks = results
     .map((r) => {
       let status = "";
       if (r.takenOut) status = `<span class="damage-status-takenout">${game.i18n.localize("DAWN.Damage.TakenOut")}</span>`;
       else if (r.woundTaken) status = `<span class="damage-status-wound">${game.i18n.localize("DAWN.Damage.WoundTaken")}</span>`;
       else if (r.gatePassed) status = `<span class="damage-status-gate">${game.i18n.localize("DAWN.Damage.GatePassed")}</span>`;
 
-      return `<tr${r.takenOut ? ' class="taken-out-row"' : ""}>
-        <td>${r.name}</td>
-        <td>${r.damageDealt}</td>
-        <td>${r.evasionLost}</td>
-        <td>${r.healthLost}</td>
-        <td>${r.armor}</td>
-        <td>${status}</td>
-      </tr>`;
+      return `<div class="damage-target-block${r.takenOut ? ' taken-out' : ''}">
+        <div class="damage-target-name">${r.name}</div>
+        <table class="damage-detail-table">
+          <tr><td>${game.i18n.localize("DAWN.Damage.Damage")}</td><td>${r.damageDealt}</td></tr>
+          <tr><td>${game.i18n.localize("DAWN.Damage.EvasionLost")}</td><td>${r.evasionLost}</td></tr>
+          <tr><td>${game.i18n.localize("DAWN.Damage.HealthLost")}</td><td>${r.healthLost}</td></tr>
+          <tr><td>${game.i18n.localize("DAWN.Actor.Character.Armor")}</td><td>${r.armor}</td></tr>
+          ${status ? `<tr><td>${game.i18n.localize("DAWN.Damage.Status")}</td><td>${status}</td></tr>` : ""}
+        </table>
+      </div>`;
     })
     .join("");
 
   const content = `
     <div class="damage-summary">
       <strong>${game.i18n.localize("DAWN.Damage.SummaryTitle")}</strong>
-      <table class="damage-summary-table">
-        <thead>
-          <tr>
-            <th>${game.i18n.localize("DAWN.Damage.Target")}</th>
-            <th>${game.i18n.localize("DAWN.Damage.Damage")}</th>
-            <th>${game.i18n.localize("DAWN.Damage.EvasionLost")}</th>
-            <th>${game.i18n.localize("DAWN.Damage.HealthLost")}</th>
-            <th>${game.i18n.localize("DAWN.Actor.Character.Armor")}</th>
-            <th>${game.i18n.localize("DAWN.Damage.Status")}</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
+      ${targetBlocks}
     </div>
   `;
 

@@ -826,30 +826,45 @@
   margin-top: 4px;
 }
 
-.damage-summary-table {
+.damage-target-block {
+  margin-top: 4px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  background: var(--color-bg-alpha-transparent, rgba(0, 0, 0, 0.05));
+}
+
+.damage-target-block.taken-out {
+  background: rgba(204, 0, 0, 0.1);
+}
+
+.damage-target-name {
+  font-weight: 600;
+  font-size: 0.9em;
+  margin-bottom: 2px;
+}
+
+.damage-detail-table {
   width: 100%;
   font-size: 0.85em;
   border-collapse: collapse;
-  margin-top: 4px;
 }
 
-.damage-summary-table th {
-  text-align: left;
+.damage-detail-table td {
+  padding: 1px 4px;
+}
+
+.damage-detail-table td:first-child {
   font-size: 0.78em;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   opacity: 0.6;
-  padding: 2px 4px;
-  border-bottom: 1px solid var(--color-border-light-tertiary, #ccc);
+  padding-right: 8px;
+  white-space: nowrap;
 }
 
-.damage-summary-table td {
-  padding: 3px 4px;
-}
-
-.damage-summary-table .taken-out-row {
-  color: var(--color-level-error, #c00);
-  font-weight: bold;
+.damage-detail-table td:last-child {
+  text-align: right;
+  font-weight: 600;
 }
 
 .damage-status-takenout {
