@@ -81,9 +81,12 @@ declare namespace foundry {
       id: string;
       name: string;
       img: string;
+      type: string;
       system: Record<string, unknown>;
+      items: Array<BaseItem>;
       getEmbeddedCollection(name: string): Array<{ id: string; name: string; type: string }>;
       toObject(): { system: Record<string, unknown> };
+      update(data: Record<string, unknown>): Promise<void>;
     }
     class BaseItem {
       id: string;
@@ -149,8 +152,12 @@ declare class ChatMessage {
     speaker?: Record<string, unknown>;
     rolls?: Roll[];
     sound?: string;
-  }): Promise<unknown>;
+    renderHook?: string;
+  }): Promise<ChatMessage>;
   static getSpeaker(options?: { actor?: unknown }): Record<string, unknown>;
+  getFlag(namespace: string, key: string): unknown;
+  setFlag(namespace: string, key: string, value: unknown): Promise<void>;
+  element: HTMLElement;
 }
 
 declare const game: {
@@ -161,8 +168,40 @@ declare const game: {
     register(namespace: string, key: string, data: Record<string, unknown>): void;
   };
   user?: {
+    id?: string;
     isGM?: boolean;
+    isAssistant?: boolean;
     limited?: boolean;
+    targets?: Array<{
+      id: string;
+      scene?: { id: string };
+      actor?: BaseActor;
+      data?: { actorId?: string };
+    }>;
+  };
+  actors: {
+    get(id: string): BaseActor | null;
+  };
+  scenes: {
+    get(id: string): {
+      tokens: {
+        get(id: string): {
+          id: string;
+          name: string;
+          actor?: BaseActor;
+        } | null;
+      };
+    } | null;
+  };
+};
+
+declare const canvas: {
+  tokens?: {
+    controlled?: Array<{
+      id: string;
+      actor?: BaseActor;
+      data?: { actorId?: string };
+    }>;
   };
 };
 
