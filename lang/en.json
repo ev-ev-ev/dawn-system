@@ -158,7 +158,8 @@
         "NoTechniques": "No techniques learned. Drag from a compendium to add.",
         "LearnTechnique": "Learn",
         "ForgetTechnique": "Forget",
-        "ChatTechnique": "Send to Chat"
+        "ChatTechnique": "Send to Chat",
+        "GenericRoll": "Roll Dice"
       },
       "Adversary": {
         "Tier": "Tier",
@@ -167,7 +168,8 @@
         "Armor": "Armor",
         "Gates": "Gates",
         "Gate": "Gate",
-        "Evasion": "Evasion"
+        "Evasion": "Evasion",
+        "GenericRoll": "Roll Dice"
       }
     }
   },

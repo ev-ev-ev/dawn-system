@@ -16,6 +16,7 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       openItem: AdversarySheet._onOpenItem,
       toggleGate: AdversarySheet._onToggleGate,
       rollAttack: AdversarySheet._onRollAttack,
+      rollGeneric: AdversarySheet._onRollGeneric,
       chatPassive: AdversarySheet._onChatPassive,
       chatAction: AdversarySheet._onChatAction,
       chatAttack: AdversarySheet._onChatAttack,
@@ -279,6 +280,10 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       (this as any).document,
       { tensionx: attack.tensionx }
     );
+  }
+
+  static async _onRollGeneric(this: AdversarySheet, _event: Event, _target: HTMLElement): Promise<void> {
+    await openRollDialog((this as any).document.name, 2, (this as any).document);
   }
 
   static async _onChatPassive(this: AdversarySheet, _event: Event, target: HTMLElement): Promise<void> {

@@ -11,6 +11,7 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     form: { submitOnChange: true, closeOnSubmit: false },
     actions: {
       rollAttr: CharacterSheet._onRollAttr,
+      rollGeneric: CharacterSheet._onRollGeneric,
       deleteItem: CharacterSheet._onDeleteItem,
       openItem: CharacterSheet._onOpenItem,
       chatItem: CharacterSheet._onChatItem,
@@ -91,6 +92,10 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     const dice = Number(system[attr] ?? 2);
     const labelKey = `DAWN.Actor.Character.${attr.charAt(0).toUpperCase() + attr.slice(1)}`;
     await openRollDialog(labelKey, dice, (this as any).document);
+  }
+
+  static async _onRollGeneric(this: CharacterSheet, _event: Event, _target: HTMLElement): Promise<void> {
+    await openRollDialog((this as any).document.name, 2, (this as any).document);
   }
 
   static async _onDeleteItem(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {
