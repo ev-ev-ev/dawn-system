@@ -136,6 +136,22 @@
         "None": "No techniques available to learn."
       }
     },
+    "Damage": {
+      "Apply": "Apply Damage",
+      "DialogTitle": "Apply Damage",
+      "Amount": "Damage",
+      "Confirm": "Confirm",
+      "Targets": "Targets",
+      "Target": "Target",
+      "Damage": "Damage",
+      "EvasionLost": "Evasion Lost",
+      "HealthLost": "Health Lost",
+      "Status": "Status",
+      "WoundTaken": "Took a Wound",
+      "GatePassed": "Passed a Gate",
+      "TakenOut": "Taken Out",
+      "SummaryTitle": "Damage Results"
+    },
     "Actor": {
       "Character": {
         "Health": "Health",

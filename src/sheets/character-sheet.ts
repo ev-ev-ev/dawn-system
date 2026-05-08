@@ -1,5 +1,6 @@
 import { openRollDialog } from "../dice/roll.js";
 import { LearnTechniqueDialog } from "../apps/learn-technique-dialog.js";
+import { openSelfDamageDialog, applySelfDamage, postDamageSummary } from "../damage/damage.js";
 
 export class CharacterSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
@@ -12,6 +13,7 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     actions: {
       rollAttr: CharacterSheet._onRollAttr,
       rollGeneric: CharacterSheet._onRollGeneric,
+      applyDamage: CharacterSheet._onApplyDamage,
       deleteItem: CharacterSheet._onDeleteItem,
       openItem: CharacterSheet._onOpenItem,
       chatItem: CharacterSheet._onChatItem,
@@ -96,6 +98,14 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
 
   static async _onRollGeneric(this: CharacterSheet, _event: Event, _target: HTMLElement): Promise<void> {
     await openRollDialog((this as any).document.name, 2, (this as any).document);
+  }
+
+  static async _onApplyDamage(this: CharacterSheet, _event: Event, _target: HTMLElement): Promise<void> {
+    const actor = (this as any).document;
+    const damage = await openSelfDamageDialog(actor, 1);
+    if (damage === null || damage === undefined || damage < 1) return;
+    const r = await applySelfDamage(actor, damage);
+    if (r) await postDamageSummary([r]);
   }
 
   static async _onDeleteItem(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {

@@ -1,4 +1,5 @@
 import { openRollDialog } from "../dice/roll.js";
+import { openSelfDamageDialog, applySelfDamage, postDamageSummary } from "../damage/damage.js";
 
 export class AdversarySheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
@@ -17,6 +18,7 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
       toggleGate: AdversarySheet._onToggleGate,
       rollAttack: AdversarySheet._onRollAttack,
       rollGeneric: AdversarySheet._onRollGeneric,
+      applyDamage: AdversarySheet._onApplyDamage,
       chatPassive: AdversarySheet._onChatPassive,
       chatAction: AdversarySheet._onChatAction,
       chatAttack: AdversarySheet._onChatAttack,
@@ -284,6 +286,14 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
 
   static async _onRollGeneric(this: AdversarySheet, _event: Event, _target: HTMLElement): Promise<void> {
     await openRollDialog((this as any).document.name, 2, (this as any).document);
+  }
+
+  static async _onApplyDamage(this: AdversarySheet, _event: Event, _target: HTMLElement): Promise<void> {
+    const actor = (this as any).document;
+    const damage = await openSelfDamageDialog(actor, 1);
+    if (damage === null || damage === undefined || damage < 1) return;
+    const r = await applySelfDamage(actor, damage);
+    if (r) await postDamageSummary([r]);
   }
 
   static async _onChatPassive(this: AdversarySheet, _event: Event, target: HTMLElement): Promise<void> {

@@ -1,5 +1,7 @@
 const EXPLAIN_ANYWAY = true;
 
+import { getTargetTokens, DamageFluffData } from "../damage/damage.js";
+
 export interface RollParams {
   tag: string;
   dice: number;
@@ -8,6 +10,7 @@ export interface RollParams {
   tension?: number;
   tensionx?: number;
   bonus?: number;
+  actorType?: string;
 }
 
 export async function rollAttribute(params: RollParams): Promise<void> {
@@ -19,6 +22,7 @@ export async function rollAttribute(params: RollParams): Promise<void> {
     tension = 0,
     tensionx = 0,
     bonus = 0,
+    actorType = "character",
   } = params;
 
   const r = new Roll(`${dice + advantage}d6x>=${crittingOn}cs>=4`);
@@ -30,6 +34,21 @@ export async function rollAttribute(params: RollParams): Promise<void> {
   const crits = r.dice[0].results.filter(d => d.exploded).length;
   const successes = r.dice[0].results.filter(d => d.success).length;
   const result = Math.max(0, successes + totalBonus);
+
+  // Capture targeted tokens (sceneId + tokenId pairs)
+  const targetTokens = getTargetTokens();
+
+  // Build target list HTML
+  let targetHtml = "";
+  if (targetTokens.length > 0) {
+    const targetNames: string[] = [];
+    for (const t of targetTokens) {
+      const scene = (game as any).scenes?.get(t.sceneId);
+      const token = scene?.tokens?.get(t.tokenId);
+      if (token) targetNames.push(token.name ?? token.actor?.name ?? "Unknown");
+    }
+    targetHtml = `<div class="damage-targets"><span class="damage-targets-label">${game.i18n.localize("DAWN.Damage.Targets")}:</span> ${targetNames.join(", ")}</div>`;
+  }
 
   const content = `
     <table>
@@ -43,13 +62,54 @@ export async function rollAttribute(params: RollParams): Promise<void> {
       ${row("Hits", r.toAnchor().outerHTML, EXPLAIN_ANYWAY)}
       ${row("Result", result, EXPLAIN_ANYWAY)}
     </table>
+    ${targetHtml}
   `;
 
-  await ChatMessage.create({
+  // Build fluff data for damage system
+  const speaker = ChatMessage.getSpeaker();
+  const fluffData: DamageFluffData = {
+    result,
+    targets: targetTokens,
+    actorType,
+    rollerActorId: (speaker as any)?.actorID ?? "",
+  };
+
+  // Create message, then store damage data as a flag for renderHook
+  const msg = await ChatMessage.create({
     content,
-    speaker: ChatMessage.getSpeaker(),
+    speaker,
     rolls: [r],
-  });
+    renderHook: `
+      (async () => {
+        try {
+          const msg = arguments[0];
+          const fluffRaw = msg.getFlag("dawn-system", "damage");
+          if (!fluffRaw) return;
+          const fluff = typeof fluffRaw === "string" ? JSON.parse(fluffRaw) : fluffRaw;
+          if (!fluff.targets || !fluff.targets.length || fluff.result < 1) return;
+          const { canApplyDamage } = await import("systems/dawn-system/dist/dawn-system.mjs");
+          if (!canApplyDamage(fluff)) return;
+          const btn = document.createElement("button");
+          btn.className = "damage-apply-btn";
+          btn.innerHTML = '<i class="fa-solid fa-heart-crack"></i> ' + game.i18n.localize("DAWN.Damage.Apply");
+          btn.addEventListener("click", async () => {
+            const damage = await openDamageDialogFromChat(fluff);
+            if (damage === null || damage === undefined) return;
+            const results = [];
+            for (const t of fluff.targets) {
+              const r = await applyDamageToTarget(t.tokenId, t.sceneId, damage);
+              if (r) results.push(r);
+            }
+            if (results.length) await postDamageSummary(results);
+          });
+          const footer = msg.element.querySelector(".message-footer");
+          if (footer) footer.prepend(btn);
+        } catch(e) { console.warn("dawn-system damage renderHook error", e); }
+      })();
+    `,
+  } as any);
+
+  await msg.setFlag("dawn-system", "damage", fluffData);
 }
 
 function row(tag: string, value: unknown, always = false): string {
@@ -106,6 +166,8 @@ export async function openRollDialog(tag: string, defaultDice: number, actor: un
 
   if (!formData) return;
 
+  const actorType = (actor as any)?.type ?? "character";
+
   await rollAttribute({
     tag: locTag,
     dice: Number(formData.dice),
@@ -114,5 +176,6 @@ export async function openRollDialog(tag: string, defaultDice: number, actor: un
     tension: Number(formData.tension),
     tensionx: Number(formData.tensionx),
     bonus: Number(formData.bonus),
+    actorType,
   });
 }

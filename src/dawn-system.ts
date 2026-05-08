@@ -7,6 +7,14 @@ import { EdgeSheet } from "./sheets/edge-sheet.js";
 import { ComponentSheet } from "./sheets/component-sheet.js";
 import { ModifierSheet } from "./sheets/modifier-sheet.js";
 import { createTensionHud, updateTensionDisplay } from "./apps/tension-hud.js";
+import {
+  canApplyDamage,
+  applyDamageToTarget,
+  openDamageDialog,
+  postDamageSummary,
+  DamageFluffData,
+  DamageResult,
+} from "./damage/damage.js";
 
 foundry.helpers.Hooks.once("ready", () => {
   createTensionHud();
@@ -100,3 +108,14 @@ foundry.helpers.Hooks.once("init", () => {
     label: "DAWN.Sheet.Adversary.Title",
   });
 });
+
+// Expose damage functions for renderHook and sheet handlers.
+export { canApplyDamage, applyDamageToTarget, postDamageSummary };
+export type { DamageFluffData, DamageResult };
+
+/**
+ * Called from chat message renderHook. Opens damage dialog, applies damage, posts summary.
+ */
+export async function openDamageDialogFromChat(fluff: DamageFluffData): Promise<number | null> {
+  return openDamageDialog(fluff.targets, fluff.result);
+}
