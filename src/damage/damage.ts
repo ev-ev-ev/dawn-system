@@ -1,12 +1,15 @@
-export interface TargetStats {
+export interface ActorStats {
   name: string;
-  tokenId: string;
-  sceneId: string;
   healthValue: number;
   healthMax: number;
   evasion: number;
   armor: number;
   actorType: string;
+}
+
+export interface TargetStats extends ActorStats {
+  tokenId: string;
+  sceneId: string;
 }
 
 export interface DamageResult {
@@ -54,25 +57,50 @@ function resolveToken(sceneId: string, tokenId: string): any {
 }
 
 /**
- * Read stats from a character actor.
+ * Read core stats from an actor (no token info).
  */
-function readCharacterStats(actor: foundry.documents.BaseActor, tokenId: string, sceneId: string): TargetStats {
+function readActorStats(actor: foundry.documents.BaseActor): ActorStats {
   const s = actor.system as Record<string, unknown>;
+
+  if (actor.type === "character") {
+    const healthObj = s.health as { value?: number; max?: number };
+    return {
+      name: actor.name,
+      healthValue: Number(healthObj?.value ?? 0),
+      healthMax: Number(healthObj?.max ?? 0),
+      evasion: Number(s.evasion ?? 0),
+      armor: Number(s.armor ?? 0),
+      actorType: "character",
+    };
+  }
+
   const healthObj = s.health as { value?: number; max?: number };
+  const evasionObj = s.evasion as { value?: number; max?: number };
+  const derived = computeAdversaryDerivedStats(actor);
   return {
     name: actor.name,
-    tokenId,
-    sceneId,
     healthValue: Number(healthObj?.value ?? 0),
-    healthMax: Number(healthObj?.max ?? 0),
-    evasion: Number(s.evasion ?? 0),
-    armor: Number(s.armor ?? 0),
-    actorType: "character",
+    healthMax: derived.healthMax,
+    evasion: Number(evasionObj?.value ?? 0),
+    armor: derived.armor,
+    actorType: "adversary",
   };
 }
 
 /**
- * Compute adversary armor + evasionMax from attached items.
+ * Read target stats for a given token (includes tokenId/sceneId).
+ */
+function readTargetStatsFromToken(token: any, actor: foundry.documents.BaseActor): TargetStats {
+  const base = readActorStats(actor);
+  return {
+    ...base,
+    tokenId: token.id,
+    sceneId: (token.scene as { id?: string })?.id ?? "",
+  };
+}
+
+/**
+ * Compute adversary armor + healthMax from attached items.
  */
 function computeAdversaryDerivedStats(actor: foundry.documents.BaseActor): { armor: number; healthMax: number } {
   const tier = Number((actor.system as any).tier ?? 1);
@@ -105,50 +133,21 @@ function computeAdversaryDerivedStats(actor: foundry.documents.BaseActor): { arm
 }
 
 /**
- * Read stats from an adversary actor.
- */
-function readAdversaryStats(actor: foundry.documents.BaseActor, tokenId: string, sceneId: string): TargetStats {
-  const s = actor.system as Record<string, unknown>;
-  const healthObj = s.health as { value?: number; max?: number };
-  const evasionObj = s.evasion as { value?: number; max?: number };
-  const derived = computeAdversaryDerivedStats(actor);
-  return {
-    name: actor.name,
-    tokenId,
-    sceneId,
-    healthValue: Number(healthObj?.value ?? 0),
-    healthMax: derived.healthMax,
-    evasion: Number(evasionObj?.value ?? 0),
-    armor: derived.armor,
-    actorType: "adversary",
-  };
-}
-
-/**
- * Read target stats for a given token.
+ * Read target stats for a given token ID.
  */
 export async function readTargetStats(tokenId: string, sceneId: string): Promise<TargetStats | null> {
   const token = resolveToken(sceneId, tokenId);
   if (!token) return null;
   const actor = token.actor;
   if (!actor) return null;
-  if (actor.type === "character") return readCharacterStats(actor, tokenId, sceneId);
-  if (actor.type === "adversary") return readAdversaryStats(actor, tokenId, sceneId);
-  return null;
+  return readTargetStatsFromToken(token, actor);
 }
 
 /**
- * Apply damage to a single token following Dawn System rules.
+ * Core damage computation and persistence for an actor.
  */
-export async function applyDamageToTarget(tokenId: string, sceneId: string, damage: number): Promise<DamageResult | null> {
-  const token = resolveToken(sceneId, tokenId);
-  if (!token) return null;
-  const actor = token.actor;
-  if (!actor) return null;
-
-  const stats = actor.type === "character"
-    ? readCharacterStats(actor, tokenId, sceneId)
-    : readAdversaryStats(actor, tokenId, sceneId);
+async function applyDamageToActor(actor: foundry.documents.BaseActor, damage: number): Promise<DamageResult> {
+  const stats = readActorStats(actor);
 
   let remaining = damage;
 
@@ -168,7 +167,7 @@ export async function applyDamageToTarget(tokenId: string, sceneId: string, dama
   let gatePassed = false;
   let takenOut = false;
 
-  // Step 3: check for wound/gate (increment first, then check taken-out)
+  // Step 3: increment wound/gate first, then check taken-out
   if (newHealth <= 0) {
     if (actor.type === "character") {
       const newWounds = Number((actor.system as any).wounds ?? 0) + 1;
@@ -190,7 +189,7 @@ export async function applyDamageToTarget(tokenId: string, sceneId: string, dama
     }
   }
 
-  // Persist updates on the actor
+  // Persist updates
   const updates: Record<string, unknown> = {};
 
   if (actor.type === "character") {
@@ -222,16 +221,27 @@ export async function applyDamageToTarget(tokenId: string, sceneId: string, dama
 }
 
 /**
- * Open the damage dialog. Returns the damage amount chosen, or null if cancelled.
+ * Apply damage to a single token following Dawn System rules.
  */
-export async function openDamageDialog(targetTokens: Array<{ tokenId: string; sceneId: string }>, defaultDamage: number): Promise<number | null> {
-  const statsList: TargetStats[] = [];
-  for (const t of targetTokens) {
-    const s = await readTargetStats(t.tokenId, t.sceneId);
-    if (s) statsList.push(s);
-  }
-  if (statsList.length === 0) return null;
+export async function applyDamageToTarget(tokenId: string, sceneId: string, damage: number): Promise<DamageResult | null> {
+  const token = resolveToken(sceneId, tokenId);
+  if (!token) return null;
+  const actor = token.actor;
+  if (!actor) return null;
+  return applyDamageToActor(actor, damage);
+}
 
+/**
+ * Apply damage to the sheet's own actor directly.
+ */
+export async function applySelfDamage(actor: foundry.documents.BaseActor, damage: number): Promise<DamageResult> {
+  return applyDamageToActor(actor, damage);
+}
+
+/**
+ * Build dialog content HTML for a list of stats.
+ */
+function buildDialogContent(statsList: ActorStats[]): string {
   const rows = statsList
     .map(
       (s) =>
@@ -239,29 +249,38 @@ export async function openDamageDialog(targetTokens: Array<{ tokenId: string; sc
     )
     .join("");
 
-  const formData = await foundry.applications.api.DialogV2.input({
-    window: { title: game.i18n.localize("DAWN.Damage.DialogTitle") },
-    content: `
-      <div class="form-group">
-        <label>${game.i18n.localize("DAWN.Damage.Amount")}</label>
-        <input type="number" name="damage" value="${defaultDamage}" min="0" autofocus />
-      </div>
-      <table class="damage-target-table">
-        <thead>
-          <tr>
-            <th>${game.i18n.localize("DAWN.Damage.Target")}</th>
-            <th>${game.i18n.localize("DAWN.Actor.Character.Health")}</th>
-            <th>${game.i18n.localize("DAWN.Actor.Character.Evasion")}</th>
-            <th>${game.i18n.localize("DAWN.Actor.Character.Armor")}</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-    `,
-    ok: { label: game.i18n.localize("DAWN.Damage.Confirm"), icon: "fa-solid fa-heart-crack" },
-    rejectClose: false,
-  });
+  return `
+    <div class="form-group">
+      <label>${game.i18n.localize("DAWN.Damage.Amount")}</label>
+      <input type="number" name="damage" value="0" min="0" autofocus />
+    </div>
+    <table class="damage-target-table">
+      <thead>
+        <tr>
+          <th>${game.i18n.localize("DAWN.Damage.Target")}</th>
+          <th>${game.i18n.localize("DAWN.Actor.Character.Health")}</th>
+          <th>${game.i18n.localize("DAWN.Actor.Character.Evasion")}</th>
+          <th>${game.i18n.localize("DAWN.Actor.Character.Armor")}</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
 
+/**
+ * Open the damage dialog. Returns the damage amount chosen, or null if cancelled.
+ */
+export async function openDamageDialog(targetTokens: Array<{ tokenId: string; sceneId: string }>, defaultDamage: number): Promise<number | null> {
+  const statsList: ActorStats[] = [];
+  for (const t of targetTokens) {
+    const token = resolveToken(t.sceneId, t.tokenId);
+    if (token?.actor) statsList.push(readActorStats(token.actor));
+  }
+  if (statsList.length === 0) return null;
+
+  const content = buildDialogContent(statsList);
+  const formData = await showDialog(content, defaultDamage);
   if (!formData) return null;
   return Number(formData.damage);
 }
@@ -270,112 +289,24 @@ export async function openDamageDialog(targetTokens: Array<{ tokenId: string; sc
  * Open damage dialog for the sheet's own actor (self-damage).
  */
 export async function openSelfDamageDialog(actor: foundry.documents.BaseActor, defaultDamage: number): Promise<number | null> {
-  const stats = actor.type === "character"
-    ? readCharacterStats(actor, "", "")
-    : readAdversaryStats(actor, "", "");
-
-  const rows = `<tr><td>${stats.name}</td><td>${stats.healthValue} / ${stats.healthMax}</td><td>${stats.evasion}</td><td>${stats.armor}</td></tr>`;
-
-  const formData = await foundry.applications.api.DialogV2.input({
-    window: { title: game.i18n.localize("DAWN.Damage.DialogTitle") },
-    content: `
-      <div class="form-group">
-        <label>${game.i18n.localize("DAWN.Damage.Amount")}</label>
-        <input type="number" name="damage" value="${defaultDamage}" min="0" autofocus />
-      </div>
-      <table class="damage-target-table">
-        <thead>
-          <tr>
-            <th>${game.i18n.localize("DAWN.Damage.Target")}</th>
-            <th>${game.i18n.localize("DAWN.Actor.Character.Health")}</th>
-            <th>${game.i18n.localize("DAWN.Actor.Character.Evasion")}</th>
-            <th>${game.i18n.localize("DAWN.Actor.Character.Armor")}</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-    `,
-    ok: { label: game.i18n.localize("DAWN.Damage.Confirm"), icon: "fa-solid fa-heart-crack" },
-    rejectClose: false,
-  });
-
+  const stats = readActorStats(actor);
+  const content = buildDialogContent([stats]);
+  const formData = await showDialog(content, defaultDamage);
   if (!formData) return null;
   return Number(formData.damage);
 }
 
 /**
- * Apply damage to the sheet's own actor directly.
+ * Shared dialog builder.
  */
-export async function applySelfDamage(actor: foundry.documents.BaseActor, damage: number): Promise<DamageResult | null> {
-  const stats = actor.type === "character"
-    ? readCharacterStats(actor, "", "")
-    : readAdversaryStats(actor, "", "");
-
-  let remaining = damage;
-
-  const evasionLost = Math.min(stats.evasion, remaining);
-  remaining -= evasionLost;
-
-  let healthLost = 0;
-  if (remaining > 0) {
-    healthLost = Math.max(1, remaining - stats.armor);
-    if (healthLost > stats.healthValue) healthLost = stats.healthValue;
-  }
-
-  let newHealth = stats.healthValue - healthLost;
-  let woundTaken = false;
-  let gatePassed = false;
-  let takenOut = false;
-
-  if (newHealth <= 0) {
-    if (actor.type === "character") {
-      const newWounds = Number((actor.system as any).wounds ?? 0) + 1;
-      if (newWounds >= 3) {
-        takenOut = true;
-      } else {
-        woundTaken = true;
-        newHealth = stats.healthMax;
-      }
-    } else {
-      const newGates = Number((actor.system as any).gates?.value ?? 0) + 1;
-      const components = (actor as any).items?.filter((i: foundry.documents.BaseItem) => i.type === "component") ?? [];
-      if (newGates >= components.length) {
-        takenOut = true;
-      } else {
-        gatePassed = true;
-        newHealth = stats.healthMax;
-      }
-    }
-  }
-
-  const updates: Record<string, unknown> = {};
-
-  if (actor.type === "character") {
-    updates["system.health.value"] = Math.max(0, newHealth);
-    updates["system.evasion"] = Math.max(0, stats.evasion - evasionLost);
-    if (woundTaken || takenOut) {
-      updates["system.wounds"] = Number((actor.system as any).wounds ?? 0) + 1;
-    }
-  } else {
-    updates["system.health.value"] = Math.max(0, newHealth);
-    updates["system.evasion.value"] = Math.max(0, stats.evasion - evasionLost);
-    if (gatePassed || takenOut) {
-      updates["system.gates.value"] = Number((actor.system as any).gates?.value ?? 0) + 1;
-    }
-  }
-
-  await actor.update(updates);
-
-  return {
-    name: stats.name,
-    damageDealt: damage,
-    evasionLost,
-    healthLost,
-    armor: stats.armor,
-    woundTaken,
-    gatePassed,
-    takenOut,
-  };
+async function showDialog(contentHtml: string, defaultDamage: number): Promise<Record<string, unknown> | null> {
+  const content = contentHtml.replace('value="0"', `value="${defaultDamage}"`);
+  return foundry.applications.api.DialogV2.input({
+    window: { title: game.i18n.localize("DAWN.Damage.DialogTitle") },
+    content,
+    ok: { label: game.i18n.localize("DAWN.Damage.Confirm"), icon: "fa-solid fa-heart-crack" },
+    rejectClose: false,
+  });
 }
 
 /**
@@ -418,14 +349,13 @@ export async function postDamageSummary(results: DamageResult[]): Promise<void> 
  * Adversary rolls: GM, or player if their controlled token's actor is a target.
  */
 export function canApplyDamage(fluff: DamageFluffData): boolean {
-  const user = (game as any).user;
+  const user = game.user;
   if (!user) return false;
-  const isGM = user.isGM;
-  if (isGM) return true;
+  if (user.isGM) return true;
 
   // Player on adversary roll: allow if their controlled token is a target
   if (fluff.actorType === "adversary") {
-    const controlled = (canvas as any)?.tokens?.controlled ?? [];
+    const controlled = canvas?.tokens?.controlled ?? [];
     for (const token of controlled) {
       const match = fluff.targets.find((t: { tokenId: string; sceneId: string }) => t.tokenId === token.id);
       if (match) return true;
