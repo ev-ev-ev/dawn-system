@@ -107,6 +107,37 @@ foundry.helpers.Hooks.once("init", () => {
     makeDefault: true,
     label: "DAWN.Sheet.Adversary.Title",
   });
+
+  // Register chat message render hook to inject damage button.
+  foundry.helpers.Hooks.on("renderChatMessageHTML", (...args: unknown[]) => {
+    const message = args[0] as any;
+    const html = args[1] as HTMLElement;
+    const fluff = message?.getFlag("dawn-system", "damage");
+    if (!fluff) return;
+    if (!fluff.targets || !fluff.targets.length || fluff.result < 1) return;
+    if (!canApplyDamage(fluff as DamageFluffData)) return;
+
+    const btn = document.createElement("button");
+    btn.className = "damage-apply-btn";
+    btn.innerHTML = '<i class="fa-solid fa-heart-crack"></i> ' + game.i18n.localize("DAWN.Damage.Apply");
+    btn.addEventListener("click", async () => {
+      try {
+        const damage = await openDamageDialog(fluff.targets, fluff.result);
+        if (damage === null || damage === undefined) return;
+        const results: DamageResult[] = [];
+        for (const t of fluff.targets) {
+          const r = await applyDamageToTarget(t.tokenId, t.sceneId, damage);
+          if (r) results.push(r);
+        }
+        if (results.length) await postDamageSummary(results);
+      } catch (e) {
+        console.warn("dawn-system damage apply error", e);
+      }
+    });
+
+    const content = html.querySelector(".message-content");
+    if (content) content.appendChild(btn);
+  });
 });
 
 // Expose damage functions for renderHook and sheet handlers.

@@ -74,40 +74,14 @@ export async function rollAttribute(params: RollParams): Promise<void> {
     rollerActorId: (speaker as any)?.actorID ?? "",
   };
 
-  // Embed fluff data directly into renderHook since flag isn't set yet at render time
-  const fluffJson = JSON.stringify(fluffData);
-
-  await ChatMessage.create({
+  // Create message and store damage data as a flag for the renderChatMessageHTML hook
+  const msg = (await ChatMessage.create({
     content,
     speaker,
     rolls: [r],
-    renderHook: `
-      (async () => {
-        try {
-          const msg = arguments[0];
-          const fluff = ${fluffJson};
-          if (!fluff.targets || !fluff.targets.length || fluff.result < 1) return;
-          const { canApplyDamage } = await import("systems/dawn-system/dist/dawn-system.mjs");
-          if (!canApplyDamage(fluff)) return;
-          const btn = document.createElement("button");
-          btn.className = "damage-apply-btn";
-          btn.innerHTML = '<i class="fa-solid fa-heart-crack"></i> ' + game.i18n.localize("DAWN.Damage.Apply");
-          btn.addEventListener("click", async () => {
-            const damage = await openDamageDialogFromChat(fluff);
-            if (damage === null || damage === undefined) return;
-            const results = [];
-            for (const t of fluff.targets) {
-              const r = await applyDamageToTarget(t.tokenId, t.sceneId, damage);
-              if (r) results.push(r);
-            }
-            if (results.length) await postDamageSummary(results);
-          });
-          const footer = msg.element.querySelector(".message-footer");
-          if (footer) footer.prepend(btn);
-        } catch(e) { console.warn("dawn-system damage renderHook error", e); }
-      })();
-    `,
-  } as any);
+  })) as any;
+
+  await msg.setFlag("dawn-system", "damage", fluffData);
 }
 
 function row(tag: string, value: unknown, always = false): string {
