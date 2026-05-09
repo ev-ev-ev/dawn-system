@@ -123,10 +123,18 @@ foundry.helpers.Hooks.once("init", () => {
     btn.innerHTML = '<i class="fa-solid fa-heart-crack"></i> ' + game.i18n.localize("DAWN.Damage.Apply");
     btn.addEventListener("click", async () => {
       try {
-        const fluff = message.getFlag("dawn-system", "damage") as DamageFluffData;
-        const targets = getOwnedTargets(fluff);
-        if (!targets.length) return;
-        const damage = await openDamageDialog(targets, fluff.result);
+        const damageFluff = message.getFlag("dawn-system", "damage") as DamageFluffData;
+        const targets = getOwnedTargets(damageFluff);
+        if (!targets.length) {
+          await foundry.applications.api.DialogV2.confirm({
+            window: { title: "No Targets" },
+            content: `<p>No damageable targets are selected. Select target tokens on the canvas first.</p>`,
+            ok: { label: "Ok" },
+            cancel: false,
+          });
+          return;
+        }
+        const damage = await openDamageDialog(targets, damageFluff.result);
         if (damage === null || damage === undefined) return;
         const results: DamageResult[] = [];
         for (const t of targets) {
@@ -149,8 +157,11 @@ export { canApplyDamage, applyDamageToTarget, postDamageSummary };
 export type { DamageFluffData, DamageResult };
 
 /**
- * Called from chat message renderHook. Opens damage dialog, applies damage, posts summary.
+ * Called from chat message. Opens damage dialog, applies damage, posts summary.
+ * Filters targets to only those owned by the current user.
  */
 export async function openDamageDialogFromChat(fluff: DamageFluffData): Promise<number | null> {
-  return openDamageDialog(fluff.targets, fluff.result);
+  const targets = getOwnedTargets(fluff);
+  if (!targets.length) return null;
+  return openDamageDialog(targets, fluff.result);
 }
