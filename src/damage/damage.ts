@@ -325,8 +325,8 @@ export async function postDamageSummary(results: DamageResult[]): Promise<void> 
         <table class="damage-detail-table">
           <tr><td>${game.i18n.localize("DAWN.Damage.Damage")}</td><td>${r.damageDealt}</td></tr>
           <tr><td>${game.i18n.localize("DAWN.Damage.EvasionLost")}</td><td>${r.evasionLost}</td></tr>
-          <tr><td>${game.i18n.localize("DAWN.Damage.HealthLost")}</td><td>${r.healthLost}</td></tr>
           <tr><td>${game.i18n.localize("DAWN.Actor.Character.Armor")}</td><td>${r.armor}</td></tr>
+          <tr><td>${game.i18n.localize("DAWN.Damage.HealthLost")}</td><td>${r.healthLost}</td></tr>
           ${status ? `<tr><td>${game.i18n.localize("DAWN.Damage.Status")}</td><td>${status}</td></tr>` : ""}
         </table>
       </div>`;
