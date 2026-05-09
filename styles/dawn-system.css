@@ -880,3 +880,57 @@
   font-weight: 600;
 }
 
+/* Roll summary in chat — matches damage summary style */
+.roll-summary {
+  margin-top: 4px;
+}
+
+.roll-target-block {
+  margin-top: 4px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  background: var(--color-bg-alpha-transparent, rgba(0, 0, 0, 0.05));
+}
+
+.roll-detail-table {
+  width: 100%;
+  font-size: 0.85em;
+  border-collapse: collapse;
+}
+
+.roll-detail-table tr {
+  background: transparent !important;
+}
+
+.roll-detail-table td {
+  padding: 1px 4px;
+  border: none !important;
+  background: transparent !important;
+  font-weight: normal !important;
+}
+
+.roll-detail-table td:first-child {
+  font-size: 0.78em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+  padding-right: 8px;
+  white-space: nowrap;
+}
+
+.roll-detail-table td:last-child {
+  text-align: right;
+  font-weight: 600 !important;
+}
+
+.roll-result-row td {
+  padding-top: 4px;
+  border-top: 1px solid var(--color-border-light-tertiary, #ccc);
+  font-weight: bold !important;
+}
+
+.roll-result-row td:first-child {
+  opacity: 1;
+  font-size: 0.85em;
+  text-transform: none;
+}

@@ -51,18 +51,22 @@ export async function rollAttribute(params: RollParams): Promise<void> {
   }
 
   const content = `
-    <table>
-      ${row(tag, dice, EXPLAIN_ANYWAY)}
-      ${row("Advantage", advantage)}
-      ${row("Critting On", crittingOn)}
-      ${row("Tension", displayTension)}
-      ${row("Tension X", tensionx)}
-      ${row("Bonus", bonus)}
-      ${row("Crits", crits)}
-      ${row("Hits", r.toAnchor().outerHTML, EXPLAIN_ANYWAY)}
-      ${row("Result", result, EXPLAIN_ANYWAY)}
-    </table>
-    ${targetHtml}
+    <div class="roll-summary">
+      <div class="roll-target-block">
+        <table class="roll-detail-table">
+          <tr><td>${tag}</td><td>${dice}</td></tr>
+          ${advantage ? `<tr><td>Advantage</td><td>${advantage}</td></tr>` : ""}
+          <tr><td>Critting On</td><td>${crittingOn}</td></tr>
+          ${displayTension ? `<tr><td>Tension</td><td>${displayTension}</td></tr>` : ""}
+          ${tensionx ? `<tr><td>Tension X</td><td>${tensionx}</td></tr>` : ""}
+          ${bonus ? `<tr><td>Bonus</td><td>${bonus}</td></tr>` : ""}
+          <tr><td>Crits</td><td>${crits}</td></tr>
+          <tr><td>Hits</td><td>${r.toAnchor().outerHTML}</td></tr>
+          <tr class="roll-result-row"><td>Result</td><td>${result}</td></tr>
+        </table>
+      </div>
+      ${targetHtml}
+    </div>
   `;
 
   // Build fluff data for damage system
