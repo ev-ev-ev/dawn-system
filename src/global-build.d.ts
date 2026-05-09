@@ -132,6 +132,13 @@ declare namespace foundry {
           submit?: (result: unknown, dialog: DialogV2) => void;
           rejectClose?: boolean;
         }): Promise<unknown>;
+        static confirm(config: {
+          window?: { title?: string };
+          content?: string;
+          ok?: { label?: string; icon?: string };
+          cancel?: { label?: string; icon?: string } | false;
+          rejectClose?: boolean;
+        }): Promise<boolean>;
       }
     }
   }
