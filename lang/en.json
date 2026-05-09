@@ -39,6 +39,9 @@
       },
       "Modifier": {
         "Title": "NPC Modifier"
+      },
+      "Terrain": {
+        "Title": "Terrain Sheet"
       }
     },
     "Item": {

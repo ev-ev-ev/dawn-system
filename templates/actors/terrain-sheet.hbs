@@ -1,0 +1,13 @@
+<div class="dawn-sheet sheet-body flexcol">
+  <header class="sheet-header flexrow">
+    <img class="profile-img" src="{{document.img}}" data-edit="img" data-action="editImage" title="{{document.name}}" />
+    <div class="header-fields flexcol">
+      <input class="charname" name="name" type="text" value="{{document.name}}" placeholder="Name" />
+      <div class="resource flexrow">
+        <label>{{localize "DAWN.Actor.Terrain.Health"}}</label>
+        <input type="number" name="system.health" value="{{system.health}}" min="0" />
+        <button type="button" data-action="applyDamage" data-tooltip="{{localize "DAWN.Damage.Apply"}}"><i class="fa-solid fa-heart-crack"></i></button>
+      </div>
+    </div>
+  </header>
+</div>

@@ -2,6 +2,7 @@ import { AdversaryDataModel, CharacterDataModel, TerrainDataModel } from "./data
 import { TechniqueDataModel, EdgeDataModel, ComponentDataModel, ModifierDataModel } from "./data/item-models.js";
 import { CharacterSheet } from "./sheets/character-sheet.js";
 import { AdversarySheet } from "./sheets/adversary-sheet.js";
+import { TerrainSheet } from "./sheets/terrain-sheet.js";
 import { TechniqueSheet } from "./sheets/technique-sheet.js";
 import { EdgeSheet } from "./sheets/edge-sheet.js";
 import { ComponentSheet } from "./sheets/component-sheet.js";
@@ -111,6 +112,11 @@ foundry.helpers.Hooks.once("init", () => {
     types: ["adversary"],
     makeDefault: true,
     label: "DAWN.Sheet.Adversary.Title",
+  });
+  foundry.documents.collections.Actors.registerSheet("dawn-system", TerrainSheet, {
+    types: ["terrain"],
+    makeDefault: true,
+    label: "DAWN.Sheet.Terrain.Title",
   });
 
   // Register chat message render hook to inject damage button.
