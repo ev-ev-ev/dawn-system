@@ -42,6 +42,9 @@
       },
       "Terrain": {
         "Title": "Terrain Sheet"
+      },
+      "Fodder": {
+        "Title": "Fodder Sheet"
       }
     },
     "Item": {
@@ -192,6 +195,9 @@
       },
       "Terrain": {
         "Health": "Health"
+      },
+      "Fodder": {
+        "Health": "Health"
       }
     }
   },
@@ -199,7 +205,8 @@
     "Actor": {
       "character": "Character",
       "adversary": "Adversary",
-      "terrain": "Terrain"
+      "terrain": "Terrain",
+      "fodder": "Fodder"
     },
     "Item": {
       "technique": "Technique",

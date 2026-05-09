@@ -26,7 +26,8 @@
     "Actor": {
       "character": {},
       "adversary": {},
-      "terrain": {}
+      "terrain": {},
+      "fodder": {}
     },
     "Item": {
       "technique": {},

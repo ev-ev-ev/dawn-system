@@ -106,3 +106,22 @@ export class TerrainDataModel extends foundry.abstract.TypeDataModel {
     };
   }
 }
+
+/**
+ * Data model for the "fodder" Actor type.
+ * Always has exactly 1 health.
+ */
+export class FodderDataModel extends foundry.abstract.TypeDataModel {
+  static override defineSchema() {
+    return {
+      health: new NumberField({
+        required: true,
+        integer: true,
+        min: 0,
+        max: 1,
+        initial: 1,
+        label: "DAWN.Actor.Fodder.Health",
+      }),
+    };
+  }
+}

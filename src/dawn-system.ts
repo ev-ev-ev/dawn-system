@@ -1,8 +1,9 @@
-import { AdversaryDataModel, CharacterDataModel, TerrainDataModel } from "./data/actor-models.js";
+import { AdversaryDataModel, CharacterDataModel, TerrainDataModel, FodderDataModel } from "./data/actor-models.js";
 import { TechniqueDataModel, EdgeDataModel, ComponentDataModel, ModifierDataModel } from "./data/item-models.js";
 import { CharacterSheet } from "./sheets/character-sheet.js";
 import { AdversarySheet } from "./sheets/adversary-sheet.js";
 import { TerrainSheet } from "./sheets/terrain-sheet.js";
+import { FodderSheet } from "./sheets/fodder-sheet.js";
 import { TechniqueSheet } from "./sheets/technique-sheet.js";
 import { EdgeSheet } from "./sheets/edge-sheet.js";
 import { ComponentSheet } from "./sheets/component-sheet.js";
@@ -60,6 +61,7 @@ foundry.helpers.Hooks.once("init", () => {
   dataModels.character = CharacterDataModel;
   dataModels.adversary = AdversaryDataModel;
   dataModels.terrain = TerrainDataModel;
+  dataModels.fodder = FodderDataModel;
 
   // Tell Foundry which attributes should appear as Token bars/values.
   // Foundry's JSDoc types trackableAttributes as Record<string, string> but
@@ -71,6 +73,7 @@ foundry.helpers.Hooks.once("init", () => {
     character: { bar: ["health", "focus"], value: ["speed"] },
     adversary: { bar: [], value: ["tier"] },
     terrain: { bar: [], value: ["health"] },
+    fodder: { bar: [], value: ["health"] },
   };
 
   // Register item data models.
@@ -117,6 +120,11 @@ foundry.helpers.Hooks.once("init", () => {
     types: ["terrain"],
     makeDefault: true,
     label: "DAWN.Sheet.Terrain.Title",
+  });
+  foundry.documents.collections.Actors.registerSheet("dawn-system", FodderSheet, {
+    types: ["fodder"],
+    makeDefault: true,
+    label: "DAWN.Sheet.Fodder.Title",
   });
 
   // Register chat message render hook to inject damage button.
