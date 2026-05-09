@@ -61,7 +61,7 @@ export function initTensionAutomation(): void {
   if (!game.user?.isGM) return;
 
   // If a combat is already active on ready, populate cache from existing combatants.
-  const combat = canvas.scene?.activeCombat;
+  const combat = game.combat;
   if (combat?.started) {
     populateCache(combat as { combatants: unknown[] });
   }

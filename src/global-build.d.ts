@@ -200,6 +200,12 @@ declare const game: {
       };
     } | null;
   };
+  combat?: {
+    started: boolean;
+    combatants: Array<{
+      actor?: { _id: string; system: unknown };
+    }>;
+  } | null;
 };
 
 declare const canvas: {
@@ -209,14 +215,6 @@ declare const canvas: {
       actor?: BaseActor;
       data?: { actorId?: string };
     }>;
-  };
-  scene?: {
-    activeCombat?: {
-      started: boolean;
-      combatants: Array<{
-        actor?: { _id: string; system: unknown };
-      }>;
-    } | null;
   };
 };
 
