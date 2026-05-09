@@ -6,7 +6,7 @@ export class TerrainSheet extends foundry.applications.api.HandlebarsApplication
   static override DEFAULT_OPTIONS = {
     classes: ["dawn-system", "actor", "terrain"],
     window: { title: "DAWN.Sheet.Terrain.Title", resizable: true },
-    position: { width: 480, height: 320 },
+    position: { width: 480, height: 190 },
     form: { submitOnChange: true, closeOnSubmit: false },
     actions: {
       applyDamage: TerrainSheet._onApplyDamage,
