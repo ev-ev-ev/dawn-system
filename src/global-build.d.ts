@@ -210,6 +210,14 @@ declare const canvas: {
       data?: { actorId?: string };
     }>;
   };
+  scene?: {
+    activeCombat?: {
+      started: boolean;
+      combatants: Array<{
+        actor?: { _id: string; system: unknown };
+      }>;
+    } | null;
+  };
 };
 
 declare const document: Document;
