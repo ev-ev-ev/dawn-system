@@ -9,6 +9,7 @@ import { ModifierSheet } from "./sheets/modifier-sheet.js";
 import { createTensionHud, updateTensionDisplay } from "./apps/tension-hud.js";
 import {
   canApplyDamage,
+  getOwnedTargets,
   applyDamageToTarget,
   openDamageDialog,
   postDamageSummary,
@@ -122,10 +123,13 @@ foundry.helpers.Hooks.once("init", () => {
     btn.innerHTML = '<i class="fa-solid fa-heart-crack"></i> ' + game.i18n.localize("DAWN.Damage.Apply");
     btn.addEventListener("click", async () => {
       try {
-        const damage = await openDamageDialog(fluff.targets, fluff.result);
+        const fluff = message.getFlag("dawn-system", "damage") as DamageFluffData;
+        const targets = getOwnedTargets(fluff);
+        if (!targets.length) return;
+        const damage = await openDamageDialog(targets, fluff.result);
         if (damage === null || damage === undefined) return;
         const results: DamageResult[] = [];
-        for (const t of fluff.targets) {
+        for (const t of targets) {
           const r = await applyDamageToTarget(t.tokenId, t.sceneId, damage);
           if (r) results.push(r);
         }

@@ -346,7 +346,7 @@ export async function postDamageSummary(results: DamageResult[]): Promise<void> 
 /**
  * Check if the current user may apply damage for this roll.
  * Character rolls: GM only.
- * Adversary rolls: GM, or player if their controlled token's actor is a target.
+ * Adversary rolls: GM, or player if their controlled token is a target.
  */
 export function canApplyDamage(fluff: DamageFluffData): boolean {
   const user = game.user;
@@ -363,4 +363,19 @@ export function canApplyDamage(fluff: DamageFluffData): boolean {
   }
 
   return false;
+}
+
+/**
+ * Get the targets the current user is allowed to damage.
+ * GM gets all targets. Player gets only their own controlled tokens.
+ */
+export function getOwnedTargets(fluff: DamageFluffData): Array<{ tokenId: string; sceneId: string }> {
+  const user = game.user;
+  if (!user) return [];
+  if (user.isGM) return fluff.targets;
+
+  // Player: only their controlled tokens
+  const controlled = canvas?.tokens?.controlled ?? [];
+  const controlledIds = new Set(controlled.map((t: { id: string }) => t.id));
+  return fluff.targets.filter((t: { tokenId: string; sceneId: string }) => controlledIds.has(t.tokenId));
 }
