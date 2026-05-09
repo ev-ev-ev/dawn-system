@@ -7,6 +7,7 @@ import { EdgeSheet } from "./sheets/edge-sheet.js";
 import { ComponentSheet } from "./sheets/component-sheet.js";
 import { ModifierSheet } from "./sheets/modifier-sheet.js";
 import { createTensionHud, updateTensionDisplay } from "./apps/tension-hud.js";
+import { initTensionAutomation } from "./apps/tension-automation.js";
 import {
   canApplyDamage,
   getOwnedTargets,
@@ -19,6 +20,8 @@ import {
 
 foundry.helpers.Hooks.once("ready", () => {
   createTensionHud();
+  // Set up automated tension tracking.
+  initTensionAutomation();
 });
 
 foundry.helpers.Hooks.once("init", () => {
@@ -41,11 +44,10 @@ foundry.helpers.Hooks.once("init", () => {
 
   // Listen for tension changes and update HUD display.
   foundry.helpers.Hooks.on("updateSetting", (...args: unknown[]) => {
-    const obj = typeof args[0] === "string" ? undefined : (args[0] as { namespace?: string; key?: string; newValue?: unknown });
-    const ns = typeof args[0] === "string" ? args[0] : obj?.namespace;
-    const key = typeof args[1] === "string" ? args[1] : obj?.key;
-    if (ns === "dawn-system" && key === "tension") {
-      const val = obj?.newValue ?? game.settings.get("dawn-system", "tension");
+    const obj = args[0] as { key?: string; value?: unknown };
+    const key = typeof args[0] === "string" ? args[0] : obj?.key;
+    if (key === "dawn-system.tension") {
+      const val = obj?.value ?? game.settings.get("dawn-system", "tension");
       updateTensionDisplay(Number(val));
     }
   });
