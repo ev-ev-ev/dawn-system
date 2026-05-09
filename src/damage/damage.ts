@@ -74,6 +74,17 @@ function readActorStats(actor: foundry.documents.BaseActor): ActorStats {
     };
   }
 
+  if (actor.type === "terrain") {
+    return {
+      name: actor.name,
+      healthValue: Number(s.health ?? 0),
+      healthMax: 0,
+      evasion: 0,
+      armor: 0,
+      actorType: "terrain",
+    };
+  }
+
   const healthObj = s.health as { value?: number; max?: number };
   const evasionObj = s.evasion as { value?: number; max?: number };
   const derived = computeAdversaryDerivedStats(actor);
@@ -177,6 +188,8 @@ async function applyDamageToActor(actor: foundry.documents.BaseActor, damage: nu
         woundTaken = true;
         newHealth = stats.healthMax;
       }
+    } else if (actor.type === "terrain") {
+      // Terrain just stays at 0 health, no wounds or gates
     } else {
       const newGates = Number((actor.system as any).gates?.value ?? 0) + 1;
       const components = (actor as any).items?.filter((i: foundry.documents.BaseItem) => i.type === "component") ?? [];
@@ -198,6 +211,8 @@ async function applyDamageToActor(actor: foundry.documents.BaseActor, damage: nu
     if (woundTaken || takenOut) {
       updates["system.wounds"] = Number((actor.system as any).wounds ?? 0) + 1;
     }
+  } else if (actor.type === "terrain") {
+    updates["system.health"] = Math.max(0, newHealth);
   } else {
     updates["system.health.value"] = Math.max(0, newHealth);
     updates["system.evasion.value"] = Math.max(0, stats.evasion - evasionLost);

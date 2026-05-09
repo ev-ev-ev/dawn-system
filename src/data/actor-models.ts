@@ -88,3 +88,21 @@ export class AdversaryDataModel extends foundry.abstract.TypeDataModel {
     };
   }
 }
+
+/**
+ * Data model for the "terrain" Actor type.
+ * Only has a health property with no maximum.
+ */
+export class TerrainDataModel extends foundry.abstract.TypeDataModel {
+  static override defineSchema() {
+    return {
+      health: new NumberField({
+        required: true,
+        integer: true,
+        min: 0,
+        initial: 10,
+        label: "DAWN.Actor.Terrain.Health",
+      }),
+    };
+  }
+}

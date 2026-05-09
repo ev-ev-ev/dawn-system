@@ -25,7 +25,8 @@
   "documentTypes": {
     "Actor": {
       "character": {},
-      "adversary": {}
+      "adversary": {},
+      "terrain": {}
     },
     "Item": {
       "technique": {},

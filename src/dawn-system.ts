@@ -1,4 +1,4 @@
-import { AdversaryDataModel, CharacterDataModel } from "./data/actor-models.js";
+import { AdversaryDataModel, CharacterDataModel, TerrainDataModel } from "./data/actor-models.js";
 import { TechniqueDataModel, EdgeDataModel, ComponentDataModel, ModifierDataModel } from "./data/item-models.js";
 import { CharacterSheet } from "./sheets/character-sheet.js";
 import { AdversarySheet } from "./sheets/adversary-sheet.js";
@@ -58,6 +58,7 @@ foundry.helpers.Hooks.once("init", () => {
   const dataModels = CONFIG.Actor.dataModels as Record<string, unknown>;
   dataModels.character = CharacterDataModel;
   dataModels.adversary = AdversaryDataModel;
+  dataModels.terrain = TerrainDataModel;
 
   // Tell Foundry which attributes should appear as Token bars/values.
   // Foundry's JSDoc types trackableAttributes as Record<string, string> but
@@ -68,6 +69,7 @@ foundry.helpers.Hooks.once("init", () => {
   trackable.trackableAttributes = {
     character: { bar: ["health", "focus"], value: ["speed"] },
     adversary: { bar: [], value: ["tier"] },
+    terrain: { bar: [], value: ["health"] },
   };
 
   // Register item data models.

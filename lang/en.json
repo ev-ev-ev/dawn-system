@@ -186,13 +186,17 @@
         "Gate": "Gate",
         "Evasion": "Evasion",
         "GenericRoll": "Roll Dice"
+      },
+      "Terrain": {
+        "Health": "Health"
       }
     }
   },
   "TYPES": {
     "Actor": {
       "character": "Character",
-      "adversary": "Adversary"
+      "adversary": "Adversary",
+      "terrain": "Terrain"
     },
     "Item": {
       "technique": "Technique",
