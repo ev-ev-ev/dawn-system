@@ -83,10 +83,12 @@ declare namespace foundry {
       img: string;
       type: string;
       system: Record<string, unknown>;
+      statuses: Set<string>;
       items: Array<BaseItem>;
       getEmbeddedCollection(name: string): Array<{ id: string; name: string; type: string }>;
       toObject(): { system: Record<string, unknown> };
       update(data: Record<string, unknown>): Promise<void>;
+      toggleStatusEffect(statusId: string, options?: { active?: boolean; overlay?: boolean }): Promise<void>;
     }
     class BaseItem {
       id: string;
@@ -205,6 +207,9 @@ declare const game: {
     current?: { actorId?: string };
     combatants: Array<{
       actor?: { _id: string; system: unknown };
+      actorId?: string;
+      defeated?: boolean;
+      update(data: Record<string, unknown>): Promise<void>;
     }>;
   } | null;
 };

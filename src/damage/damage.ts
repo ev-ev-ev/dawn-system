@@ -200,7 +200,7 @@ async function applyDamageToActor(actor: foundry.documents.BaseActor, damage: nu
         newHealth = stats.healthMax;
       }
     } else if (actor.type === "terrain" || actor.type === "fodder") {
-      // Terrain/fodder just stays at 0 health, no wounds or gates
+      takenOut = true;
     } else {
       const newGates = Number((actor.system as any).gates?.value ?? 0) + 1;
       const components = (actor as any).items?.filter((i: foundry.documents.BaseItem) => i.type === "component") ?? [];
@@ -234,6 +234,10 @@ async function applyDamageToActor(actor: foundry.documents.BaseActor, damage: nu
 
   await actor.update(updates);
 
+  if (takenOut) {
+    await markTakenOut(actor);
+  }
+
   return {
     name: stats.name,
     damageDealt: damage,
@@ -244,6 +248,28 @@ async function applyDamageToActor(actor: foundry.documents.BaseActor, damage: nu
     gatePassed,
     takenOut,
   };
+}
+
+/**
+ * Apply the "dead" status effect and mark combatant as defeated.
+ */
+async function markTakenOut(actor: foundry.documents.BaseActor): Promise<void> {
+  // Apply dead status effect if not already present.
+  if (!actor.statuses.has("dead")) {
+    await (actor as any).toggleStatusEffect("dead", { active: true });
+  }
+
+  // Mark as defeated in combat if they're a combatant.
+  const combat = game.combat;
+  if (combat?.started) {
+    const combatants = (combat as any).combatants ?? [];
+    for (const combatant of combatants) {
+      if (combatant.actorId === actor.id && !combatant.defeated) {
+        await combatant.update({ defeated: true });
+        break;
+      }
+    }
+  }
 }
 
 /**
