@@ -26,6 +26,8 @@ foundry.helpers.Hooks.once("ready", () => {
   createTensionHud();
   // Set up automated tension tracking.
   initTensionAutomation();
+  // Set up status effect expiry during combat.
+  initStatusExpiry();
 });
 
 foundry.helpers.Hooks.once("init", () => {
@@ -48,9 +50,6 @@ foundry.helpers.Hooks.once("init", () => {
 
   // Replace Foundry default status effects with DAWN statuses.
   initStatusEffects();
-
-  // Set up status effect expiry during combat.
-  initStatusExpiry();
 
   // Listen for tension changes and update HUD display.
   foundry.helpers.Hooks.on("updateSetting", (...args: unknown[]) => {
