@@ -256,7 +256,7 @@ async function applyDamageToActor(actor: foundry.documents.BaseActor, damage: nu
 async function markTakenOut(actor: foundry.documents.BaseActor): Promise<void> {
   // Apply dead status effect if not already present.
   if (!actor.statuses.has("dead")) {
-    await (actor as any).toggleStatusEffect("dead", { active: true });
+    await (actor as any).toggleStatusEffect("dead", { active: true, overlay: true });
   }
 
   // Mark as defeated in combat if they're a combatant.
