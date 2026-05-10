@@ -10,6 +10,7 @@ import { ComponentSheet } from "./sheets/component-sheet.js";
 import { ModifierSheet } from "./sheets/modifier-sheet.js";
 import { createTensionHud, updateTensionDisplay } from "./apps/tension-hud.js";
 import { initTensionAutomation } from "./apps/tension-automation.js";
+import { initStatusEffects } from "./apps/status-effects.js";
 import {
   canApplyDamage,
   getOwnedTargets,
@@ -43,6 +44,9 @@ foundry.helpers.Hooks.once("init", () => {
       Player: 1,
     },
   });
+
+  // Replace Foundry default status effects with DAWN statuses.
+  initStatusEffects();
 
   // Listen for tension changes and update HUD display.
   foundry.helpers.Hooks.on("updateSetting", (...args: unknown[]) => {

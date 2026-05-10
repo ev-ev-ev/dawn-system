@@ -6,6 +6,27 @@
       "Decrement": "Decrease Tension",
       "Reset": "Reset Tension"
     },
+    "Status": {
+      "TakenOut": "Taken Out",
+      "Banished": "Banished",
+      "Hastened": "Hastened",
+      "Invisible": "Invisible",
+      "Regenerating": "Regenerating",
+      "Reinforced": "Reinforced",
+      "Steadied": "Steadied",
+      "Strengthened": "Strengthened",
+      "Blighted": "Blighted",
+      "Dazed": "Dazed",
+      "Feared": "Feared",
+      "Immobilized": "Immobilized",
+      "Launched": "Launched",
+      "Marked": "Marked",
+      "Slowed": "Slowed",
+      "Shredded": "Shredded",
+      "Snared": "Snared",
+      "Taunted": "Taunted",
+      "Weakened": "Weakened"
+    },
     "Sheet": {
       "Character": {
         "Title": "Character Sheet",

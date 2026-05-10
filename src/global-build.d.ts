@@ -202,6 +202,7 @@ declare const game: {
   };
   combat?: {
     started: boolean;
+    current?: { actorId?: string };
     combatants: Array<{
       actor?: { _id: string; system: unknown };
     }>;
@@ -231,4 +232,5 @@ declare const CONFIG: {
   Dawn?: {
     Archetypes?: Record<string, unknown>;
   };
+  statusEffects: Record<string, unknown> | Array<Record<string, unknown>>;
 };
