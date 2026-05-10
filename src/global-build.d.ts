@@ -85,6 +85,10 @@ declare namespace foundry {
       system: Record<string, unknown>;
       statuses: Set<string>;
       items: Array<BaseItem>;
+      activeEffects: Array<{
+        update(data: Record<string, unknown>): Promise<void>;
+        duration?: { value?: number };
+      }>;
       getEmbeddedCollection(name: string): Array<{ id: string; name: string; type: string }>;
       toObject(): { system: Record<string, unknown> };
       update(data: Record<string, unknown>): Promise<void>;
