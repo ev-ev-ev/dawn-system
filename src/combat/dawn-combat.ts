@@ -2,12 +2,14 @@
  * Flag data stored on the Combat document by the Dawn system.
  */
 interface DawnCombatFlags {
-  /** Ordered list of combatant IDs, in the order they activated this round. */
+  /** The round number these flags were last written for. */
+  round: number;
+  /** Ordered list of combatant IDs, in the order they activated this round.
+   * A combatant may appear more than once if they have multiple activations.
+   */
   activationLog: string[];
   /** The ID of the combatant currently taking their turn, or null. */
   currentlyActing: string | null;
-  /** Map of combatant ID → number of activations used this round. */
-  activationsUsed: Record<string, number>;
 }
 
 /**
@@ -38,35 +40,44 @@ export class DawnCombat extends foundry.documents.Combat {
   //  Feature 1.1 — Activation state
   // ──────────────────────────────────────────────────────────
 
-  /** Read the raw Dawn flags from this combat, providing safe defaults. */
+  /** Read the raw Dawn flags from this combat, providing safe defaults.
+   * If the stored round stamp doesn't match the current round the flags
+   * are treated as empty — this is what resets state each new round
+   * without relying on _onStartRound.
+   */
   private _getDawnFlags(): DawnCombatFlags {
-    const flags = ((this as any).flags?.["dawn-system"] ?? {}) as Partial<DawnCombatFlags>;
+    const currentRound = (this as any).round as number ?? 0;
+    const raw = ((this as any).flags?.["dawn-system"] ?? {}) as Partial<DawnCombatFlags>;
+    const stale = (raw.round ?? -1) !== currentRound;
     return {
-      activationLog:    flags.activationLog    ?? [],
-      currentlyActing:  flags.currentlyActing  ?? null,
-      activationsUsed:  flags.activationsUsed  ?? {},
+      round:           currentRound,
+      activationLog:   stale ? [] : (raw.activationLog  ?? []),
+      currentlyActing: stale ? null : (raw.currentlyActing ?? null),
     };
   }
 
   /**
    * Returns the maximum number of activations this combatant may take per round.
    * - fodder / terrain → 0 (never activate)
-   * - adversary        → gates.value
+   * - adversary        → number of component items (gatesMax)
    * - character        → 1
    */
   activationLimit(combatant: foundry.documents.Combatant): number {
-    const actor = (combatant as any).actor as (Record<string, unknown> & { type?: string }) | null;
+    const actor = (combatant as any).actor as (Record<string, unknown> & { type?: string; items?: Array<{ type: string }> }) | null;
     const type = actor?.type;
     if (type === "fodder" || type === "terrain") return 0;
     if (type === "adversary") {
-      return Number((actor?.system as any)?.gates?.value ?? 0);
+      return (actor?.items ?? []).filter((i: { type: string }) => i.type === "component").length;
     }
     return 1;
   }
 
-  /** How many activations has this combatant already used this round? */
+  /** How many activations has this combatant already used this round?
+   * Derived by counting occurrences in activationLog so it automatically
+   * resets when the log resets at the start of a new round.
+   */
   getActivationsUsed(combatantId: string): number {
-    return this._getDawnFlags().activationsUsed[combatantId] ?? 0;
+    return this._getDawnFlags().activationLog.filter(id => id === combatantId).length;
   }
 
   /**
@@ -96,8 +107,8 @@ export class DawnCombat extends foundry.documents.Combat {
    */
   async startActivation(combatantId: string): Promise<void> {
     const flags = this._getDawnFlags();
-    const used = { ...flags.activationsUsed, [combatantId]: (flags.activationsUsed[combatantId] ?? 0) + 1 };
     const log  = [...flags.activationLog, combatantId];
+    const currentRound = (this as any).round as number ?? 0;
 
     // Find this combatant's index in the Foundry turn array.
     const turnIdx = (this as any).turns.findIndex(
@@ -106,9 +117,9 @@ export class DawnCombat extends foundry.documents.Combat {
 
     await (this as any).update({
       turn: turnIdx >= 0 ? turnIdx : 0,
+      "flags.dawn-system.round":            currentRound,
       "flags.dawn-system.activationLog":   log,
       "flags.dawn-system.currentlyActing": combatantId,
-      "flags.dawn-system.activationsUsed": used,
     });
   }
 
@@ -120,7 +131,11 @@ export class DawnCombat extends foundry.documents.Combat {
    * when the last combatant in the Foundry turn array ends their activation.
    */
   async endActivation(): Promise<void> {
+    const currentRound = (this as any).round as number ?? 0;
+    // Also clear Foundry's `turn` pointer so the canvas token ring disappears.
     await (this as any).update({
+      turn: null,
+      "flags.dawn-system.round":            currentRound,
       "flags.dawn-system.currentlyActing": null,
     });
   }
@@ -133,23 +148,11 @@ export class DawnCombat extends foundry.documents.Combat {
    */
   async rewind(): Promise<void> {
     await (this as any).previousRound();
+    const newRound = (this as any).round as number ?? 0;
     await (this as any).update({
+      "flags.dawn-system.round":            newRound,
       "flags.dawn-system.activationLog":   [],
       "flags.dawn-system.currentlyActing": null,
-      "flags.dawn-system.activationsUsed": {},
-    });
-  }
-
-  /**
-   * Override the round-start hook to wipe activation flags when a new round
-   * begins via nextRound() / fast-forward.
-   */
-  protected override async _onStartRound(context: unknown): Promise<void> {
-    await super._onStartRound(context);
-    await (this as any).update({
-      "flags.dawn-system.activationLog":   [],
-      "flags.dawn-system.currentlyActing": null,
-      "flags.dawn-system.activationsUsed": {},
     });
   }
 
@@ -163,8 +166,14 @@ export class DawnCombat extends foundry.documents.Combat {
     const ch = changed as Record<string, unknown>;
     const flagsChanged = (ch.flags as Record<string, unknown> | undefined)?.["dawn-system"] !== undefined;
     const turnChanged  = "turn" in ch;
-    if ((flagsChanged || turnChanged) && (this as any).isView) {
-      (ui.combat as unknown as { render(opts: object): void }).render({ combat: this });
+    if (flagsChanged || turnChanged) {
+      // Guard: only render if the tracker element is currently in the DOM.
+      // Foundry already re-renders on combat updates via the updateCombat hook;
+      // we only need to force a render for flag-only changes which Foundry ignores.
+      const tracker = (ui as any).combat;
+      if (flagsChanged && tracker?.element) {
+        tracker.render();
+      }
     }
   }
 
