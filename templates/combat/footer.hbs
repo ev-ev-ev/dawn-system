@@ -1,0 +1,26 @@
+{{!-- Dawn Combat Tracker — footer controls --}}
+<nav class="dawn-tracker-footer-controls">
+  {{#if started}}
+  <button type="button" class="dawn-ctrl-btn" data-action="rewind">
+    <i class="fa-solid fa-backward-step"></i>
+    <span>Rewind</span>
+  </button>
+
+  <button type="button" class="dawn-ctrl-btn dawn-end-turn-btn" data-action="endActivation"
+          {{#unless canEndTurn}}disabled{{/unless}}>
+    <i class="fa-solid fa-hourglass-end"></i>
+    <span>End Turn</span>
+  </button>
+
+  <button type="button" class="dawn-ctrl-btn" data-action="fastForward">
+    <i class="fa-solid fa-forward-step"></i>
+    <span>Fast Forward</span>
+  </button>
+  {{else}}
+  <button type="button" class="dawn-ctrl-btn dawn-start-encounter-btn" data-action="startEncounter"
+          {{#unless hasCombat}}disabled{{/unless}}>
+    <i class="fa-solid fa-swords"></i>
+    <span>Start Encounter</span>
+  </button>
+  {{/if}}
+</nav>

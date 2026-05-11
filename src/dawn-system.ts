@@ -8,6 +8,8 @@ import { TechniqueSheet } from "./sheets/technique-sheet.js";
 import { EdgeSheet } from "./sheets/edge-sheet.js";
 import { ComponentSheet } from "./sheets/component-sheet.js";
 import { ModifierSheet } from "./sheets/modifier-sheet.js";
+import { DawnCombat } from "./combat/dawn-combat.js";
+import { DawnCombatTracker } from "./combat/dawn-combat-tracker.js";
 import { createTensionHud, updateTensionDisplay } from "./apps/tension-hud.js";
 import { initTensionAutomation } from "./apps/tension-automation.js";
 import { initStatusEffects } from "./apps/status-effects.js";
@@ -50,6 +52,13 @@ foundry.helpers.Hooks.once("init", () => {
 
   // Replace Foundry default status effects with DAWN statuses.
   initStatusEffects();
+
+  // Register the custom Combat document class and Combat Tracker UI.
+  // CONFIG.Combat.documentClass is used for all Combat documents.
+  // CONFIG.ui.combat is instantiated by Foundry during game setup.
+  // Cast needed: Foundry's allowJs inference only partially infers config.mjs exports.
+  (CONFIG as unknown as { Combat: { documentClass: unknown } }).Combat.documentClass = DawnCombat;
+  (CONFIG as unknown as { ui: Record<string, unknown> }).ui.combat = DawnCombatTracker;
 
   // Listen for tension changes and update HUD display.
   foundry.helpers.Hooks.on("updateSetting", (...args: unknown[]) => {

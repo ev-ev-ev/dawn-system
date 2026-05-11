@@ -4,26 +4,29 @@
  * The real types come from Foundry's source at runtime.
  */
 
-// Establish proper class inheritance chain for 'override' to work
-declare class TypeDataModel {
-  static defineSchema(): Record<string, unknown>;
-  prepareBaseData(): void;
+declare class BaseActor {
+  id: string;
+  name: string;
+  img: string;
+  type: string;
+  system: Record<string, unknown>;
+  statuses: Set<string>;
+  items: Array<BaseItem>;
+  activeEffects: Array<{
+    update(data: Record<string, unknown>): Promise<void>;
+    duration?: { value?: number };
+  }>;
+  getEmbeddedCollection(name: string): Array<{ id: string; name: string; type: string }>;
+  toObject(): { system: Record<string, unknown> };
+  update(data: Record<string, unknown>): Promise<void>;
+  toggleStatusEffect(statusId: string, options?: { active?: boolean; overlay?: boolean }): Promise<void>;
 }
 
-declare class ActorSheetV2 extends TypeDataModel {
-  document: BaseActor;
-  static DEFAULT_OPTIONS: Record<string, unknown>;
-  static PARTS: Record<string, { template: string }>;
-  _prepareContext(options: object): Promise<Record<string, unknown>>;
-  _preRender(context: object, options: object): Promise<void>;
-  _onRender(context: object, options: object): Promise<void>;
-}
-
-declare class ItemSheetV2 extends TypeDataModel {
-  document: BaseItem;
-  static DEFAULT_OPTIONS: Record<string, unknown>;
-  static PARTS: Record<string, { template: string }>;
-  _prepareContext(options: object): Promise<Record<string, unknown>>;
+declare class BaseItem {
+  id: string;
+  name: string;
+  type: string;
+  system: Record<string, unknown>;
 }
 
 declare namespace foundry {
@@ -33,42 +36,50 @@ declare namespace foundry {
       prepareBaseData(): void;
     }
   }
-  namespace applications {
-    namespace api {
-      function HandlebarsApplicationMixin<T extends new (...args: unknown[]) => any>(
-        base: T
-      ): T;
-    }
-    namespace sheets {
-      class ActorSheetV2 {
-        document: BaseActor;
-        static DEFAULT_OPTIONS: Record<string, unknown>;
-        static PARTS: Record<string, { template: string }>;
-        _prepareContext(options: object): Promise<Record<string, unknown>>;
-        _preRender(context: object, options: object): Promise<void>;
-        _onRender(context: object, options: object): Promise<void>;
-      }
-      class ItemSheetV2 {
-        document: BaseItem;
-        static DEFAULT_OPTIONS: Record<string, unknown>;
-        static PARTS: Record<string, { template: string }>;
-        _prepareContext(options: object): Promise<Record<string, unknown>>;
-      }
-    }
-  }
-  namespace data {
-    namespace fields {
-      class NumberField { constructor(options?: Record<string, unknown>); }
-      class StringField { constructor(options?: Record<string, unknown>); }
-      class TextField { constructor(options?: Record<string, unknown>); }
-      class ArrayField { constructor(options?: Record<string, unknown>); }
-      class SchemaField { constructor(options?: Record<string, unknown>); }
-      class BooleanField { constructor(options?: Record<string, unknown>); }
-      class FlagField { constructor(options?: Record<string, unknown>); }
-      class ObjectField { constructor(options?: Record<string, unknown>); }
-    }
-  }
+
   namespace documents {
+    class Combat {
+      id: string | null;
+      round: number;
+      turn: number | null;
+      turns: foundry.documents.Combatant[];
+      combatants: {
+        get(id: string): foundry.documents.Combatant | undefined;
+        size: number;
+        filter(fn: (c: foundry.documents.Combatant) => boolean): foundry.documents.Combatant[];
+      };
+      flags: Record<string, Record<string, unknown>>;
+      active: boolean;
+      readonly started: boolean;
+      readonly combatant: foundry.documents.Combatant | null;
+      readonly isView: boolean;
+      update(data: Record<string, unknown>, options?: Record<string, unknown>): Promise<this>;
+      nextTurn(): Promise<this>;
+      previousTurn(): Promise<this>;
+      nextRound(): Promise<this>;
+      previousRound(): Promise<this>;
+      protected _onStartRound(context: unknown): Promise<void>;
+      _onUpdate(changed: object, options: object, userId: string): void;
+    }
+
+    class Combatant {
+      id: string | null;
+      name: string;
+      img: string;
+      hidden: boolean;
+      defeated: boolean;
+      initiative: number | null;
+      actor: { type?: string; system: Record<string, unknown> } | null;
+      token: { disposition: number; movementHistory: unknown[] } | null;
+      _videoSrc: string | null;
+      resource: unknown;
+      readonly combat: foundry.documents.Combat | null;
+      readonly isDefeated: boolean;
+      readonly isOwner: boolean;
+      readonly permission: number;
+      readonly visible: boolean;
+    }
+
     namespace collections {
       class Actors {
         static registerSheet(scope: string, cls: unknown, options: Record<string, unknown>): void;
@@ -77,6 +88,7 @@ declare namespace foundry {
         static registerSheet(scope: string, cls: unknown, options: Record<string, unknown>): void;
       }
     }
+
     class BaseActor {
       id: string;
       name: string;
@@ -94,6 +106,7 @@ declare namespace foundry {
       update(data: Record<string, unknown>): Promise<void>;
       toggleStatusEffect(statusId: string, options?: { active?: boolean; overlay?: boolean }): Promise<void>;
     }
+
     class BaseItem {
       id: string;
       name: string;
@@ -101,23 +114,31 @@ declare namespace foundry {
       system: Record<string, unknown>;
     }
   }
+
+  namespace data {
+    namespace fields {
+      class NumberField { constructor(options?: Record<string, unknown>); }
+      class StringField { constructor(options?: Record<string, unknown>); }
+      class TextField { constructor(options?: Record<string, unknown>); }
+      class ArrayField { constructor(options?: Record<string, unknown>); }
+      class SchemaField { constructor(options?: Record<string, unknown>); }
+      class BooleanField { constructor(options?: Record<string, unknown>); }
+      class FlagField { constructor(options?: Record<string, unknown>); }
+      class ObjectField { constructor(options?: Record<string, unknown>); }
+    }
+  }
+
   namespace helpers {
     namespace Hooks {
       function once(event: string, fn: (...args: unknown[]) => void): void;
       function on(event: string, fn: (...args: unknown[]) => void): void;
     }
   }
-  namespace applications {
-    namespace api {
-      // Already declared above; extend with DialogV2
-    }
-  }
-}
 
-// Merge DialogV2 into foundry.applications.api
-declare namespace foundry {
   namespace applications {
     namespace api {
+      function HandlebarsApplicationMixin<T extends new (...args: unknown[]) => any>(base: T): T;
+
       class DialogV2 {
         static input(config: {
           window?: { title?: string };
@@ -145,6 +166,39 @@ declare namespace foundry {
           cancel?: { label?: string; icon?: string } | false;
           rejectClose?: boolean;
         }): Promise<boolean>;
+      }
+    }
+
+    namespace sidebar {
+      namespace tabs {
+        class CombatTracker {
+          viewed: foundry.documents.Combat | null;
+          readonly element: HTMLElement;
+          readonly isPopout: boolean;
+          render(options?: Record<string, unknown>): unknown;
+          protected _prepareCombatContext(context: object, options: object): Promise<void>;
+          protected _prepareTrackerContext(context: object, options: object): Promise<void>;
+          protected _getCombatantThumbnail(combatant: foundry.documents.Combatant): Promise<string>;
+          static DEFAULT_OPTIONS: Record<string, unknown>;
+          static PARTS: Record<string, unknown>;
+        }
+      }
+    }
+
+    namespace sheets {
+      class ActorSheetV2 {
+        document: BaseActor;
+        static DEFAULT_OPTIONS: Record<string, unknown>;
+        static PARTS: Record<string, { template: string }>;
+        _prepareContext(options: object): Promise<Record<string, unknown>>;
+        _preRender(context: object, options: object): Promise<void>;
+        _onRender(context: object, options: object): Promise<void>;
+      }
+      class ItemSheetV2 {
+        document: BaseItem;
+        static DEFAULT_OPTIONS: Record<string, unknown>;
+        static PARTS: Record<string, { template: string }>;
+        _prepareContext(options: object): Promise<Record<string, unknown>>;
       }
     }
   }
@@ -238,6 +292,12 @@ declare const CONFIG: {
   Item: {
     dataModels: Record<string, unknown>;
   };
+  Combat: {
+    documentClass: typeof foundry.documents.Combat;
+    dataModels: Record<string, unknown>;
+    initiative: { formula: string | null; decimals: number };
+  };
+  ui: Record<string, new () => unknown>;
   Dawn?: {
     Archetypes?: Record<string, unknown>;
   };

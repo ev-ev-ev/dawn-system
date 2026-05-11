@@ -1,0 +1,72 @@
+{{!-- Dawn Combat Tracker — tracker part (scrollable) --}}
+<div class="dawn-tracker-scroll">
+
+  {{!-- ① Activation log: tokens that have already acted this round --}}
+  {{#if activationLog.length}}
+  <section class="dawn-section dawn-activation-log">
+    <h4 class="dawn-section-header">Activated</h4>
+    <ol class="dawn-combatant-list">
+      {{#each activationLog}}
+      <li class="combatant dawn-combatant dawn-log-entry" data-combatant-id="{{id}}">
+        <img class="combatant-img" src="{{img}}" title="{{name}}" />
+        <span class="combatant-name">{{name}}</span>
+      </li>
+      {{/each}}
+    </ol>
+  </section>
+  {{/if}}
+
+  {{!-- ② Currently acting token --}}
+  {{#if currentlyActing}}
+  <section class="dawn-section dawn-acting">
+    <h4 class="dawn-section-header">Acting</h4>
+    <div class="combatant dawn-combatant dawn-acting-entry active"
+         data-combatant-id="{{currentlyActing.id}}">
+      <img class="combatant-img" src="{{currentlyActing.img}}" title="{{currentlyActing.name}}" />
+      <span class="combatant-name">{{currentlyActing.name}}</span>
+      <button type="button" class="dawn-end-turn-inline" data-action="endActivation">
+        <i class="fa-solid fa-hourglass-end"></i> End Turn
+      </button>
+    </div>
+  </section>
+  {{/if}}
+
+  {{!-- ③ Up Next candidates — click to start their activation --}}
+  {{#if upNext.length}}
+  <section class="dawn-section dawn-up-next">
+    <h4 class="dawn-section-header">Up Next</h4>
+    <ul class="dawn-combatant-list">
+      {{#each upNext}}
+      <li class="combatant dawn-combatant dawn-up-next-entry"
+          data-combatant-id="{{id}}"
+          data-action="startActivation">
+        <img class="combatant-img" src="{{img}}" title="{{name}}" />
+        <span class="combatant-name">{{name}}</span>
+        <i class="fa-solid fa-play dawn-activate-icon" title="Activate"></i>
+      </li>
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}
+
+  {{!-- ④ Remaining combatants, grouped by disposition --}}
+  {{#each remaining}}
+  <section class="dawn-section dawn-remaining">
+    <h4 class="dawn-section-header">{{label}}</h4>
+    <ul class="dawn-combatant-list">
+      {{#each combatants}}
+      <li class="combatant dawn-combatant" data-combatant-id="{{id}}">
+        <img class="combatant-img" src="{{img}}" title="{{name}}" />
+        <span class="combatant-name">{{name}}</span>
+      </li>
+      {{/each}}
+    </ul>
+  </section>
+  {{/each}}
+
+  {{!-- No-combat placeholder --}}
+  {{#unless hasCombat}}
+  <p class="dawn-no-combat">No active combat encounter.</p>
+  {{/unless}}
+
+</div>
