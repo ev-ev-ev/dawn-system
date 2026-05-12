@@ -203,6 +203,44 @@ export class DawnCombat extends foundry.documents.Combat {
   }
 
   /**
+   * Count how many activations each disposition has in the log this round.
+   * Used to determine fallback eligibility.
+   */
+  private _logCountsByDisposition(): Map<number, number> {
+    const log = this._getDawnFlags().activationLog;
+    const counts = new Map<number, number>();
+    for (const id of log) {
+      const c = (this as any).combatants.get(id) as foundry.documents.Combatant | undefined;
+      if (!c) continue;
+      const disp = (c as any).token?.disposition as number;
+      if (disp !== undefined) counts.set(disp, (counts.get(disp) ?? 0) + 1);
+    }
+    return counts;
+  }
+
+  /**
+   * Fallback candidates for a non-Friendly disposition: combatants with
+   * activationLimit > 0 whose faction has logged fewer activations than
+   * the Friendly faction this round.
+   *
+   * This lets non-Friendly factions keep interleaving with players even
+   * after exhausting their normal per-round activations.
+   * Friendly combatants never receive fallback activations.
+   */
+  private _fallbackCandidates(
+    disp: number,
+    logCounts: Map<number, number>,
+  ): foundry.documents.Combatant[] {
+    if (disp === CONST.TOKEN_DISPOSITIONS.FRIENDLY) return [];
+    const friendly    = logCounts.get(CONST.TOKEN_DISPOSITIONS.FRIENDLY) ?? 0;
+    const factionSeen = logCounts.get(disp) ?? 0;
+    if (factionSeen >= friendly) return [];
+    return this.activatableCombatants().filter(
+      c => (c as any).token?.disposition === disp && this.activationLimit(c) > 0
+    );
+  }
+
+  /**
    * The disposition that should act next, or null if all activations are
    * exhausted for this round.
    *
@@ -218,11 +256,14 @@ export class DawnCombat extends foundry.documents.Combat {
     const cycle = this.dispositionCycleOrder();
     if (cycle.length === 0) return null;
 
-    const hasCandidates = (disp: number): boolean =>
-      this.activatableCombatants().some(
+    const logCounts = this._logCountsByDisposition();
+    const hasCandidates = (disp: number): boolean => {
+      const hasNormal = this.activatableCombatants().some(
         c => (c as any).token?.disposition === disp
           && this.getActivationsUsed(c.id!) < this.activationLimit(c)
       );
+      return hasNormal || this._fallbackCandidates(disp, logCounts).length > 0;
+    };
 
     const log = this.getActivationLog();
 
@@ -251,17 +292,20 @@ export class DawnCombat extends foundry.documents.Combat {
   }
 
   /**
-   * Combatants eligible to be chosen for the next activation:
-   * those whose disposition matches `nextDisposition()` and who still have
-   * activations remaining.
+   * Combatants eligible to be chosen for the next activation.
+   * Returns normal candidates first; falls back to faction-fallback candidates
+   * when the faction is exhausted but has fewer logged activations than
+   * the Friendly faction.
    */
   upNextCandidates(): foundry.documents.Combatant[] {
     const disp = this.nextDisposition();
     if (disp === null) return [];
-    return this.activatableCombatants().filter(
+    const normal = this.activatableCombatants().filter(
       c => (c as any).token?.disposition === disp
         && this.getActivationsUsed(c.id!) < this.activationLimit(c)
     );
+    if (normal.length > 0) return normal;
+    return this._fallbackCandidates(disp, this._logCountsByDisposition());
   }
 
   /**
