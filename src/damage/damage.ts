@@ -297,7 +297,7 @@ function buildDialogContent(statsList: ActorStats[]): string {
   const rows = statsList
     .map(
       (s) =>
-        `<tr><td>${s.name}</td><td>${s.healthValue} / ${s.healthMax}</td><td>${s.evasion}</td><td>${s.armor}</td></tr>`
+        `<tr><td>${foundry.utils.escapeHTML(s.name)}</td><td>${s.healthValue} / ${s.healthMax}</td><td>${s.evasion}</td><td>${s.armor}</td></tr>`
     )
     .join("");
 
@@ -373,7 +373,7 @@ export async function postDamageSummary(results: DamageResult[]): Promise<void> 
       else if (r.gatePassed) status = `<span class="damage-status-gate">${game.i18n.localize("DAWN.Damage.GatePassed")}</span>`;
 
       return `<div class="damage-target-block${r.takenOut ? ' taken-out' : ''}">
-        <div class="damage-target-name">${r.name}</div>
+        <div class="damage-target-name">${foundry.utils.escapeHTML(r.name)}</div>
         <table class="damage-detail-table">
           <tr><td>${game.i18n.localize("DAWN.Damage.Damage")}</td><td>${r.damageDealt}</td></tr>
           <tr><td>${game.i18n.localize("DAWN.Damage.EvasionLost")}</td><td>${r.evasionLost}</td></tr>

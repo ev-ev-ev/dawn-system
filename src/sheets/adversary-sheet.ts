@@ -218,7 +218,8 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
     const item = (this as any).document.items.get(itemId) as foundry.documents.BaseItem | undefined;
     if (!item) return;
     const s = item.system as Record<string, unknown>;
-    const content = `<strong>${item.name}</strong><hr>${s.flavor ?? ""}${s.defense ? `<p><strong>${s.defensename ?? "Defense"}</strong>: ${s.defense}</p>` : ""}${s.turn ? `<p><strong>${s.turnname ?? "Turn"}</strong>: ${s.turn}</p>` : ""}${s.phase ? `<p><strong>${s.phasename ?? "Phase"}</strong>: ${s.phase}</p>` : ""}`;
+    const e = foundry.utils.escapeHTML;
+    const content = `<strong>${e(item.name)}</strong><hr>${e(s.flavor ?? "")}${s.defense ? `<p><strong>${e(s.defensename ?? "Defense")}</strong>: ${e(s.defense)}</p>` : ""}${s.turn ? `<p><strong>${e(s.turnname ?? "Turn")}</strong>: ${e(s.turn)}</p>` : ""}${s.phase ? `<p><strong>${e(s.phasename ?? "Phase")}</strong>: ${e(s.phase)}</p>` : ""}`;
     await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
       content,
       speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
@@ -231,7 +232,8 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
     const item = (this as any).document.items.get(itemId) as foundry.documents.BaseItem | undefined;
     if (!item) return;
     const s = item.system as Record<string, unknown>;
-    const content = `<strong>${item.name}</strong> <span style="opacity:0.7;font-size:0.85em">(${s.tech ?? ""} #${s.level ?? 1})</span><hr>${s.text ?? ""}`;
+    const e = foundry.utils.escapeHTML;
+    const content = `<strong>${e(item.name)}</strong> <span style="opacity:0.7;font-size:0.85em">(${e(s.tech ?? "")} #${s.level ?? 1})</span><hr>${e(s.text ?? "")}`;
     await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
       content,
       speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
@@ -244,7 +246,8 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
     const item = (this as any).document.items.get(itemId) as foundry.documents.BaseItem | undefined;
     if (!item) return;
     const s = item.system as Record<string, unknown>;
-    const content = `<strong>${item.name}</strong><hr>${s.flavor ?? ""}<p><strong>HP</strong>: ${s.basehp ?? 0} + ${s.tierhp ?? 0} × Tier</p><p><strong>Speed</strong>: ${s.speed ?? 0}</p><p><strong>Armor</strong>: ${s.tierarmor ?? 0}</p>${s.passive ? `<p><strong>Passive</strong>: ${s.passive}</p>` : ""}${s.actionname ? `<p><strong>${s.actionname}</strong>: ${s.action}</p>` : ""}${s.attackname ? `<p><strong>${s.attackname}</strong>: ${s.attack} [${s.attackdice ?? 0}d6${s.attacktierdice ? `+${s.attacktierdice}d6` : ""}${s.attacktensionx ? ` × Tension` : ""}]</p>` : ""}${s.acename ? `<p><strong>${s.acename}</strong>: ${s.ace} (Min Tension: ${s.acetension ?? 0})</p>` : ""}`;
+    const e = foundry.utils.escapeHTML;
+    const content = `<strong>${e(item.name)}</strong><hr>${e(s.flavor ?? "")}<p><strong>HP</strong>: ${s.basehp ?? 0} + ${s.tierhp ?? 0} × Tier</p><p><strong>Speed</strong>: ${s.speed ?? 0}</p><p><strong>Armor</strong>: ${s.tierarmor ?? 0}</p>${s.passive ? `<p><strong>Passive</strong>: ${e(s.passive)}</p>` : ""}${s.actionname ? `<p><strong>${e(s.actionname)}</strong>: ${e(s.action)}</p>` : ""}${s.attackname ? `<p><strong>${e(s.attackname)}</strong>: ${e(s.attack)} [${s.attackdice ?? 0}d6${s.attacktierdice ? `+${s.attacktierdice}d6` : ""}${s.attacktensionx ? ` × Tension` : ""}]</p>` : ""}${s.acename ? `<p><strong>${e(s.acename)}</strong>: ${e(s.ace)} (Min Tension: ${s.acetension ?? 0})</p>` : ""}`;
     await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
       content,
       speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
@@ -300,7 +303,8 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
     const index = Number(target.dataset.abilityIndex);
     const passive = (this as any)._passives[index];
     if (!passive) return;
-    const content = `<strong>Passive</strong> <span style="opacity:0.7;font-size:0.85em">(${passive.source})</span><hr>${passive.text}`;
+    const e = foundry.utils.escapeHTML;
+    const content = `<strong>Passive</strong> <span style="opacity:0.7;font-size:0.85em">(${e(passive.source)})</span><hr>${e(passive.text)}`;
     await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
       content,
       speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
@@ -311,7 +315,8 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
     const index = Number(target.dataset.abilityIndex);
     const action = (this as any)._actions[index];
     if (!action) return;
-    const content = `<strong>${action.name}</strong> <span style="opacity:0.7;font-size:0.85em">(${action.source})</span><hr>${action.text}`;
+    const e = foundry.utils.escapeHTML;
+    const content = `<strong>${e(action.name)}</strong> <span style="opacity:0.7;font-size:0.85em">(${e(action.source)})</span><hr>${e(action.text)}`;
     await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
       content,
       speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
@@ -322,7 +327,8 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
     const index = Number(target.dataset.abilityIndex);
     const attack = (this as any)._attacks[index];
     if (!attack) return;
-    const content = `<strong>${attack.name}</strong> <span style="opacity:0.7;font-size:0.85em">(${attack.source} | ${attack.dice}d6${attack.tensionx ? ' × Tension' : ''})</span><hr>${attack.text}`;
+    const e = foundry.utils.escapeHTML;
+    const content = `<strong>${e(attack.name)}</strong> <span style="opacity:0.7;font-size:0.85em">(${e(attack.source)} | ${attack.dice}d6${attack.tensionx ? ' × Tension' : ''})</span><hr>${e(attack.text)}`;
     await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
       content,
       speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
@@ -333,7 +339,8 @@ export class AdversarySheet extends foundry.applications.api.HandlebarsApplicati
     const index = Number(target.dataset.abilityIndex);
     const ace = (this as any)._aces[index];
     if (!ace) return;
-    const content = `<strong>${ace.name}</strong> <span style="opacity:0.7;font-size:0.85em">(${ace.source} | Min Tension: ${ace.tension})</span><hr>${ace.text}`;
+    const e = foundry.utils.escapeHTML;
+    const content = `<strong>${e(ace.name)}</strong> <span style="opacity:0.7;font-size:0.85em">(${e(ace.source)} | Min Tension: ${ace.tension})</span><hr>${e(ace.text)}`;
     await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
       content,
       speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),

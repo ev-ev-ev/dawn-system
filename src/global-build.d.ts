@@ -30,6 +30,10 @@ declare class BaseItem {
 }
 
 declare namespace foundry {
+  namespace utils {
+    function escapeHTML(value: string | any): string;
+  }
+
   namespace abstract {
     class TypeDataModel {
       static defineSchema(): Record<string, unknown>;

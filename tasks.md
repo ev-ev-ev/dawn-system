@@ -73,4 +73,6 @@ TODO
 
 - [ ] Feature 4: action buttons
 
-Cast, 
+Cast, Finisher, Skirmish
+
+- [ ] Feature 5: AP counting

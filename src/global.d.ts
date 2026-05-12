@@ -10,6 +10,13 @@
 // ---------------------------------------------------------------------------
 
 declare namespace foundry {
+  // ── Utils ─────────────────────────────────────────────────────────────────
+
+  namespace utils {
+    /** Escape HTML special characters (&, <, >, ", ') for safe embedding in HTML. */
+    function escapeHTML(value: string | any): string;
+  }
+
   // ── Documents ─────────────────────────────────────────────────────────────
 
   namespace documents {

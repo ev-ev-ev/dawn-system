@@ -45,7 +45,7 @@ export async function rollAttribute(params: RollParams): Promise<void> {
     for (const t of targetTokens) {
       const scene = (game as any).scenes?.get(t.sceneId);
       const token = scene?.tokens?.get(t.tokenId);
-      if (token) targetNames.push(token.name ?? token.actor?.name ?? "Unknown");
+      if (token) targetNames.push(foundry.utils.escapeHTML(token.name ?? token.actor?.name ?? "Unknown"));
     }
     targetHtml = `<div class="damage-targets"><span class="damage-targets-label">${game.i18n.localize("DAWN.Damage.Targets")}:</span> ${targetNames.join(", ")}</div>`;
   }
@@ -54,7 +54,7 @@ export async function rollAttribute(params: RollParams): Promise<void> {
     <div class="roll-summary">
       <div class="roll-target-block">
         <table class="roll-detail-table">
-          <tr><td>${tag}</td><td>${dice}</td></tr>
+          <tr><td>${foundry.utils.escapeHTML(tag)}</td><td>${dice}</td></tr>
           ${advantage ? `<tr><td>Advantage</td><td>${advantage}</td></tr>` : ""}
           <tr><td>Critting On</td><td>${crittingOn}</td></tr>
           ${displayTension ? `<tr><td>Tension</td><td>${displayTension}</td></tr>` : ""}
@@ -90,7 +90,7 @@ export async function rollAttribute(params: RollParams): Promise<void> {
 
 function row(tag: string, value: unknown, always = false): string {
   if (always || (value !== 0 && value !== "")) {
-    return `<tr><td><strong>${tag}</strong></td><td><strong>${value}</strong></td></tr>`;
+    return `<tr><td><strong>${foundry.utils.escapeHTML(tag)}</strong></td><td><strong>${foundry.utils.escapeHTML(String(value))}</strong></td></tr>`;
   }
   return "";
 }

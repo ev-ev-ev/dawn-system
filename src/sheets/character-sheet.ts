@@ -133,7 +133,8 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     const item = (this as any).document.items.get(itemId) as foundry.documents.BaseItem | undefined;
     if (!item) return;
     const s = item.system as Record<string, unknown>;
-    const content = `<strong>${item.name}</strong> <span style="opacity:0.7;font-size:0.85em">(${s.tech ?? ""} #${s.level ?? 1})</span><hr>${s.text ?? ""}`;
+    const e = foundry.utils.escapeHTML;
+    const content = `<strong>${e(item.name)}</strong> <span style="opacity:0.7;font-size:0.85em">(${e(s.tech ?? "")} #${s.level ?? 1})</span><hr>${e(s.text ?? "")}`;
     await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
       content,
       speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
