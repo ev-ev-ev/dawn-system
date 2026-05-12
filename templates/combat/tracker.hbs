@@ -17,6 +17,20 @@
         </ul>
       </section>
       {{/each}}
+
+      {{#if defeated.length}}
+      <section class="dawn-section dawn-defeated">
+        <h4 class="dawn-section-header">Defeated</h4>
+        <ul class="dawn-combatant-list">
+          {{#each defeated}}
+          <li class="combatant dawn-combatant dawn-defeated-entry" data-combatant-id="{{id}}">
+            <img class="combatant-img" src="{{img}}" title="{{name}}" />
+            <span class="combatant-name">{{name}}</span>
+          </li>
+          {{/each}}
+        </ul>
+      </section>
+      {{/if}}
     {{else}}
       <p class="dawn-no-combat">No active combat encounter.</p>
     {{/if}}
@@ -87,6 +101,21 @@
     </ul>
   </section>
   {{/each}}
+
+  {{!-- ⑤ Defeated combatants --}}
+  {{#if defeated.length}}
+  <section class="dawn-section dawn-defeated">
+    <h4 class="dawn-section-header">Defeated</h4>
+    <ul class="dawn-combatant-list">
+      {{#each defeated}}
+      <li class="combatant dawn-combatant dawn-defeated-entry" data-combatant-id="{{id}}">
+        <img class="combatant-img" src="{{img}}" title="{{name}}" />
+        <span class="combatant-name">{{name}}</span>
+      </li>
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}
 
   {{/if}}{{!-- end #if started --}}
 

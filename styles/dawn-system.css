@@ -1028,6 +1028,23 @@
   opacity: 0.55;
 }
 
+/* ── Defeated ────────────────────────────────────────── */
+.dawn-defeated .dawn-section-header {
+  color: var(--color-text-light-negated, #888);
+}
+
+.dawn-defeated-entry {
+  opacity: 0.4;
+}
+
+.dawn-defeated-entry .combatant-img {
+  filter: grayscale(1) brightness(0.6);
+}
+
+.dawn-defeated-entry .combatant-name {
+  text-decoration: line-through;
+}
+
 /* ── Footer controls ─────────────────────────────────── */
 .dawn-tracker-footer-controls {
   display: flex;

@@ -83,6 +83,7 @@ export class DawnCombatTracker extends foundry.applications.sidebar.tabs.CombatT
     ctx.upNext         = [];
     ctx.remaining      = [];
     ctx.forces         = [];
+    ctx.defeated       = [];
 
     if (!combat) return;
 
@@ -96,8 +97,9 @@ export class DawnCombatTracker extends foundry.applications.sidebar.tabs.CombatT
     // ── Pre-combat view: show all forces grouped by disposition ──────────
     if (!(combat.started ?? false)) {
       const byDisp = new Map<number, foundry.documents.Combatant[]>();
+      const defeated: foundry.documents.Combatant[] = [];
       for (const c of ((combat as any).turns as foundry.documents.Combatant[])) {
-        if (c.isDefeated) continue;
+        if (c.isDefeated) { defeated.push(c); continue; }
         const disp = (c as any).token?.disposition as number;
         if (!byDisp.has(disp)) byDisp.set(disp, []);
         byDisp.get(disp)!.push(c);
@@ -112,6 +114,7 @@ export class DawnCombatTracker extends foundry.applications.sidebar.tabs.CombatT
           combatants: await Promise.all(combatants.map(mapCombatant)),
         }))
       );
+      ctx.defeated = await Promise.all(defeated.map(mapCombatant));
       return;
     }
 
@@ -120,6 +123,9 @@ export class DawnCombatTracker extends foundry.applications.sidebar.tabs.CombatT
     const currentlyActing = combat.getCurrentlyActing();
     const upNext = combat.upNextCandidates();
     const remaining = combat.remainingByDisposition();
+    const defeatedCombatants = ((combat as any).turns as foundry.documents.Combatant[]).filter(
+      (c: foundry.documents.Combatant) => c.isDefeated,
+    );
 
     ctx.activationLog   = await Promise.all(logCombatants.map(mapCombatant));
     ctx.currentlyActing = currentlyActing ? await mapCombatant(currentlyActing) : null;
@@ -133,6 +139,7 @@ export class DawnCombatTracker extends foundry.applications.sidebar.tabs.CombatT
         combatants: await Promise.all(combatants.map(mapCombatant)),
       }))
     );
+    ctx.defeated = await Promise.all(defeatedCombatants.map(mapCombatant));
   }
 
   // ──────────────────────────────────────────────────────────
