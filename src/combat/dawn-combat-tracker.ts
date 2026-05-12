@@ -74,13 +74,15 @@ export class DawnCombatTracker extends foundry.applications.sidebar.tabs.CombatT
     const combat = this.viewed as DawnCombat | null;
     const ctx = context as Record<string, unknown>;
 
-    ctx.hasCombat    = combat !== null;
-    ctx.round        = combat?.round ?? 0;
-    ctx.canEndTurn   = false;
+    ctx.hasCombat      = combat !== null;
+    ctx.round          = combat?.round ?? 0;
+    ctx.started        = combat?.started ?? false;
+    ctx.canEndTurn     = false;
     ctx.activationLog  = [];
     ctx.currentlyActing = null;
     ctx.upNext         = [];
     ctx.remaining      = [];
+    ctx.forces         = [];
 
     if (!combat) return;
 
@@ -91,6 +93,29 @@ export class DawnCombatTracker extends foundry.applications.sidebar.tabs.CombatT
       img:  await (this as any)._getCombatantThumbnail(c) as string,
     });
 
+    // ── Pre-combat view: show all forces grouped by disposition ──────────
+    if (!(combat.started ?? false)) {
+      const byDisp = new Map<number, foundry.documents.Combatant[]>();
+      for (const c of ((combat as any).turns as foundry.documents.Combatant[])) {
+        if (c.isDefeated) continue;
+        const disp = (c as any).token?.disposition as number;
+        if (!byDisp.has(disp)) byDisp.set(disp, []);
+        byDisp.get(disp)!.push(c);
+      }
+      // Sort by Dawn faction priority.
+      const PRIO: Record<number, number> = { [1]: 0, [-1]: 1, [0]: 2, [-2]: 3 };
+      const sorted = [...byDisp.entries()].sort(([a], [b]) => (PRIO[a] ?? 4) - (PRIO[b] ?? 4));
+      ctx.forces = await Promise.all(
+        sorted.map(async ([disp, combatants]) => ({
+          disposition: disp,
+          label: DISPOSITION_LABELS[disp] ?? `Disposition ${disp}`,
+          combatants: await Promise.all(combatants.map(mapCombatant)),
+        }))
+      );
+      return;
+    }
+
+    // ── Active combat view ───────────────────────────────────────────────
     const logCombatants = combat.getActivationLog();
     const currentlyActing = combat.getCurrentlyActing();
     const upNext = combat.upNextCandidates();
@@ -170,6 +195,6 @@ export class DawnCombatTracker extends foundry.applications.sidebar.tabs.CombatT
   ): Promise<void> {
     const combat = this.viewed as DawnCombat | null;
     if (!combat) return;
-    await (combat as any).nextRound();
+    await (combat as any).startCombat();
   }
 }

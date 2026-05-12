@@ -100,6 +100,23 @@ export class DawnCombat extends foundry.documents.Combat {
   }
 
   /**
+   * Start the combat encounter.
+   *
+   * Overrides the default implementation to keep `turn: null` (Dawn manages
+   * the turn pointer itself) and fire `combatStart` rather than `combatRound`.
+   * This ensures tension resets to 0 on start instead of incrementing.
+   */
+  async startCombat(): Promise<this> {
+    (this as any)._playCombatSound("startEncounter");
+    const updateData = { round: 1, turn: null };
+    (foundry.helpers.Hooks as any).callAll("combatStart", this, updateData);
+    await (this as any).update(updateData);
+    await ((foundry as any).documents?.ActiveEffect as { registry?: { refresh(e: string, ctx: object): Promise<void> } } | undefined)
+      ?.registry?.refresh("combatStart", { combat: this });
+    return this;
+  }
+
+  /**
    * Begin a combatant's activation.
    * Updates flags (log, currentlyActing, activationsUsed) and advances
    * Foundry's `turn` pointer to the combatant's slot so that turn hooks
@@ -121,6 +138,16 @@ export class DawnCombat extends foundry.documents.Combat {
       "flags.dawn-system.activationLog":   log,
       "flags.dawn-system.currentlyActing": combatantId,
     });
+
+    // Fire turnStart so ActiveEffect durations with expiry:"turnStart" are processed.
+    if (game.user?.isGM) {
+      await ((foundry as any).documents?.ActiveEffect as { registry?: { refresh(e: string, ctx: object): Promise<void> } } | undefined)
+        ?.registry?.refresh("turnStart", {
+          round: currentRound,
+          turn:  turnIdx >= 0 ? turnIdx : 0,
+          skipped: false,
+        });
+    }
   }
 
   /**
@@ -131,13 +158,28 @@ export class DawnCombat extends foundry.documents.Combat {
    * when the last combatant in the Foundry turn array ends their activation.
    */
   async endActivation(): Promise<void> {
+    const acting = this.getCurrentlyActing();
     const currentRound = (this as any).round as number ?? 0;
+    const turnIdx = acting
+      ? (this as any).turns.findIndex((c: foundry.documents.Combatant) => c.id === acting.id)
+      : -1;
+
     // Also clear Foundry's `turn` pointer so the canvas token ring disappears.
     await (this as any).update({
       turn: null,
       "flags.dawn-system.round":            currentRound,
       "flags.dawn-system.currentlyActing": null,
     });
+
+    // Fire turnEnd so ActiveEffect durations with expiry:"turnEnd" are processed.
+    if (acting && game.user?.isGM) {
+      await ((foundry as any).documents?.ActiveEffect as { registry?: { refresh(e: string, ctx: object): Promise<void> } } | undefined)
+        ?.registry?.refresh("turnEnd", {
+          round: currentRound,
+          turn:  turnIdx >= 0 ? turnIdx : 0,
+          skipped: false,
+        });
+    }
   }
 
   /**
@@ -186,6 +228,7 @@ export class DawnCombat extends foundry.documents.Combat {
    */
   activatableCombatants(): foundry.documents.Combatant[] {
     return ((this as any).turns as foundry.documents.Combatant[]).filter(c => {
+      if (c.isDefeated) return false;
       const type = ((c as any).actor as { type?: string } | null)?.type;
       return type !== "fodder" && type !== "terrain";
     });
@@ -324,8 +367,9 @@ export class DawnCombat extends foundry.documents.Combat {
     const result    = new Map<number, foundry.documents.Combatant[]>();
 
     for (const c of ((this as any).turns as foundry.documents.Combatant[])) {
-      if (c.id === actingId) continue;           // shown in "Acting" section
-      if (logIds.has(c.id!)) continue;           // shown in "Activated" section
+      if (c.isDefeated) continue;           // defeated tokens never appear
+      if (c.id === actingId) continue;      // shown in "Acting" section
+      if (logIds.has(c.id!)) continue;      // shown in "Activated" section
       const disp = (c as any).token?.disposition as number;
       if (disp === upNextDisp) continue;         // shown in "Up Next" section
       if (!result.has(disp)) result.set(disp, []);

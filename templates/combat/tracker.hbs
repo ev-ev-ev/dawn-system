@@ -1,5 +1,29 @@
 {{!-- Dawn Combat Tracker — tracker part (scrollable) --}}
-<div class="dawn-tracker-scroll">
+<div class="dawn-tracker-scroll combat-tracker">
+
+  {{!-- PRE-COMBAT: forces preview, no activation actions --}}
+  {{#unless started}}
+    {{#if hasCombat}}
+      {{#each forces}}
+      <section class="dawn-section dawn-remaining">
+        <h4 class="dawn-section-header">{{label}}</h4>
+        <ul class="dawn-combatant-list">
+          {{#each combatants}}
+          <li class="combatant dawn-combatant" data-combatant-id="{{id}}">
+            <img class="combatant-img" src="{{img}}" title="{{name}}" />
+            <span class="combatant-name">{{name}}</span>
+          </li>
+          {{/each}}
+        </ul>
+      </section>
+      {{/each}}
+    {{else}}
+      <p class="dawn-no-combat">No active combat encounter.</p>
+    {{/if}}
+  {{/unless}}
+
+  {{!-- ACTIVE COMBAT sections --}}
+  {{#if started}}
 
   {{!-- ① Activation log: tokens that have already acted this round --}}
   {{#if activationLog.length}}
@@ -64,9 +88,6 @@
   </section>
   {{/each}}
 
-  {{!-- No-combat placeholder --}}
-  {{#unless hasCombat}}
-  <p class="dawn-no-combat">No active combat encounter.</p>
-  {{/unless}}
+  {{/if}}{{!-- end #if started --}}
 
 </div>
