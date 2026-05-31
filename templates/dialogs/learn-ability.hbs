@@ -1,0 +1,51 @@
+<div class="learn-ability-body flexcol">
+  <p class="ability-formula">{{localize "DAWN.Dialog.LearnAbility.Formula"}}</p>
+  <div class="ability-cols flexrow">
+
+    <div class="ability-col flexcol">
+      <div class="ability-col-title">{{localize "DAWN.Actor.Character.Ability.Verbs"}}</div>
+      <div class="ability-col-list flexcol">
+        {{#each verbs as |entry|}}
+        <div class="ability-entry-row flexrow">
+          <span class="ability-entry-text">{{entry.text}}{{#if entry.symbols}} <span class="ability-symbol">{{entry.symbols}}</span>{{/if}}</span>
+          <span class="ability-entry-cost">{{#if entry.variable}}X{{else}}{{entry.cost}}{{/if}}</span>
+          <button type="button" class="ability-add-btn" data-action="addVerb" data-index="{{entry.index}}">{{localize "DAWN.Dialog.LearnAbility.Add"}}</button>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="ability-col flexcol">
+      <div class="ability-col-title">{{localize "DAWN.Actor.Character.Ability.Nouns"}}</div>
+      <div class="ability-col-list flexcol">
+        {{#each nouns as |entry|}}
+        <div class="ability-entry-row flexrow">
+          <span class="ability-entry-text">{{entry.text}}{{#if entry.symbols}} <span class="ability-symbol">{{entry.symbols}}</span>{{/if}}</span>
+          <span class="ability-entry-cost">{{entry.cost}}</span>
+          <button type="button" class="ability-add-btn" data-action="addNoun" data-index="{{entry.index}}">{{localize "DAWN.Dialog.LearnAbility.Add"}}</button>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="ability-col flexcol">
+      <div class="ability-col-title">{{localize "DAWN.Actor.Character.Ability.Conditions"}}</div>
+      <div class="ability-col-list flexcol">
+        {{#each conditions as |entry|}}
+        <div class="ability-entry-row flexrow">
+          <span class="ability-entry-text">{{entry.text}}{{#if entry.symbols}} <span class="ability-symbol">{{entry.symbols}}</span>{{/if}}</span>
+          <span class="ability-entry-cost">{{entry.cost}}</span>
+          <button type="button" class="ability-add-btn" data-action="addCondition" data-index="{{entry.index}}">{{localize "DAWN.Dialog.LearnAbility.Add"}}</button>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+  </div>
+  <div class="ability-footnotes">
+    <span>✦ {{localize "DAWN.Dialog.LearnAbility.FootnoteDagger"}}</span>
+    <span>◇ {{localize "DAWN.Dialog.LearnAbility.FootnoteDiamond"}}</span>
+    <span>☽ {{localize "DAWN.Dialog.LearnAbility.FootnoteMoon"}}</span>
+    <span>/ {{localize "DAWN.Dialog.LearnAbility.FootnoteSlash"}}</span>
+  </div>
+</div>

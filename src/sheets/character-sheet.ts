@@ -1,5 +1,6 @@
 import { openRollDialog } from "../dice/roll.js";
 import { LearnTechniqueDialog } from "../apps/learn-technique-dialog.js";
+import { LearnAbilityDialog } from "../apps/learn-ability-dialog.js";
 import { openSelfDamageDialog, applySelfDamage, postDamageSummary } from "../damage/damage.js";
 
 export class CharacterSheet extends foundry.applications.api.HandlebarsApplicationMixin(
@@ -23,6 +24,10 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
       rollSkill: CharacterSheet._onRollSkill,
       addCustomSkill: CharacterSheet._onAddCustomSkill,
       removeCustomSkill: CharacterSheet._onRemoveCustomSkill,
+      learnAbility: CharacterSheet._onLearnAbility,
+      removeAbilityVerb: CharacterSheet._onRemoveAbilityVerb,
+      removeAbilityNoun: CharacterSheet._onRemoveAbilityNoun,
+      removeAbilityCondition: CharacterSheet._onRemoveAbilityCondition,
     },
   };
 
@@ -98,12 +103,15 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
         value: skillsData[key] ?? 0,
       })),
     }));
+    const ability = (document.system as any).ability ?? {};
+    const hasAbilityContent = !!(ability.verbs?.length || ability.nouns?.length || ability.conditions?.length);
     return Object.assign(context, {
       system: document.system,
       techniques,
       woundBoxes,
       stressBoxes,
       skillGroups,
+      hasAbilityContent,
       attrOptions: {
         body: "DAWN.Actor.Character.Body",
         talent: "DAWN.Actor.Character.Talent",
@@ -201,5 +209,31 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     const current = [...((this as any).document.system.customSkills as Array<{ label: string; value: number }> ?? [])];
     current.splice(index, 1);
     await (this as any).document.update({ "system.customSkills": current });
+  }
+
+  static async _onLearnAbility(this: CharacterSheet, _event: Event, _target: HTMLElement): Promise<void> {
+    const dialog = new LearnAbilityDialog((this as any).document);
+    await dialog.render(true);
+  }
+
+  static async _onRemoveAbilityVerb(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.verbIndex);
+    const current = [...((this as any).document.system.ability.verbs as Array<{ text: string; cost: number }> ?? [])];
+    current.splice(index, 1);
+    await (this as any).document.update({ "system.ability.verbs": current });
+  }
+
+  static async _onRemoveAbilityNoun(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.nounIndex);
+    const current = [...((this as any).document.system.ability.nouns as Array<{ text: string; cost: number }> ?? [])];
+    current.splice(index, 1);
+    await (this as any).document.update({ "system.ability.nouns": current });
+  }
+
+  static async _onRemoveAbilityCondition(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.conditionIndex);
+    const current = [...((this as any).document.system.ability.conditions as Array<{ text: string; cost: number }> ?? [])];
+    current.splice(index, 1);
+    await (this as any).document.update({ "system.ability.conditions": current });
   }
 }

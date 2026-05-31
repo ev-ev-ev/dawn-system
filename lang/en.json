@@ -161,6 +161,15 @@
         "Title": "Learn a Technique",
         "Learn": "Learn",
         "None": "No techniques available to learn."
+      },
+      "LearnAbility": {
+        "Title": "Learn Ability Component",
+        "Add": "Add",
+        "Formula": "You can [Verb] [Noun], so long as [Condition].",
+        "FootnoteDagger": "Ignore \"so long as\" — or include any condition at cost 0.",
+        "FootnoteDiamond": "Category — reduce cost by 1 by picking only one specific thing.",
+        "FootnoteMoon": "Choose another Noun for X; if cost is X it becomes that Noun's cost.",
+        "FootnoteSlash": "Pick one option when this word is chosen."
       }
     },
     "Damage": {
@@ -234,6 +243,16 @@
           "UnveilTooltip": "Research the unknown, uncover lore.",
           "Tinker": "Tinker",
           "TinkerTooltip": "Create art, use medicine, act methodically."
+        },
+        "Ability": {
+          "Title": "Ability",
+          "Rank": "Rank",
+          "Learn": "Learn",
+          "Verbs": "Verbs",
+          "Nouns": "Nouns",
+          "Conditions": "Conditions",
+          "Remove": "Remove",
+          "Empty": "No ability components yet. Click Learn to add verbs, nouns, and conditions."
         },
         "Wound": "Wound",
         "Evasion": "Evasion",
