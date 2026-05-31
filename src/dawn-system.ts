@@ -13,7 +13,6 @@ import { DawnCombatTracker } from "./combat/dawn-combat-tracker.js";
 import { createTensionHud, updateTensionDisplay } from "./apps/tension-hud.js";
 import { initTensionAutomation } from "./apps/tension-automation.js";
 import { initStatusEffects } from "./apps/status-effects.js";
-import { initStatusExpiry } from "./apps/status-expiry.js";
 import {
   canApplyDamage,
   getOwnedTargets,
@@ -28,8 +27,6 @@ foundry.helpers.Hooks.once("ready", () => {
   createTensionHud();
   // Set up automated tension tracking.
   initTensionAutomation();
-  // Set up status effect expiry during combat.
-  initStatusExpiry();
 });
 
 foundry.helpers.Hooks.once("init", () => {
