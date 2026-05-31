@@ -107,6 +107,19 @@ export interface RollDialogDefaults {
 export async function openRollDialog(tag: string, defaultDice: number, actor: unknown, defaults?: RollDialogDefaults): Promise<void> {
   const locTag = (game as any).i18n.localize(tag);
   const tensionValue = game.settings.get("dawn-system", "tension") as number;
+  const dramaValue = game.settings.get("dawn-system", "drama") as number;
+  const doomValue = game.settings.get("dawn-system", "doom") as number;
+
+  const rollingDisposition = (actor as any)?.token?.disposition ?? null;
+  const actingDisposition = (game as any).combat?.combatant?.token?.disposition ?? null;
+
+  let effectiveTension = tensionValue;
+  if (rollingDisposition === CONST.TOKEN_DISPOSITIONS.FRIENDLY && actingDisposition === CONST.TOKEN_DISPOSITIONS.FRIENDLY) {
+    effectiveTension = tensionValue + dramaValue;
+  } else if (rollingDisposition === CONST.TOKEN_DISPOSITIONS.HOSTILE && actingDisposition === CONST.TOKEN_DISPOSITIONS.HOSTILE) {
+    effectiveTension = tensionValue + doomValue;
+  }
+
   const d = defaults ?? {};
   const formData = await foundry.applications.api.DialogV2.input({
     window: { title: `Roll: ${locTag}` },
@@ -125,7 +138,7 @@ export async function openRollDialog(tag: string, defaultDice: number, actor: un
       </div>
       <div class="form-group">
         <label>Tension</label>
-        <input type="number" name="tension" value="${d.tension ?? tensionValue}" />
+        <input type="number" name="tension" value="${d.tension ?? effectiveTension}" />
       </div>
       <div class="form-group">
         <label>Tension Multiplier</label>

@@ -10,7 +10,7 @@ import { ComponentSheet } from "./sheets/component-sheet.js";
 import { ModifierSheet } from "./sheets/modifier-sheet.js";
 import { DawnCombat } from "./combat/dawn-combat.js";
 import { DawnCombatTracker } from "./combat/dawn-combat-tracker.js";
-import { createTensionHud, updateTensionDisplay } from "./apps/tension-hud.js";
+import { createTensionHud, updateTensionDisplay, updateDramaDisplay, updateDoomDisplay, updateDramaVisibility, updateDoomVisibility } from "./apps/tension-hud.js";
 import { initTensionAutomation } from "./apps/tension-automation.js";
 import { initStatusEffects } from "./apps/status-effects.js";
 import {
@@ -47,6 +47,56 @@ foundry.helpers.Hooks.once("init", () => {
     },
   });
 
+  // Register Drama world setting.
+  game.settings.register("dawn-system", "drama", {
+    name: "DAWN.Drama.Title",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0,
+    range: { min: 0, max: 99, step: 1 },
+    permissions: {
+      GM: 2,
+      Assistant: 1,
+      Player: 1,
+    },
+  });
+
+  // Register Doom world setting.
+  game.settings.register("dawn-system", "doom", {
+    name: "DAWN.Doom.Title",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0,
+    range: { min: 0, max: 99, step: 1 },
+    permissions: {
+      GM: 2,
+      Assistant: 1,
+      Player: 1,
+    },
+  });
+
+  // Register Drama enabled toggle (shown in Settings UI).
+  game.settings.register("dawn-system", "dramaEnabled", {
+    name: "DAWN.Drama.Enabled",
+    hint: "DAWN.Drama.EnabledHint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false,
+  });
+
+  // Register Doom enabled toggle (shown in Settings UI).
+  game.settings.register("dawn-system", "doomEnabled", {
+    name: "DAWN.Doom.Enabled",
+    hint: "DAWN.Doom.EnabledHint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false,
+  });
+
   // Replace Foundry default status effects with DAWN statuses.
   initStatusEffects();
 
@@ -57,13 +107,25 @@ foundry.helpers.Hooks.once("init", () => {
   (CONFIG as unknown as { Combat: { documentClass: unknown } }).Combat.documentClass = DawnCombat;
   (CONFIG as unknown as { ui: Record<string, unknown> }).ui.combat = DawnCombatTracker;
 
-  // Listen for tension changes and update HUD display.
+  // Listen for tension/drama/doom changes and update HUD display.
   foundry.helpers.Hooks.on("updateSetting", (...args: unknown[]) => {
     const obj = args[0] as { key?: string; value?: unknown };
     const key = typeof args[0] === "string" ? args[0] : obj?.key;
     if (key === "dawn-system.tension") {
       const val = obj?.value ?? game.settings.get("dawn-system", "tension");
       updateTensionDisplay(Number(val));
+    } else if (key === "dawn-system.drama") {
+      const val = obj?.value ?? game.settings.get("dawn-system", "drama");
+      updateDramaDisplay(Number(val));
+    } else if (key === "dawn-system.doom") {
+      const val = obj?.value ?? game.settings.get("dawn-system", "doom");
+      updateDoomDisplay(Number(val));
+    } else if (key === "dawn-system.dramaEnabled") {
+      const val = obj?.value ?? game.settings.get("dawn-system", "dramaEnabled");
+      updateDramaVisibility(Boolean(val));
+    } else if (key === "dawn-system.doomEnabled") {
+      const val = obj?.value ?? game.settings.get("dawn-system", "doomEnabled");
+      updateDoomVisibility(Boolean(val));
     }
   });
 

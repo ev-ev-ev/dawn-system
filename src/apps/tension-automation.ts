@@ -21,6 +21,8 @@ function populateCache(combat: { combatants: unknown[] }): void {
 function onCombatStart(combat: unknown): void {
   populateCache(combat as { combatants: unknown[] });
   game.settings.set("dawn-system", "tension", 0);
+  game.settings.set("dawn-system", "drama", 0);
+  game.settings.set("dawn-system", "doom", 0);
 }
 
 function incrementTensionForRound(...args: unknown[]): void {

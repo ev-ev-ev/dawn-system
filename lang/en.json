@@ -6,6 +6,23 @@
       "Decrement": "Decrease Tension",
       "Reset": "Reset Tension"
     },
+
+    "Drama": {
+      "Title": "Drama",
+      "Increment": "Increase Drama",
+      "Decrement": "Decrease Drama",
+      "Reset": "Reset Drama",
+      "Enabled": "Enable Drama",
+      "EnabledHint": "Show the Drama counter in the tension HUD. Drama is added to tension for friendly rolls on friendly turns. Several techniques work like this. Use Drama for all of them."
+    },
+    "Doom": {
+      "Title": "Doom",
+      "Increment": "Increase Doom",
+      "Decrement": "Decrease Doom",
+      "Reset": "Reset Doom",
+      "Enabled": "Enable Doom",
+      "EnabledHint": "Show the Doom counter in the tension HUD. Doom is added to tension for hostile rolls on hostile turns. NOTE: this is NOT how Doom is described in the book, but it's equivilent. Instead of increasing Tension and Doom, JUST increase Doom."
+    },
     "Status": {
       "TakenOut": "Taken Out",
       "Banished": "Banished",

@@ -716,6 +716,7 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   opacity: 0.7;
+  min-width: 5em;
 }
 
 .tension-hud .tension-value {
