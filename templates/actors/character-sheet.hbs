@@ -132,5 +132,13 @@
   </section>
 
   <section class="tab{{#if tabs.unstructured.active}} active{{/if}}" data-group="sheet" data-tab="unstructured">
+    <fieldset class="stress">
+      <legend>{{localize "DAWN.Actor.Character.Stress"}}</legend>
+      <div class="stress-row flexrow">
+        {{#each stressBoxes as |box|}}
+        <span class="gate-box{{#if box.checked}} checked{{/if}}" data-action="toggleStress" data-stress-index="{{box.index}}" role="button">{{#if box.checked}}<i class="fa-solid fa-bandage"></i>{{/if}}</span>
+        {{/each}}
+      </div>
+    </fieldset>
   </section>
 </div>

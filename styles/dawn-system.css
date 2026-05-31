@@ -135,6 +135,7 @@
 /* ----------------------------------------- */
 
 .dawn-sheet .wounds .wounds-row,
+.dawn-sheet .stress .stress-row,
 .dawn-sheet .gates .gates-row {
   justify-content: space-evenly;
 }

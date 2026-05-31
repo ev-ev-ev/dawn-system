@@ -19,6 +19,7 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
       chatItem: CharacterSheet._onChatItem,
       learnTechnique: CharacterSheet._onLearnTechnique,
       toggleWound: CharacterSheet._onToggleWound,
+      toggleStress: CharacterSheet._onToggleStress,
     },
   };
 
@@ -75,10 +76,13 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
       });
     const woundsValue = Number((document.system as any).wounds ?? 0);
     const woundBoxes = Array.from({ length: 3 }, (_, i) => ({ index: i, checked: i < woundsValue }));
+    const stressValue = Number((document.system as any).stress ?? 0);
+    const stressBoxes = Array.from({ length: 3 }, (_, i) => ({ index: i, checked: i < stressValue }));
     return Object.assign(context, {
       system: document.system,
       techniques,
       woundBoxes,
+      stressBoxes,
       attrOptions: {
         body: "DAWN.Actor.Character.Body",
         talent: "DAWN.Actor.Character.Talent",
@@ -146,5 +150,12 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     const current = Number((this as any).document.system.wounds ?? 0);
     const newValue = index < current ? current - 1 : current + 1;
     await (this as any).document.update({ "system.wounds": newValue });
+  }
+
+  static async _onToggleStress(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.stressIndex);
+    const current = Number((this as any).document.system.stress ?? 0);
+    const newValue = index < current ? current - 1 : current + 1;
+    await (this as any).document.update({ "system.stress": newValue });
   }
 }

@@ -14,6 +14,7 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
         value: new NumberField({ required: true, integer: true, min: 0, initial: 2, label: "DAWN.Actor.Character.Focus" }),
       }),
       wounds: new NumberField({ required: true, integer: true, min: 0, max: 3, initial: 0, label: "DAWN.Actor.Character.Wounds" }),
+      stress: new NumberField({ required: true, integer: true, min: 0, max: 3, initial: 0, label: "DAWN.Actor.Character.Stress" }),
       tier: new NumberField({
         required: true,
         integer: true,
