@@ -95,7 +95,7 @@ export class LearnAbilityDialog extends foundry.applications.api.HandlebarsAppli
     id: "learn-ability",
     classes: ["dawn-system", "learn-ability-dialog"],
     window: { title: "DAWN.Dialog.LearnAbility.Title", resizable: true },
-    position: { width: 880, height: 600 },
+    position: { width: 880, height: 900 },
     actions: {
       addVerb:      LearnAbilityDialog._onAddVerb,
       addNoun:      LearnAbilityDialog._onAddNoun,

@@ -9,7 +9,7 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
   static override DEFAULT_OPTIONS = {
     classes: ["dawn-system", "actor", "character"],
     window: { title: "DAWN.Sheet.Character.Title", resizable: true },
-    position: { width: 700, height: 640 },
+    position: { width: 600, height: 640 },
     form: { submitOnChange: true, closeOnSubmit: false },
     actions: {
       rollAttr: CharacterSheet._onRollAttr,
