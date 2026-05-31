@@ -32,7 +32,9 @@
         "Title": "Character Sheet",
         "Tab": {
           "structured": "Structured",
-          "unstructured": "Unstructured"
+          "unstructured": "Unstructured",
+          "notes": "Notes",
+          "NotesPlaceholder": "Write any notes, background, or other information here…"
         }
       },
       "Adversary": {

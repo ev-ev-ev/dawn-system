@@ -9,7 +9,7 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
   static override DEFAULT_OPTIONS = {
     classes: ["dawn-system", "actor", "character"],
     window: { title: "DAWN.Sheet.Character.Title", resizable: true },
-    position: { width: 480, height: 640 },
+    position: { width: 700, height: 640 },
     form: { submitOnChange: true, closeOnSubmit: false },
     actions: {
       rollAttr: CharacterSheet._onRollAttr,
@@ -46,8 +46,9 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
   static TABS = {
     sheet: {
       tabs: [
-        { id: "structured", icon: "fa-solid fa-list" },
+        { id: "structured",   icon: "fa-solid fa-list" },
         { id: "unstructured", icon: "fa-solid fa-feather" },
+        { id: "notes",        icon: "fa-solid fa-book" },
       ],
       initial: "structured",
       labelPrefix: "DAWN.Sheet.Character.Tab",

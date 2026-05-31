@@ -79,6 +79,7 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
       mind: new NumberField({ required: true, integer: true, min: 2, initial: 2, label: "DAWN.Actor.Character.Mind" }),
       evasion: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "DAWN.Actor.Character.Evasion" }),
       armor: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "DAWN.Actor.Character.Armor" }),
+      notes: new StringField({ required: false, blank: true, initial: "" }),
     };
   }
 

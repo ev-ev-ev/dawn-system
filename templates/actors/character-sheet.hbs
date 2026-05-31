@@ -275,4 +275,10 @@
       </fieldset>
     </div>
   </section>
+
+  <section class="tab notes-tab{{#if tabs.notes.active}} active{{/if}}" data-group="sheet" data-tab="notes">
+    <div class="notes-editor">
+      <textarea name="system.notes" class="notes-textarea" placeholder="{{localize "DAWN.Sheet.Character.Tab.NotesPlaceholder"}}">{{system.notes}}</textarea>
+    </div>
+  </section>
 </div>
