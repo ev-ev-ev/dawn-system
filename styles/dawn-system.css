@@ -1203,6 +1203,124 @@
   align-self: flex-start;
 }
 
+/* ─── Bonds Fieldset ─────────────────────────────────────────────────────── */
+
+.dawn-sheet .bond-row {
+  gap: 4px;
+  align-items: center;
+  padding: 2px 0;
+  border-bottom: 1px solid var(--color-border-light-tertiary, #ccc);
+}
+
+.dawn-sheet .bond-row:last-of-type {
+  border-bottom: none;
+}
+
+.dawn-sheet .bond-target-input {
+  flex: 2;
+  min-width: 0;
+}
+
+.dawn-sheet .bond-tags-input {
+  flex: 3;
+  min-width: 0;
+}
+
+.dawn-sheet .bond-rank-input {
+  width: 2.5em;
+  flex: 0 0 auto;
+}
+
+.dawn-sheet .bond-row a {
+  flex: 0 0 auto;
+  cursor: pointer;
+  opacity: 0.4;
+  padding: 2px 4px;
+}
+
+.dawn-sheet .bond-row a:hover {
+  opacity: 1;
+}
+
+.dawn-sheet .bond-row a[data-action="chatBond"]:hover {
+  color: var(--color-level-info, #44a);
+}
+
+.dawn-sheet .bond-row a[data-action="removeBond"]:hover {
+  color: var(--color-level-error, #c00);
+}
+
+.dawn-sheet .bonds-empty {
+  text-align: center;
+  padding: 8px;
+  opacity: 0.5;
+  font-style: italic;
+  font-size: 0.85em;
+}
+
+.dawn-sheet .add-bond-btn,
+.dawn-sheet .add-bond-action-btn {
+  margin-top: 4px;
+  font-size: 0.85em;
+  align-self: flex-start;
+}
+
+/* ─── Bond Actions Fieldset ──────────────────────────────────────────────── */
+
+.dawn-sheet .bond-action-entry {
+  gap: 2px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border-light-tertiary, #ccc);
+}
+
+.dawn-sheet .bond-action-entry:last-of-type {
+  border-bottom: none;
+}
+
+.dawn-sheet .bond-action-header {
+  gap: 4px;
+  align-items: center;
+}
+
+.dawn-sheet .bond-action-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+}
+
+.dawn-sheet .bond-action-header a {
+  flex: 0 0 auto;
+  cursor: pointer;
+  opacity: 0.4;
+  padding: 2px 4px;
+}
+
+.dawn-sheet .bond-action-header a:hover {
+  opacity: 1;
+}
+
+.dawn-sheet .bond-action-header a[data-action="chatBondAction"]:hover {
+  color: var(--color-level-info, #44a);
+}
+
+.dawn-sheet .bond-action-header a[data-action="removeBondAction"]:hover {
+  color: var(--color-level-error, #c00);
+}
+
+.dawn-sheet .bond-actions textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 2.8em;
+  font-size: 0.85em;
+  line-height: 1.4;
+  padding: 3px 5px;
+  background: var(--color-bg-input, rgba(0,0,0,0.05));
+  border: 1px solid var(--color-border-input, #ccc);
+  border-radius: 3px;
+  color: var(--color-text-primary, inherit);
+}
+
 /* ─── Unstructured Tab Layout ────────────────────────────────────────────── */
 
 .dawn-sheet .unstructured-lower {

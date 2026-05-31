@@ -28,6 +28,12 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
       removeAbilityVerb: CharacterSheet._onRemoveAbilityVerb,
       removeAbilityNoun: CharacterSheet._onRemoveAbilityNoun,
       removeAbilityCondition: CharacterSheet._onRemoveAbilityCondition,
+      addBond: CharacterSheet._onAddBond,
+      removeBond: CharacterSheet._onRemoveBond,
+      chatBond: CharacterSheet._onChatBond,
+      addBondAction: CharacterSheet._onAddBondAction,
+      removeBondAction: CharacterSheet._onRemoveBondAction,
+      chatBondAction: CharacterSheet._onChatBondAction,
     },
   };
 
@@ -235,5 +241,56 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     const current = [...((this as any).document.system.ability.conditions as Array<{ text: string; cost: number }> ?? [])];
     current.splice(index, 1);
     await (this as any).document.update({ "system.ability.conditions": current });
+  }
+
+  static async _onAddBond(this: CharacterSheet, _event: Event, _target: HTMLElement): Promise<void> {
+    const current = [...((this as any).document.system.bonds as Array<{ target: string; tags: string; rank: number }> ?? [])];
+    current.push({ target: "", tags: "", rank: 1 });
+    await (this as any).document.update({ "system.bonds": current });
+  }
+
+  static async _onRemoveBond(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.bondIndex);
+    const current = [...((this as any).document.system.bonds as Array<{ target: string; tags: string; rank: number }> ?? [])];
+    current.splice(index, 1);
+    await (this as any).document.update({ "system.bonds": current });
+  }
+
+  static async _onChatBond(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.bondIndex);
+    const bond = ((this as any).document.system.bonds as Array<{ target: string; tags: string; rank: number }>)[index];
+    if (!bond) return;
+    const e = foundry.utils.escapeHTML;
+    const tags = bond.tags ? `<span style="opacity:0.7;font-size:0.85em">${e(bond.tags)}</span>` : "";
+    const content = `<strong>${e(bond.target || "(unnamed)")}</strong> &middot; Rank ${bond.rank}${tags ? "<br>" + tags : ""}`;
+    await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
+      content,
+      speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
+    });
+  }
+
+  static async _onAddBondAction(this: CharacterSheet, _event: Event, _target: HTMLElement): Promise<void> {
+    const current = [...((this as any).document.system.bondActions as Array<{ name: string; description: string }> ?? [])];
+    current.push({ name: "", description: "" });
+    await (this as any).document.update({ "system.bondActions": current });
+  }
+
+  static async _onRemoveBondAction(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.bondActionIndex);
+    const current = [...((this as any).document.system.bondActions as Array<{ name: string; description: string }> ?? [])];
+    current.splice(index, 1);
+    await (this as any).document.update({ "system.bondActions": current });
+  }
+
+  static async _onChatBondAction(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.bondActionIndex);
+    const action = ((this as any).document.system.bondActions as Array<{ name: string; description: string }>)[index];
+    if (!action) return;
+    const e = foundry.utils.escapeHTML;
+    const content = `<strong>${e(action.name || "(unnamed)")}</strong>${action.description ? "<hr>" + e(action.description) : ""}`;
+    await (ChatMessage as unknown as { create(data: Record<string, unknown>): Promise<unknown> }).create({
+      content,
+      speaker: (ChatMessage as unknown as { getSpeaker(opts: Record<string, unknown>): unknown }).getSpeaker({ actor: (this as any).document }),
+    });
   }
 }

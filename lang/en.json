@@ -254,6 +254,23 @@
           "Remove": "Remove",
           "Empty": "No ability components yet. Click Learn to add verbs, nouns, and conditions."
         },
+        "Bonds": {
+          "Title": "Bonds",
+          "Add": "Add Bond",
+          "Remove": "Remove Bond",
+          "Chat": "Send to Chat",
+          "Empty": "No bonds yet.",
+          "TargetPlaceholder": "Target name…",
+          "TagsPlaceholder": "Tags, comma separated…"
+        },
+        "BondActions": {
+          "Title": "Bond Actions",
+          "Add": "Add Available Bond Action",
+          "Remove": "Remove Bond Action",
+          "Chat": "Send to Chat",
+          "NamePlaceholder": "Action name…",
+          "DescPlaceholder": "Description…"
+        },
         "Wound": "Wound",
         "Evasion": "Evasion",
         "Armor": "Armor",

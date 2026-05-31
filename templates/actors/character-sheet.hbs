@@ -145,6 +145,42 @@
       </div>
     </fieldset>
 
+    <fieldset class="bonds">
+      <legend>{{localize "DAWN.Actor.Character.Bonds.Title"}}</legend>
+      {{#each system.bonds as |bond|}}
+      <div class="bond-row flexrow">
+        <input type="text" name="system.bonds.{{@index}}.target" value="{{bond.target}}" placeholder="{{localize "DAWN.Actor.Character.Bonds.TargetPlaceholder"}}" class="bond-target-input" />
+        <input type="text" name="system.bonds.{{@index}}.tags" value="{{bond.tags}}" placeholder="{{localize "DAWN.Actor.Character.Bonds.TagsPlaceholder"}}" class="bond-tags-input" />
+        <input type="number" name="system.bonds.{{@index}}.rank" value="{{bond.rank}}" min="1" max="3" class="bond-rank-input" />
+        <a data-action="chatBond" data-bond-index="{{@index}}" data-tooltip="{{localize "DAWN.Actor.Character.Bonds.Chat"}}"><i class="fa-solid fa-message"></i></a>
+        <a data-action="removeBond" data-bond-index="{{@index}}" data-tooltip="{{localize "DAWN.Actor.Character.Bonds.Remove"}}"><i class="fa-solid fa-trash"></i></a>
+      </div>
+      {{/each}}
+      {{#unless system.bonds.length}}
+      <p class="bonds-empty hint">{{localize "DAWN.Actor.Character.Bonds.Empty"}}</p>
+      {{/unless}}
+      <button type="button" data-action="addBond" class="add-bond-btn">
+        <i class="fa-solid fa-plus"></i> {{localize "DAWN.Actor.Character.Bonds.Add"}}
+      </button>
+    </fieldset>
+
+    <fieldset class="bond-actions">
+      <legend>{{localize "DAWN.Actor.Character.BondActions.Title"}}</legend>
+      {{#each system.bondActions as |action|}}
+      <div class="bond-action-entry flexcol">
+        <div class="bond-action-header flexrow">
+          <input type="text" name="system.bondActions.{{@index}}.name" value="{{action.name}}" placeholder="{{localize "DAWN.Actor.Character.BondActions.NamePlaceholder"}}" class="bond-action-name" />
+          <a data-action="chatBondAction" data-bond-action-index="{{@index}}" data-tooltip="{{localize "DAWN.Actor.Character.BondActions.Chat"}}"><i class="fa-solid fa-message"></i></a>
+          <a data-action="removeBondAction" data-bond-action-index="{{@index}}" data-tooltip="{{localize "DAWN.Actor.Character.BondActions.Remove"}}"><i class="fa-solid fa-trash"></i></a>
+        </div>
+        <textarea name="system.bondActions.{{@index}}.description" placeholder="{{localize "DAWN.Actor.Character.BondActions.DescPlaceholder"}}">{{action.description}}</textarea>
+      </div>
+      {{/each}}
+      <button type="button" data-action="addBondAction" class="add-bond-action-btn">
+        <i class="fa-solid fa-plus"></i> {{localize "DAWN.Actor.Character.BondActions.Add"}}
+      </button>
+    </fieldset>
+
     <div class="unstructured-lower flexrow">
       <fieldset class="skills">
         <legend class="skills-legend">

@@ -39,6 +39,15 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
         label: new StringField({ required: true, blank: true, initial: "" }),
         value: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
       })),
+      bonds: new ArrayField(new SchemaField({
+        target: new StringField({ required: true, blank: true, initial: "" }),
+        tags: new StringField({ required: true, blank: true, initial: "" }),
+        rank: new NumberField({ required: true, integer: true, min: 1, max: 3, initial: 1 }),
+      })),
+      bondActions: new ArrayField(new SchemaField({
+        name: new StringField({ required: true, blank: true, initial: "" }),
+        description: new StringField({ required: true, blank: true, initial: "" }),
+      })),
       ability: new SchemaField({
         rank: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
         verbs: new ArrayField(new SchemaField({
