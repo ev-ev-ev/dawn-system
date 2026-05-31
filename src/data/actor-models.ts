@@ -1,4 +1,4 @@
-const { NumberField, StringField, SchemaField, BooleanField } = foundry.data.fields;
+const { NumberField, StringField, SchemaField, BooleanField, ArrayField } = foundry.data.fields;
 
 /**
  * Data model for the "character" Actor type.
@@ -15,6 +15,30 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
       }),
       wounds: new NumberField({ required: true, integer: true, min: 0, max: 3, initial: 0, label: "DAWN.Actor.Character.Wounds" }),
       stress: new NumberField({ required: true, integer: true, min: 0, max: 3, initial: 0, label: "DAWN.Actor.Character.Stress" }),
+      influence: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "DAWN.Actor.Character.Influence" }),
+      useCustomSkills: new BooleanField({ required: true, initial: false }),
+      skills: new SchemaField({
+        break: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        endure: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        menace: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        defend: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        finesse: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        lurk: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        move: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        react: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        absorb: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        intuit: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        connect: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        luck: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        deceive: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        command: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        unveil: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        tinker: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+      }),
+      customSkills: new ArrayField(new SchemaField({
+        label: new StringField({ required: true, blank: true, initial: "" }),
+        value: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+      })),
       tier: new NumberField({
         required: true,
         integer: true,

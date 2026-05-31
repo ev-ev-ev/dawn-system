@@ -9,6 +9,10 @@
         <button type="button" data-action="rollGeneric" data-tooltip="{{localize "DAWN.Actor.Character.GenericRoll"}}"><i class="fa-solid fa-dice-d6"></i></button>
         <button type="button" data-action="applyDamage" data-tooltip="{{localize "DAWN.Damage.Apply"}}"><i class="fa-solid fa-heart-crack"></i></button>
       </div>
+      <div class="resource flexrow">
+        <label>{{localize "DAWN.Actor.Character.Influence"}}</label>
+        <input type="number" name="system.influence" value="{{system.influence}}" min="0" />
+      </div>
     </div>
   </header>
 
@@ -139,6 +143,45 @@
         <span class="gate-box{{#if box.checked}} checked{{/if}}" data-action="toggleStress" data-stress-index="{{box.index}}" role="button">{{#if box.checked}}<i class="fa-solid fa-bandage"></i>{{/if}}</span>
         {{/each}}
       </div>
+    </fieldset>
+
+    <fieldset class="skills">
+      <legend class="skills-legend">
+        <span>{{localize "DAWN.Actor.Character.Skills.Title"}}</span>
+        <label class="toggle-switch" data-tooltip="{{localize "DAWN.Actor.Character.Skills.CustomToggle"}}">
+          <input type="checkbox" name="system.useCustomSkills" {{#if system.useCustomSkills}}checked{{/if}} />
+          <span class="toggle-slider"></span>
+          <span>{{localize "DAWN.Actor.Character.Skills.Custom"}}</span>
+        </label>
+      </legend>
+      {{#if system.useCustomSkills}}
+      <div class="custom-skills-list">
+        {{#each system.customSkills as |skill|}}
+        <div class="custom-skill-row flexrow" data-skill-index="{{@index}}">
+          <input type="text" name="system.customSkills.{{@index}}.label" value="{{skill.label}}" placeholder="Skill name…" />
+          <input type="number" name="system.customSkills.{{@index}}.value" value="{{skill.value}}" min="0" />
+          <a data-action="removeCustomSkill" data-skill-index="{{@index}}" data-tooltip="{{localize "DAWN.Actor.Character.Skills.RemoveSkill"}}"><i class="fa-solid fa-trash"></i></a>
+        </div>
+        {{/each}}
+        <button type="button" data-action="addCustomSkill" class="add-skill-btn">
+          <i class="fa-solid fa-plus"></i> {{localize "DAWN.Actor.Character.Skills.AddSkill"}}
+        </button>
+      </div>
+      {{else}}
+      {{#each skillGroups as |group|}}
+      <div class="skill-group">
+        <div class="skill-group-header">{{localize group.labelKey}}</div>
+        {{#each group.skills as |skill|}}
+        <div class="resource flexrow">
+          <label data-action="rollSkill" data-skill="{{skill.key}}" data-attr="{{skill.attr}}" role="button" data-tooltip="{{localize skill.tooltipKey}}">
+            <i class="fa-solid fa-dice-d6"></i> {{localize skill.labelKey}}
+          </label>
+          <input type="number" name="system.skills.{{skill.key}}" value="{{skill.value}}" min="0" />
+        </div>
+        {{/each}}
+      </div>
+      {{/each}}
+      {{/if}}
     </fieldset>
   </section>
 </div>

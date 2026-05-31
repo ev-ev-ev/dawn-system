@@ -20,6 +20,9 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
       learnTechnique: CharacterSheet._onLearnTechnique,
       toggleWound: CharacterSheet._onToggleWound,
       toggleStress: CharacterSheet._onToggleStress,
+      rollSkill: CharacterSheet._onRollSkill,
+      addCustomSkill: CharacterSheet._onAddCustomSkill,
+      removeCustomSkill: CharacterSheet._onRemoveCustomSkill,
     },
   };
 
@@ -78,11 +81,29 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     const woundBoxes = Array.from({ length: 3 }, (_, i) => ({ index: i, checked: i < woundsValue }));
     const stressValue = Number((document.system as any).stress ?? 0);
     const stressBoxes = Array.from({ length: 3 }, (_, i) => ({ index: i, checked: i < stressValue }));
+    const SKILL_GROUPS = [
+      { attr: "body",    skills: ["break", "endure", "menace", "defend"] },
+      { attr: "talent",  skills: ["finesse", "lurk", "move", "react"] },
+      { attr: "spirit",  skills: ["absorb", "intuit", "connect", "luck"] },
+      { attr: "mind",    skills: ["deceive", "command", "unveil", "tinker"] },
+    ];
+    const skillsData = ((document.system as any).skills ?? {}) as Record<string, number>;
+    const skillGroups = SKILL_GROUPS.map(group => ({
+      labelKey: `DAWN.Actor.Character.${group.attr.charAt(0).toUpperCase() + group.attr.slice(1)}`,
+      skills: group.skills.map(key => ({
+        key,
+        attr: group.attr,
+        labelKey: `DAWN.Actor.Character.Skills.${key.charAt(0).toUpperCase() + key.slice(1)}`,
+        tooltipKey: `DAWN.Actor.Character.Skills.${key.charAt(0).toUpperCase() + key.slice(1)}Tooltip`,
+        value: skillsData[key] ?? 0,
+      })),
+    }));
     return Object.assign(context, {
       system: document.system,
       techniques,
       woundBoxes,
       stressBoxes,
+      skillGroups,
       attrOptions: {
         body: "DAWN.Actor.Character.Body",
         talent: "DAWN.Actor.Character.Talent",
@@ -157,5 +178,28 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     const current = Number((this as any).document.system.stress ?? 0);
     const newValue = index < current ? current - 1 : current + 1;
     await (this as any).document.update({ "system.stress": newValue });
+  }
+
+  static async _onRollSkill(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {
+    const skill = target.dataset.skill as string;
+    const attr = target.dataset.attr as string;
+    const system = (this as any).document.system as Record<string, unknown>;
+    const dice = Number((system as Record<string, number>)[attr] ?? 2);
+    const advantage = Number((system.skills as Record<string, number>)[skill] ?? 0);
+    const labelKey = `DAWN.Actor.Character.Skills.${skill.charAt(0).toUpperCase() + skill.slice(1)}`;
+    await openRollDialog(labelKey, dice, (this as any).document, { advantage });
+  }
+
+  static async _onAddCustomSkill(this: CharacterSheet, _event: Event, _target: HTMLElement): Promise<void> {
+    const current = [...((this as any).document.system.customSkills as Array<{ label: string; value: number }> ?? [])];
+    current.push({ label: "", value: 0 });
+    await (this as any).document.update({ "system.customSkills": current });
+  }
+
+  static async _onRemoveCustomSkill(this: CharacterSheet, _event: Event, target: HTMLElement): Promise<void> {
+    const index = Number(target.dataset.skillIndex);
+    const current = [...((this as any).document.system.customSkills as Array<{ label: string; value: number }> ?? [])];
+    current.splice(index, 1);
+    await (this as any).document.update({ "system.customSkills": current });
   }
 }
